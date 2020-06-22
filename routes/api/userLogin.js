@@ -26,3 +26,5 @@ router.get("logout", function(req, res) {
     res.json({})
   });
 });
+
+module.exports = router;
