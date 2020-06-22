@@ -17,13 +17,13 @@ function Header() {
                 <div className="text-sm lg:flex-grow">
                     <Link to="/" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
                         About
-      </Link>
+                    </Link>
                     <Link to="/features" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
                         Features
-      </Link>
+                    </Link>
                     <Link to="/developers" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
                         Developers
-      </Link>
+                    </Link>
                 </div>
                 <div>
                     <Link to="/login" className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Login</Link>
