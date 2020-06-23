@@ -28,7 +28,7 @@ function SignupForm() {
                     password: password
                 }).then(() => {
                     console.log("User is signed up and logged in...");
-                    window.location.replace("/");
+                    window.location.replace("/game");
                 }).catch(err => {
                     console.log("Something went wrong while signing up...", err);
                 })

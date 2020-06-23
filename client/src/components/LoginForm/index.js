@@ -25,7 +25,7 @@ function LoginForm() {
                 password: password
             }).then(() => {
                 console.log("User is logged in...");
-                window.location.replace("/");
+                window.location.replace("/game");
             }).catch(err => {
                 console.log("Something went wrong while logging in...", err);
                 // Else, set wrongCredentials to true
