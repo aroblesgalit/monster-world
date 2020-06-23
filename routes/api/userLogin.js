@@ -2,20 +2,23 @@ const db = require("../../models");
 const passport = require("../../config/passport");
 const router = require("express").Router();
 
-router.post("/login", passport.authenticate("userLocal"), function(req, res) {
+router.post("/login", passport.authenticate("local"), function(req, res) {
+  // console.log(req.body);
   res.json(req.user);
 });
 
 router.post("/signup", function(req, res) {
+  console.log(req.body);
   db.User.create({
-    name: req.body.name,
-    email: req.body.email,
+    username: req.body.username,
     password: req.body.password
   })
-    .then(function (dbUser) {
+    .then(function () {
+      // res.json(res);
       res.redirect(307, "/api/user-login/login");
     })
     .catch(function(err) {
+      console.log(err);
       res.status(401).json(err);
     });
 });
