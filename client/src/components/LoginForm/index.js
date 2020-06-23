@@ -20,6 +20,7 @@ function LoginForm() {
             // Check if right credentials
             // Log user in
             console.log("User is logged in...printing username and password...", username, password);
+            window.location.replace("/");
             // Else, set wrongCredentials to true
             // Throw an alert
         } else {

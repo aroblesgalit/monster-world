@@ -23,6 +23,7 @@ function SignupForm() {
                 // Create user
                 // Login user (take user to profile page or main page)
                 console.log("User is signed up and logged in...printing username and password...", username, password);
+                window.location.replace("/");
             } else {
                 // Password doesn't match
                 // Set passwordNotMatch to true
