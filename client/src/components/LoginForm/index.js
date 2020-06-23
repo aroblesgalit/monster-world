@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import API from "../../utils/API";
 
 function LoginForm() {
 
@@ -19,10 +20,18 @@ function LoginForm() {
         if (username && password) {
             // Check if right credentials
             // Log user in
-            console.log("User is logged in...printing username and password...", username, password);
-            window.location.replace("/");
-            // Else, set wrongCredentials to true
-            // Throw an alert
+            API.loginUser({
+                username: username,
+                password: password
+            }).then(() => {
+                console.log("User is logged in...");
+                window.location.replace("/");
+            }).catch(err => {
+                console.log("Something went wrong while logging in...", err);
+                // Else, set wrongCredentials to true
+                setWrongCredentials(true);
+                // Throw an alert
+            })
         } else {
             // Set missingField to true
             setMissingField(true);
@@ -38,11 +47,11 @@ function LoginForm() {
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
                     Username
                 </label>
-                <input 
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                    id="username" 
-                    type="text" 
-                    placeholder="Username" 
+                <input
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="username"
+                    type="text"
+                    placeholder="Username"
                     ref={usernameRef}
                 />
             </div>
@@ -50,22 +59,27 @@ function LoginForm() {
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                     Password
                 </label>
-                <input 
-                    className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" 
-                    id="password" 
-                    type="password" 
-                    placeholder="******************" 
-                    ref={passwordRef}    
+                <input
+                    className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                    id="password"
+                    type="password"
+                    placeholder="******************"
+                    ref={passwordRef}
                 />
                 {
                     missingField ?
                         <p className="text-red-500 text-xs italic">Please fill in all fields.</p> :
                         ""
                 }
+                {
+                    wrongCredentials ?
+                        <p className="text-red-500 text-xs italic">Wrong username or password.</p> :
+                        ""
+                }
             </div>
             <div className="flex items-center justify-between">
-                <button 
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+                <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     type="submit"
                     onClick={handleLogin}
                 >
