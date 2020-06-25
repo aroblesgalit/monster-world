@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import API from "../../utils/API";
 
 function SignupForm() {
 
@@ -22,8 +23,15 @@ function SignupForm() {
             if (password === confirmPassword) {
                 // Create user
                 // Login user (take user to profile page or main page)
-                console.log("User is signed up and logged in...printing username and password...", username, password);
-                window.location.replace("/");
+                API.signupUser({
+                    username: username,
+                    password: password
+                }).then(() => {
+                    console.log("User is signed up and logged in...");
+                    window.location.replace("/game");
+                }).catch(err => {
+                    console.log("Something went wrong while signing up...", err);
+                })
             } else {
                 // Password doesn't match
                 // Set passwordNotMatch to true
@@ -38,7 +46,6 @@ function SignupForm() {
             // Throw an alert
             console.log("Missing field(s).")
         }
-
     }
 
     return (
