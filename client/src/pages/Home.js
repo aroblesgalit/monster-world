@@ -1,5 +1,6 @@
 import React from "react";
 import Hero from "../components/Hero";
+const Phaser = require('phaser');
 
 function Home() {
     var config = {
@@ -50,9 +51,8 @@ function Home() {
         emitter.startFollow(logo);
     }
     return (
-        // <Hero />
         <div>
-            
+            <Hero />
         </div>
     );
 }
