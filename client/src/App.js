@@ -10,15 +10,17 @@ import Game from "./pages/Game";
 function App() {
   return (
     <Router>
-      <Header />
       <Switch>
         <Route exact path="/">
+          <Header />
           <Home />
         </Route>
         <Route path="/login">
+          <Header />
           <Login />
         </Route>
         <Route path="/signup">
+          <Header />
           <Signup />
         </Route>
         <Route path="/game">

@@ -1,51 +1,51 @@
 import Phaser from 'phaser';
-
+import map from '../../assets/zelda.png'
+let controls;
 function GameSetup() {
   var config = {
     type: Phaser.AUTO,
     width: '100',
-    height: '90',
-    physics: {
-      default: 'arcade',
-      arcade: {
-        gravity: { y: 200 }
-      }
-    },
+    height: '100',
     scene: {
       preload: preload,
-      create: create
+      create: create,
+      update: update
     }
   };
 
   var game = new Phaser.Game(config);
 
   function preload() {
-    this.load.setBaseURL('http://labs.phaser.io');
-
-    this.load.image('sky', 'assets/skies/space3.png');
-    this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-    this.load.image('red', 'assets/particles/red.png');
+    this.load.image('map', map);
   }
+
 
   function create() {
-    this.add.image(400, 300, 'sky');
+    this.add.image(0, 0, 'map').setOrigin(0);
+    this.cameras.main.setBounds(0, 0, 570, 570);
+    this.cameras.main.setZoom(3);
 
-    var particles = this.add.particles('red');
+    //  Camera controls
+    var cursors = this.input.keyboard.createCursorKeys();
 
-    var emitter = particles.createEmitter({
-      speed: 100,
-      scale: { start: 1, end: 0 },
-      blendMode: 'ADD'
-    });
+    var controlConfig = {
+        camera: this.cameras.main,
+        left: cursors.left,
+        right: cursors.right,
+        up: cursors.up,
+        down: cursors.down,
+        acceleration: 0.06,
+        drag: 0.0005,
+        maxSpeed: 1.0
+    };
+    controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
+    
+  }
 
-    var logo = this.physics.add.image(400, 100, 'logo');
 
-    logo.setVelocity(100, 200);
-    logo.setBounce(1, 1);
-    logo.setCollideWorldBounds(true);
-
-    emitter.startFollow(logo);
+  function update (time, delta)
+  {
+      controls.update(delta);
   }
 }
-
-export default GameSetup;
+  export default GameSetup;
