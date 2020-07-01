@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 // Scenes
 import Default from './Default';
 import ShowMap from './Map';
+import Farm from "./Farm";
 
 function GameSetup() {
   var config = {
@@ -15,7 +16,7 @@ function GameSetup() {
         gravity: { y: 200 }
       }
     },
-    scene: [ShowMap, Default]
+    scene: [ShowMap, Default, Farm]
   };
 
   var game = new Phaser.Game(config);
