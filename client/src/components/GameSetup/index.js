@@ -16,7 +16,7 @@ function GameSetup() {
         gravity: { y: 200 }
       }
     },
-    scene: [ShowMap, Default, Farm]
+    scene: [Farm, ShowMap, Default]
   };
 
   var game = new Phaser.Game(config);
