@@ -9,7 +9,7 @@ function GameSetup() {
   var config = {
     type: Phaser.AUTO,
     width: window.innerWidth,
-    height: window.innerHeight-80, // 80 = height of header
+    height: window.innerHeight,
     physics: {
       default: 'arcade',
       arcade: {
