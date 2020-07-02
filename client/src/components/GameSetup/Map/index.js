@@ -17,6 +17,7 @@ class ShowMap extends Phaser.Scene {
 
   preload() {
     this.load.image('map', 'Assets/map.png');
+    this.load.image('farmOnMap', 'Assets/farmOnMap.png')
   }
 
   create() {
@@ -28,6 +29,36 @@ class ShowMap extends Phaser.Scene {
 
     // Set up map image
     var map = this.add.image(gameWidth / 2, gameHeight / 2, 'map');
+    
+    // Sprites
+    this.items = this.add.group([
+      {
+        key: "farmOnMap",
+        setXY: {
+          x: 100,
+          y: 100
+        },
+        setScale: {
+          x: 0.5,
+          y: 0.5
+        }
+      }
+    ]);
+
+    this.items.setDepth(1);
+
+    Phaser.Actions.Call(this.items.getChildren(), function(item) {
+      // Make item interactive
+      item.setInteractive();
+
+      item.on("pointerdown", function(pointer) {
+        // console.log("you clicked", item.texture.key);
+        if (item.texture.key === "farmOnMap") {
+          this.scene.scene.start("Farm");
+        }
+      })
+
+    }, this);
 
     // blow up image to 4 times the original size
     // map.setScale(4);

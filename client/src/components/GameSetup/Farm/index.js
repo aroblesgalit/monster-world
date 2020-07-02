@@ -13,7 +13,7 @@ class Farm extends Phaser.Scene {
     create() {
         // Set up farmBg image to centered on screen
         // this.image = this.add.image(this.game.config.width / 2, this.game.config.height / 2, "farmBg");
-        this.add.image(0, 0, "farmBg").setOrigin(0);
+        var farmBg = this.add.image(0, 0, "farmBg").setOrigin(0, 0);
         this.cameras.main.setBounds(0, 0, 730, 416);
         this.cameras.main.setZoom(3);
 
@@ -32,15 +32,20 @@ class Farm extends Phaser.Scene {
         };
 
         controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
-
-        // this.input.keyboard.on("keyup_ArrowRight", function (e) {
-        //     this.image.x += 10;
-        // }, this);
-
     }
 
     update(time, delta) {
         controls.update(delta);
+        if (this.game.input.activePointer.isDown) {
+            if (this.game.origDragPoint) {
+              // move the camera by the amount the mouse has moved since last update
+              this.cameras.main.scrollX += this.game.origDragPoint.x - this.game.input.activePointer.position.x;
+              this.cameras.main.scrollY += this.game.origDragPoint.y - this.game.input.activePointer.position.y;
+            } // set new drag origin to current position
+            this.game.origDragPoint = this.game.input.activePointer.position.clone();
+          } else {
+            this.game.origDragPoint = null;
+          }
     }
 }
 
