@@ -69,7 +69,7 @@ class Shop extends Phaser.Scene {
     });
 
     this.cameras.main.setBounds(0, 0, 1920, 1600);
-    this.cameras.main.setZoom(0.75);
+    this.cameras.main.setZoom(0.42);
 
 
     //  Camera controls
