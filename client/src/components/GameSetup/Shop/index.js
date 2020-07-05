@@ -26,27 +26,68 @@ class Shop extends Phaser.Scene {
     let sign1M = this.add.sprite(1110, 310, '1Msign').setOrigin(0).setDepth(1).setInteractive();
 
     // sign onclick functions
+    sign20L.on('pointerdown', function () {
+      this.setScale(0.97);
+    });
+    sign20L.on('pointerout', function () {
+      this.setScale(1);
+    });
     sign20L.on('pointerup', function () {
+      this.setScale(1);
       console.log("Clicked sign20L");
     });
 
+    sign20R.on('pointerdown', function () {
+      this.setScale(0.97);
+    });
+    sign20R.on('pointerout', function () {
+      this.setScale(1);
+    });
     sign20R.on('pointerup', function () {
-      console.log("Clicked sign20R");
+      this.setScale(1);
     });
 
+    sign50.on('pointerdown', function () {
+      this.setScale(0.97);
+    });
+    sign50.on('pointerout', function () {
+      this.setScale(1);
+    });
     sign50.on('pointerup', function () {
+      this.setScale(1);
       console.log("Clicked sign50");
     });
 
+    freesignL.on('pointerdown', function () {
+      this.setScale(0.97);
+    });
+    freesignL.on('pointerout', function () {
+      this.setScale(1);
+    });
     freesignL.on('pointerup', function () {
+      this.setScale(1);
       console.log("Clicked freesignL");
     });
 
+    freesignR.on('pointerdown', function () {
+      this.setScale(0.97);
+    });
+    freesignR.on('pointerout', function () {
+      this.setScale(1);
+    });
     freesignR.on('pointerup', function () {
+      this.setScale(1);
       console.log("Clicked freesignR");
     });
 
+    sign1M.on('pointerdown', function () {
+      this.setScale(0.97);
+    });
+    sign1M.on('pointerout', function () {
+      this.setScale(1);
+    });
     sign1M.on('pointerup', function () {
+      this.setScale(1);
       console.log("Clicked sign1M");
     });
 
