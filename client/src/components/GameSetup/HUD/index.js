@@ -28,8 +28,14 @@ class HeadsUpDisplay extends Phaser.Scene {
     this.background.displayWidth = gameWidth;
 
     // Set up map button
-    var mapButton = this.add.sprite(this.background.displayWidth/2, 38,'button');
+    var mapButton = this.add.sprite(0,0,'button').setOrigin(0)
+    var mapText = this.add.text(22,28).setText("Map")
     mapButton.setScale(1.5);
+
+    mapButton.setInteractive();
+    var mapContainer  =this.add.container((this.background.displayWidth-mapButton.displayWidth)/2, 0, [mapButton, mapText]);
+    
+    mapButton.on('pointerup', this.loadImage, this);
 
     // other buttons
     var button1 = this.add.sprite(this.background.displayWidth-60, 0,'button').setOrigin(0);
@@ -44,6 +50,10 @@ class HeadsUpDisplay extends Phaser.Scene {
 
   resize() {
     this.background.displayWidth = this.game.config.width;
+  }
+
+  loadImage(){
+      console.log("Button has been clicked!");
   }
 
 }
