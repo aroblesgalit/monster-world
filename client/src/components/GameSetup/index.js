@@ -17,13 +17,17 @@ function GameSetup() {
         gravity: { y: 200 }
       }
     },
-    scene: [Default, ShowMap]
+    scene: [Default, ShowMap ]
   };
 
   var game = new Phaser.Game(config);
   
-  // Add heads up display to game
+  // Add heads up display to game.  This will start the scene on top of the existing one.
   game.scene.add('HUD', HUD, true);
+
+  // start the map and make it sleep
+  // game.scene.start("ShowMap");
+  // game.scene.sleep("ShowMap");
 }
 
 export default GameSetup;
