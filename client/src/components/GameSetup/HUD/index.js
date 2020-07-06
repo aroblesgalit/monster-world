@@ -15,6 +15,7 @@ class HeadsUpDisplay extends Phaser.Scene {
     this.status = "closed";
     this.load.image('background', 'Assets/hudBackground.png');
     this.load.image('button', 'Assets/hudButton.png');
+    this.load.image('settings', 'Assets/hudSettings.png');
   }
 
   create() {
@@ -62,7 +63,11 @@ class HeadsUpDisplay extends Phaser.Scene {
     
 
     // other buttons
-    var button1 = this.add.sprite(this.background.displayWidth - 60, 0, 'button').setOrigin(0);
+    var settingsButton = this.add.sprite(0, 0, 'button').setOrigin(0);
+    var settingsDisplay = this.add.sprite(13, 5, 'settings').setOrigin(0);
+    settingsDisplay.setScale(.15);
+    var settingsContainer = this.add.container((this.background.displayWidth - 60), 0, [settingsButton, settingsDisplay]);
+
     var button2 = this.add.sprite(this.background.displayWidth - 120, 0, 'button').setOrigin(0);
     var button3 = this.add.sprite(this.background.displayWidth - 180, 0, 'button').setOrigin(0);
 
