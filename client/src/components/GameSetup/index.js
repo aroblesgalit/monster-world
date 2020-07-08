@@ -7,16 +7,16 @@ import Farm from "./Farm";
 
 function GameSetup() {
   var config = {
-    type: Phaser.AUTO,
-    width: window.innerWidth,
-    height: window.innerHeight,
+    type: Phaser.CANVAS,
+    width: 800,
+    height: 600,
     physics: {
       default: 'arcade',
       arcade: {
         gravity: { y: 200 }
       }
     },
-    scene: [ShowMap, Default, Farm]
+    scene: [Farm, ShowMap, Default]
   };
 
   var game = new Phaser.Game(config);

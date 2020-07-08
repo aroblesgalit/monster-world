@@ -16,6 +16,9 @@ class Farm extends Phaser.Scene {
         this.load.image("buttonUp", "Assets/blue_button04.png");
         this.load.image("buttonDown", "Assets/blue_button05.png");
         this.load.image("buttonHover", "Assets/blue_button02.png");
+
+        this.load.image("buildWindow", "Assets/build_window.png");
+        this.load.image("dirt2", "Assets/dirt2.png");
     }
 
     create() {
@@ -99,7 +102,12 @@ class Farm extends Phaser.Scene {
         //     .on("pointerdown", () => {
         //     console.log("Button clicked!")
         // })
+        
 
+        // Build window
+        let buildWindow = this.add.image(0, 0, "buildWindow").setOrigin(0);
+        let dirt2 = this.add.image(8, 20, "dirt2").setOrigin(0).setInteractive({ useHandCursor: true });
+        let buildContainer = this.add.container(76, this.cameras.main.height / 6.3, [buildWindow, dirt2]);
     }
 
     update(time, delta) {
@@ -116,5 +124,6 @@ class Farm extends Phaser.Scene {
         }
     }
 }
+
 
 export default Farm;
