@@ -1,10 +1,13 @@
 // guide for making a menu in phaser https://www.youtube.com/watch?v=OS7neDUUhPE
 
 import Phaser from 'phaser';
+import ShopMenu from '../../../ui/ShopMenu';
+
 let controls;
 class Shop extends Phaser.Scene {
   constructor() {
     super({ key: "Shop" });
+    this.shopMenu = undefined;
   }
 
   preload() {
@@ -25,6 +28,11 @@ class Shop extends Phaser.Scene {
     let freesignR = this.add.sprite(690, 240, 'freesign').setOrigin(0).setDepth(1).setInteractive();
     let sign1M = this.add.sprite(1110, 310, '1Msign').setOrigin(0).setDepth(1).setInteractive();
 
+    // function setShopText(value) {
+    //   let shopText = this.add.text(300, 100, value, { font: '24px Courier', fill: '#00ff00' })
+    // }
+    const shopMenu = this.shopMenu = this.createShopMenu(550, 1000, "Welcome!");
+
     // sign onclick functions
     sign20L.on('pointerdown', function () {
       this.setScale(0.97);
@@ -34,7 +42,10 @@ class Shop extends Phaser.Scene {
     });
     sign20L.on('pointerup', function () {
       this.setScale(1);
-      console.log("Clicked sign20L");
+      // Shop.shopMenu("sign20L");
+      // let shopText = this.add.text(300, 100, "sign20L", { font: '24px Courier', fill: '#00ff00' })
+      shopMenu.setText("You clicked sign20L!");
+
     });
 
     sign20R.on('pointerdown', function () {
@@ -45,6 +56,8 @@ class Shop extends Phaser.Scene {
     });
     sign20R.on('pointerup', function () {
       this.setScale(1);
+      shopMenu.setText("You clicked sign20R!");
+
     });
 
     sign50.on('pointerdown', function () {
@@ -55,7 +68,7 @@ class Shop extends Phaser.Scene {
     });
     sign50.on('pointerup', function () {
       this.setScale(1);
-      console.log("Clicked sign50");
+      shopMenu.setText("You clicked sign50!");
     });
 
     freesignL.on('pointerdown', function () {
@@ -66,7 +79,7 @@ class Shop extends Phaser.Scene {
     });
     freesignL.on('pointerup', function () {
       this.setScale(1);
-      console.log("Clicked freesignL");
+      shopMenu.setText("You clicked freesignL!");
     });
 
     freesignR.on('pointerdown', function () {
@@ -77,7 +90,7 @@ class Shop extends Phaser.Scene {
     });
     freesignR.on('pointerup', function () {
       this.setScale(1);
-      console.log("Clicked freesignR");
+      shopMenu.setText("You clicked freesignR!");
     });
 
     sign1M.on('pointerdown', function () {
@@ -88,7 +101,7 @@ class Shop extends Phaser.Scene {
     });
     sign1M.on('pointerup', function () {
       this.setScale(1);
-      console.log("Clicked sign1M");
+      shopMenu.setText("You clicked sign1M!");
     });
 
     this.cameras.main.setBounds(0, 0, 1920, 1600);
@@ -110,6 +123,15 @@ class Shop extends Phaser.Scene {
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
+  }
+
+  createShopMenu(x, y)
+  {
+    const style = { fontSize: '64px', color: '#fff' }
+    const menu = new ShopMenu(this, x, y, style)
+
+    this.add.existing(menu);
+    return menu;
   }
 
   update(time, delta) {
