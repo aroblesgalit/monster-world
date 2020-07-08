@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 let controls;
+let buildVisible;
 
 class Farm extends Phaser.Scene {
     constructor() {
@@ -85,6 +86,14 @@ class Farm extends Phaser.Scene {
                     .setPosition(0, 1);
                 buildBtnText.setPosition(buildBtn.x + 18, buildBtn.y);
             })
+            .on("pointerup", () => {
+                buildVisible = !buildVisible;
+                if(buildVisible) {
+                    buildContainer.visible = true;
+                } else {
+                    buildContainer.visible = false;
+                }
+            }, this)
             .on("pointerover", () => {
                 buildBtn.setTexture("buttonHover");
             })
@@ -92,7 +101,6 @@ class Farm extends Phaser.Scene {
                 buildBtn.setTexture("buttonUp")
                     .setPosition(0, 0);
                 buildBtnText.setPosition(buildBtn.x + 18, buildBtn.y);
-
             })
         let buildBtnText = this.add.text(buildBtn.x + 18, buildBtn.y, "Build", { font: "10px Arial", fill: "#000" });
         this.add.container(100, this.cameras.main.height / 3.3, [buildBtn, buildBtnText]);
@@ -102,12 +110,50 @@ class Farm extends Phaser.Scene {
         //     .on("pointerdown", () => {
         //     console.log("Button clicked!")
         // })
-        
 
-        // Build window
         let buildWindow = this.add.image(0, 0, "buildWindow").setOrigin(0);
         let dirt2 = this.add.image(8, 20, "dirt2").setOrigin(0).setInteractive({ useHandCursor: true });
+
         let buildContainer = this.add.container(76, this.cameras.main.height / 6.3, [buildWindow, dirt2]);
+
+        buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
+
+        buildContainer.visible = false;
+
+        this.input.setDraggable(buildContainer);
+
+        buildContainer.on('drag', function (pointer, dragX, dragY) {
+            this.x = dragX;
+            this.y = dragY;
+        });
+
+        dirt2.on("pointerup", function () {
+            console.log("Clicked on dirt2.");
+        }, this);
+    }
+
+    createWindow(func) {
+        var x = Phaser.Math.Between(400, 600);
+        var y = Phaser.Math.Between(64, 128);
+
+        var handle = 'window';
+
+        var win = this.add.zone(x, y, func.WIDTH, func.HEIGHT).setInteractive().setOrigin(0);
+
+        var demo = new func(handle, win);
+
+        this.input.setDraggable(win);
+
+        win.on('drag', function (pointer, dragX, dragY) {
+
+            this.x = dragX;
+            this.y = dragY;
+
+            demo.refresh()
+
+        });
+
+        this.scene.add(handle, demo, true);
     }
 
     update(time, delta) {
@@ -124,6 +170,33 @@ class Farm extends Phaser.Scene {
         }
     }
 }
+
+// class Build extends Phaser.Scene {
+//     constructor(handle, parent) {
+//         super(handle);
+//         this.parent = parent;
+//     }
+
+//     create() {
+//         let buildWindow = this.add.image(0, 0, "buildWindow").setOrigin(0);
+//         let dirt2 = this.add.image(8, 20, "dirt2").setOrigin(0).setInteractive({ useHandCursor: true });
+
+//         let buildContainer = this.add.container(76, this.cameras.main.height / 6.3, [buildWindow, dirt2]);
+
+//         buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
+
+//         this.input.setDraggable(buildContainer);
+
+//         buildContainer.on('drag', function (pointer, dragX, dragY) {
+//             this.x = dragX;
+//             this.y = dragY;
+//         });
+
+//         dirt2.on("pointerup", function () {
+//             console.log("Clicked on dirt2.");
+//         }, this);
+//     }
+// }
 
 
 export default Farm;
