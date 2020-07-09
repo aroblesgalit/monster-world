@@ -1,6 +1,10 @@
 import Phaser from 'phaser';
 
-// const formatValue = (value) => `Value: ${value}`;
+const formatValue = (value) => {
+  return value;
+  // this.add.image(0, 0, menuBox);
+  // return `Value: ${value}`;
+}
 
 export default class ShopMenu extends Phaser.GameObjects.Text
 {
@@ -19,6 +23,6 @@ export default class ShopMenu extends Phaser.GameObjects.Text
 
  updateValueText()
  {
-  //  this.setText(formatValue(this.value));
+   this.setText(formatValue(this.value));
  }
 }
