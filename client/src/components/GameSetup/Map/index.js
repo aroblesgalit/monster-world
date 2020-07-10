@@ -18,7 +18,8 @@ class ShowMap extends Phaser.Scene {
 
   preload() {
     this.load.image('map', 'Assets/map.png');
-    this.load.image('farmOnMap', 'Assets/farmOnMap.png')
+    this.load.image('FarmOnMap', 'Assets/farmOnMap.png')
+    this.load.image('DefaultOnMap', 'Assets/defaultOnMap.png')
   }
 
   create() {
@@ -28,33 +29,65 @@ class ShowMap extends Phaser.Scene {
 
     // Set up map image
     var map = this.add.image(0, 0, 'map').setOrigin(0);
-    
-    // Sprites
+
+    // Map Locations
+    //===========================
     this.items = this.add.group([
       {
-        key: "farmOnMap",
+        key: "FarmOnMap",
         setXY: {
-          x: 100,
-          y: 100
+          x: 240,
+          y: 950
         },
         setScale: {
-          x: 0.5,
-          y: 0.5
+          x: 0.13,
+          y: 0.13
+        }
+      },
+      {
+        key: "DefaultOnMap",
+        setXY: {
+          x: 100,
+          y: 50
+        },
+        setScale: {
+          x: .5,
+          y: .5
         }
       }
     ]);
 
     this.items.setDepth(1);
 
-    Phaser.Actions.Call(this.items.getChildren(), function(item) {
+    // Make Locations Buttons
+    //===========================
+    Phaser.Actions.Call(this.items.getChildren(), function (item) {
       // Make item interactive
       item.setInteractive();
 
-      item.on("pointerdown", function(pointer) {
-        // console.log("you clicked", item.texture.key);
-        if (item.texture.key === "farmOnMap") {
-          this.scene.scene.start("Farm");
-        }
+      var HUD = this.scene.get('HeadsUpDisplay');
+      var game = this.game;
+      console.log(this.scene);
+      item.on("pointerdown", function (pointer) {
+        // close map
+        HUD.triggerMap();
+
+        var choseScene = item.texture.key.replace("OnMap","");
+
+        //console.log(game.scene.scenes);
+        // var list = game.scene.getScenes(true);
+        // console.log(list);
+
+        this.scene.scene.sleep('Farm');
+        this.scene.scene.sleep('Default');
+        this.scene.scene.run(choseScene);
+        console.log(this.scene.scene.get(choseScene));
+        // this.scene.scene.bringToTop(choseScene);
+        // this.scene.scene.bringToTop('HeadsUpDisplay');
+        // this.scene.scene.bringToTop('ShowMap');
+        
+
+
       })
 
     }, this);
@@ -75,10 +108,10 @@ class ShowMap extends Phaser.Scene {
     // Set up camera settings on scene
     cam.setBackgroundColor('#D8DFEF')
     cam.setBounds(0, 0, map.displayWidth, map.displayHeight);
-    this.cameras.main.setViewport(gameWidth*.15, gameHeight*.15, gameWidth*.7, gameHeight*.7);
+    this.cameras.main.setViewport(gameWidth * .15, gameHeight * .15, gameWidth * .7, gameHeight * .7);
   }
 
-  update(){
+  update() {
     var pointer = this.input.activePointer;
     var cam = this.cameras.main;
 

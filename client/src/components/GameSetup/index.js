@@ -17,7 +17,7 @@ function GameSetup() {
         gravity: { y: 200 }
       }
     },
-    scene: [Farm, ShowMap, Default]
+    scene: [Default, Farm, ShowMap]
   };
 
   var game = new Phaser.Game(config);
@@ -26,7 +26,7 @@ function GameSetup() {
   game.scene.add('HUD', HUD, true);
 
   // start the map and make it sleep
-  // game.scene.start("ShowMap");
+  game.scene.start("Farm");
   // game.scene.sleep("ShowMap");
 }
 
