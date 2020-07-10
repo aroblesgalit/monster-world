@@ -34,11 +34,16 @@ class Farm extends Phaser.Scene {
 
         // Set up farmBg image to centered on screen
         // this.image = this.add.image(this.game.config.width / 2, this.game.config.height / 2, "farmBg");
-        let grass = this.add.image(0, 0, "grass")
-            .setOrigin(0, 0)
-            .setScale(0.4);
+        // let grass = this.add.image(0, 0, "grass")
+        //     .setOrigin(0, 0)
+        //     .setScale(0.4);
         this.cameras.main.setBounds(0, 0, 0, 0);
         this.cameras.main.setZoom(3);
+
+        // Grass tilemap
+        const grassMap = this.make.tilemap({ key: "grass_tilemap"});
+        const tileset = grassMap.addTilesetImage("tallGrass_tileset", "grass_tiles");
+        const grassPlatform = grassMap.createStaticLayer("grass", tileset, 0, 200);
 
         // Camera controls
         let cursors = this.input.keyboard.createCursorKeys();
@@ -92,7 +97,7 @@ class Farm extends Phaser.Scene {
             })
             .on("pointerup", () => {
                 buildVisible = !buildVisible;
-                if(buildVisible) {
+                if (buildVisible) {
                     buildContainer.visible = true;
                 } else {
                     buildContainer.visible = false;
