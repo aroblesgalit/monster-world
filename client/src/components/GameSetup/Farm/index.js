@@ -8,7 +8,7 @@ class Farm extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("grass", "Assets/grass.png");
+        // this.load.image("grass", "Assets/grass.png");
         this.load.spritesheet("crop", "Assets/Crop_Spritesheet.png", {
             frameWidth: 10,
             frameHeight: 14
@@ -23,14 +23,14 @@ class Farm extends Phaser.Scene {
 
         this.load.image("grass_tiles", "Assets/tilesets/tallgrass.png");
         // JSON - tilemap - grass
-        this.load.tilemapTiledJSON("grass_tilemap", "Assets/grass_tilemap.json");
+        this.load.tilemapTiledJSON("grass_tilemap", "Assets/tilemaps/grass_tilemap.json");
     }
 
     create() {
 
         // Width and Height of game setup
-        let gameW = this.sys.game.config.width;
-        let gameH = this.sys.game.config.height;
+        // let gameW = this.sys.game.config.width;
+        // let gameH = this.sys.game.config.height;
 
         // Set up farmBg image to centered on screen
         // this.image = this.add.image(this.game.config.width / 2, this.game.config.height / 2, "farmBg");
@@ -43,7 +43,7 @@ class Farm extends Phaser.Scene {
         // Grass tilemap
         const grassMap = this.make.tilemap({ key: "grass_tilemap"});
         const tileset = grassMap.addTilesetImage("tallGrass_tileset", "grass_tiles");
-        const grassPlatform = grassMap.createStaticLayer("grass", tileset, 0, 200);
+        const grassPlatform = grassMap.createStaticLayer("grass", tileset);
 
         // Camera controls
         let cursors = this.input.keyboard.createCursorKeys();
