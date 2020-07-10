@@ -130,6 +130,8 @@ class Farm extends Phaser.Scene {
         dirt2.on("pointerup", function () {
             console.log("Clicked on dirt2.");
         }, this);
+
+        this.scene.sleep('Farm');
     }
 
     createWindow(func) {
