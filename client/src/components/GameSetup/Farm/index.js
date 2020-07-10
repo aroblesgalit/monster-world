@@ -20,6 +20,10 @@ class Farm extends Phaser.Scene {
 
         this.load.image("buildWindow", "Assets/build_window.png");
         this.load.image("dirt2", "Assets/dirt2.png");
+
+        this.load.image("grass_tiles", "Assets/tilesets/tallgrass.png");
+        // JSON - tilemap - grass
+        this.load.tilemapTiledJSON("grass_tilemap", "Assets/grass_tilemap.json");
     }
 
     create() {
