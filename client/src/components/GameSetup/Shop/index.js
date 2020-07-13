@@ -152,11 +152,93 @@ class Potion extends Phaser.Scene {
     super(handle);
     this.parent = parent;
   }
+
+  index = 0;
+
+  preload() {
+    this.load.image('potionred', 'assets/potion.png');
+    this.load.image('potionblue', 'assets/potionblue.png');
+    this.load.image('potiongreen', 'assets/potiongreen.png');
+    this.load.image('potionpurple', 'assets/potionpurple.png');
+    this.load.image('arrowright', 'assets/arrow.png');
+    this.load.image('arrowleft', 'assets/arrowleft.png');
+    // this.load.spritesheet('diamonds', '/assets/diamonds32x24x5.png');
+  }
+
   create() 
   {
     var bg = this.add.image(0, 0, "shopMenuBox").setOrigin(0);
-    this.cameras.main.setViewport(this.game.config.width/2 - Potion.WIDTH/2, this.game.config.height/2 - Potion.HEIGHT/2, Potion.WIDTH, Potion.HEIGHT);
-    this.add.text(90,50,"Potions HERE!", {color: "white", fontSize: "30px"})
+    this.cameras.main.setViewport(this.game.config.width/2 - Potion.WIDTH/1.75, this.game.config.height/2 - Potion.HEIGHT/5, Potion.WIDTH, Potion.HEIGHT);
+    this.add.text(90,50,"Potions HERE!", {color: "white", fontSize: "30px"});
+    let arrowright = this.add.image(Potion.WIDTH-65, Potion.HEIGHT/1.35, 'arrowright').setScale(0.15).setInteractive();
+    let arrowleft = this.add.image(145, Potion.HEIGHT/1.35, 'arrowleft').setScale(0.15).setInteractive();
+    let potion = this.add.image(Potion.WIDTH/1.75, Potion.HEIGHT/2, 'potionred').setScale(0.35);
+
+
+    arrowright.on('pointerdown', function () {
+      this.setScale(0.13);
+    });
+    arrowright.on('pointerout', function () {
+      this.setScale(0.15);
+    });
+    arrowright.on('pointerup', function () {
+      this.setScale(0.15);
+    });
+    arrowright.on('pointerup', function () {
+      this.updateSprite('up', potion);
+    }, this);
+
+    arrowleft.on('pointerdown', function () {
+      this.setScale(0.13);
+    });
+    arrowleft.on('pointerout', function () {
+      this.setScale(0.15);
+    });
+    arrowleft.on('pointerup', function () {
+      this.setScale(0.15);
+    });
+    arrowleft.on('pointerup', function () {
+      this.updateSprite('down', potion);
+    }, this);
+
+  }
+
+  // this funtion takes a direction to increment, current index, and an image object as input
+  // cycles through images based on direction to increment
+  updateSprite(dir, potion) {
+    if (dir === 'up') {
+      if (this.index === 3) {
+        this.index = 0;
+      }
+      else {
+        this.index++;
+      }
+    }
+    else {
+      if (this.index === 0) {
+        this.index = 3;
+      }
+      else {
+        this.index--;
+      }
+    }
+    console.log(this.index)
+    switch (this.index) {
+      case 0: 
+        potion.setTexture('potionred');
+        break;
+      case 1:
+        potion.setTexture('potionblue');
+        break;
+      case 2:
+        potion.setTexture('potionpurple');
+        break;
+      case 3:
+        potion.setTexture('potiongreen');
+        break;
+      default:
+        return;
+    }
   }
 
 }
