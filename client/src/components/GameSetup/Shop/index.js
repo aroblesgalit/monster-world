@@ -162,18 +162,18 @@ class Potion extends Phaser.Scene {
     this.load.image('potionpurple', 'assets/potionpurple.png');
     this.load.image('arrowright', 'assets/arrow.png');
     this.load.image('arrowleft', 'assets/arrowleft.png');
-    // this.load.spritesheet('diamonds', '/assets/diamonds32x24x5.png');
+    this.load.image('buybutton', 'assets/buybutton.png');
   }
 
   create() 
   {
     var bg = this.add.image(0, 0, "shopMenuBox").setOrigin(0);
     this.cameras.main.setViewport(this.game.config.width/2 - Potion.WIDTH/1.75, this.game.config.height/2 - Potion.HEIGHT/5, Potion.WIDTH, Potion.HEIGHT);
-    this.add.text(90,50,"Potions HERE!", {color: "white", fontSize: "30px"});
+    let price = this.add.text(Potion.WIDTH/1.85, 65,"20g", {color: "white", fontSize: "24px"});
     let arrowright = this.add.image(Potion.WIDTH-65, Potion.HEIGHT/1.35, 'arrowright').setScale(0.15).setInteractive();
     let arrowleft = this.add.image(145, Potion.HEIGHT/1.35, 'arrowleft').setScale(0.15).setInteractive();
     let potion = this.add.image(Potion.WIDTH/1.75, Potion.HEIGHT/2, 'potionred').setScale(0.35);
-
+    let buybutton = this.add.image(Potion.WIDTH/1.7, Potion.HEIGHT/1.35, 'buybutton').setScale(0.2).setInteractive();
 
     arrowright.on('pointerdown', function () {
       this.setScale(0.13);
@@ -185,7 +185,7 @@ class Potion extends Phaser.Scene {
       this.setScale(0.15);
     });
     arrowright.on('pointerup', function () {
-      this.updateSprite('up', potion);
+      this.updateSprite('up', potion, price);
     }, this);
 
     arrowleft.on('pointerdown', function () {
@@ -198,14 +198,27 @@ class Potion extends Phaser.Scene {
       this.setScale(0.15);
     });
     arrowleft.on('pointerup', function () {
-      this.updateSprite('down', potion);
+      this.updateSprite('down', potion, price);
+    }, this);
+
+    buybutton.on('pointerdown', function () {
+      this.setScale(0.18);
+    });
+    buybutton.on('pointerout', function () {
+      this.setScale(0.2);
+    });
+    buybutton.on('pointerup', function () {
+      this.setScale(0.2);
+    });
+    buybutton.on('pointerup', function () {
+      this.handleBuy();
     }, this);
 
   }
 
   // this funtion takes a direction to increment, current index, and an image object as input
   // cycles through images based on direction to increment
-  updateSprite(dir, potion) {
+  updateSprite(dir, potion, price) {
     if (dir === 'up') {
       if (this.index === 3) {
         this.index = 0;
@@ -222,19 +235,41 @@ class Potion extends Phaser.Scene {
         this.index--;
       }
     }
-    console.log(this.index)
     switch (this.index) {
       case 0: 
         potion.setTexture('potionred');
+        price.setText("20g");
         break;
       case 1:
         potion.setTexture('potionblue');
+        price.setText("25g");
         break;
       case 2:
         potion.setTexture('potionpurple');
+        price.setText("50g");
         break;
       case 3:
         potion.setTexture('potiongreen');
+        price.setText("100g");
+        break;
+      default:
+        return;
+    }
+  }
+
+  handleBuy() {
+    switch (this.index) {
+      case 0: 
+      console.log("You bought the red potion!");
+        break;
+      case 1:
+        console.log("You bought the blue potion!");
+        break;
+      case 2:
+        console.log("You bought the purple potion!");
+        break;
+      case 3:
+        console.log("You bought the green potion!");
         break;
       default:
         return;
