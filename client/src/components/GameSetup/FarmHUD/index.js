@@ -5,9 +5,11 @@ let buildContainer;
 let plantActive = false;
 let plantMarker;
 
-class Farm extends Phaser.Scene {
-    constructor() {
-        super({ key: "Farm" });
+class FarmHUD extends Phaser.Scene {
+    constructor(game) {
+        super({ key: "FarmHUD" });
+
+        var game = game;
     }
 
     preload() {
@@ -16,6 +18,7 @@ class Farm extends Phaser.Scene {
             frameWidth: 16,
             frameHeight: 16
         });
+
         this.load.image("dirt", "Assets/tilledDirt.png");
         this.load.image("buttonUp", "Assets/blue_button04.png");
         this.load.image("buttonDown", "Assets/blue_button05.png");
@@ -23,48 +26,9 @@ class Farm extends Phaser.Scene {
 
         this.load.image("buildWindow", "Assets/build_window.png");
         this.load.image("dirt2", "Assets/dirt2.png");
-
-
-        // Tilemap - grass
-        this.load.image("grass_tiles", "Assets/tilesets/tallgrass.png");
-        this.load.image("plowedSoil_tiles", "Asset/tilesets/plowed_soil.png");
-        this.load.tilemapTiledJSON("grass_tilemap", "Assets/tilemaps/grass_tilemap.json");
     }
 
     create() {
-
-        // Width and Height of game setup
-        // let gameW = this.sys.game.config.width;
-        // let gameH = this.sys.game.config.height;
-
-        // Set up farmBg image to centered on screen
-        // this.image = this.add.image(this.game.config.width / 2, this.game.config.height / 2, "farmBg");
-        // let grass = this.add.image(0, 0, "grass")
-        //     .setOrigin(0, 0)
-        //     .setScale(0.4);
-        // this.cameras.main.setBounds(0, 0, 0, 0);
-        // this.cameras.main.setZoom(3);
-
-        // Grass tilemap
-        const grassMap = this.make.tilemap({ key: "grass_tilemap" });
-        const tileset = grassMap.addTilesetImage("tallGrass_tileset", "grass_tiles");
-        const grassPlatform = grassMap.createStaticLayer("grass", tileset);
-
-        // Camera controls
-        let cursors = this.input.keyboard.createCursorKeys();
-
-        let controlConfig = {
-            camera: this.cameras.main,
-            left: cursors.left,
-            right: cursors.right,
-            up: cursors.up,
-            down: cursors.down,
-            acceleration: 0.06,
-            drag: 0.0005,
-            maxSpeed: 1.0
-        };
-
-        controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
         // Crop
         let config = {
@@ -77,17 +41,6 @@ class Farm extends Phaser.Scene {
         };
 
         this.anims.create(config);
-
-
-
-
-        // Dirt
-        // const dirt = this.add.image(40, this.cameras.main.height - 40, "dirt", 0);
-
-        // dirt.setInteractive({ useHandCursor: true });
-        // dirt.on("pointerdown", (pointer) => {
-        //     this.plantTurnips();
-        // });
 
         // Build Button
         let buildBtn = this.add.image(0, 0, "buttonUp")
@@ -113,7 +66,7 @@ class Farm extends Phaser.Scene {
         let buildBtnText = this.add.text(buildBtn.x - 20, buildBtn.y - 10, "Build", { font: "20px Arial", fill: "#000" });
         this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 36, [buildBtn, buildBtnText]);
 
-        
+
         // Build window
         let buildWindow = this.add.image(0, 0, "buildWindow");
         let dirt2 = this.add.image(0, 20, "dirt2").setInteractive({ useHandCursor: true });
@@ -137,7 +90,7 @@ class Farm extends Phaser.Scene {
             plantActive = true;
         }, this);
 
-        this.scene.sleep('Farm');
+        this.scene.sleep("FarmHUD");
     }
 
     createPlantMarker() {
@@ -187,6 +140,7 @@ class Farm extends Phaser.Scene {
             this.clearPlantMarker();
         }
     }
+
 }
 
-export default Farm;
+export default FarmHUD;
