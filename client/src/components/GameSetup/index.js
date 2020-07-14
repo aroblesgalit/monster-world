@@ -3,29 +3,23 @@ import Phaser from 'phaser';
 // Scenes
 import Default from './Default';
 import ShowMap from './Map';
-import Shop from './Shop';
-
-var myCanvas = document.createElement('canvas');
-myCanvas.id = "game-canvas";
-myCanvas.style = "margin-top: 50px; margin-left: auto; margin-right: auto;"
-document.body.appendChild(myCanvas);
+import { Shop, Potion } from './Shop';
 import HUD from './HUD';
 import Farm from "./Farm";
 
+
 function GameSetup() {
   var config = {
-    type: Phaser.CANVAS,
-    parent: document.getElementById("game-parent"),
-    width: 800,
-    height: 600, // 80 = height of header
-    canvas: document.getElementById("game-canvas"),
+    type: Phaser.AUTO,
+    width: window.innerWidth,
+    height: window.innerHeight, // 80 = height of header
     physics: {
       default: 'arcade',
       arcade: {
         gravity: { y: 200 }
       }
     },
-    scene: [Default, Farm, ShowMap, Shop]
+    scene: [Default, Farm, Shop, Potion, ShowMap]
   };
 
   var game = new Phaser.Game(config);
@@ -35,6 +29,8 @@ function GameSetup() {
 
   // start the map and make it sleep
   game.scene.start("Farm");
+  game.scene.start("Shop");
+  game.scene.start("Potion");
   // game.scene.sleep("ShowMap");
 }
 

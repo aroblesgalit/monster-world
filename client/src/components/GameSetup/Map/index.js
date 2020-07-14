@@ -8,7 +8,7 @@ Getting Started with Scene Breakdown - https://www.youtube.com/watch?v=7cpZ5Y7TH
 */
 
 import Phaser from 'phaser';
-let controls;
+
 class ShowMap extends Phaser.Scene {
   constructor(game) {
     super({ key: "ShowMap" });
@@ -18,8 +18,9 @@ class ShowMap extends Phaser.Scene {
 
   preload() {
     this.load.image('map', 'Assets/map.png');
-    this.load.image('FarmOnMap', 'Assets/farmOnMap.png')
-    this.load.image('DefaultOnMap', 'Assets/defaultOnMap.png')
+    this.load.image('FarmOnMap', 'Assets/farmOnMap.png');
+    this.load.image('DefaultOnMap', 'Assets/defaultOnMap.png');
+    this.load.image('ShopOnMap', 'assets/potion.png');
   }
 
   create() {
@@ -54,7 +55,18 @@ class ShowMap extends Phaser.Scene {
           x: .5,
           y: .5
         }
-      }
+      },
+      {
+        key: "ShopOnMap",
+        setXY: {
+          x: 440,
+          y: 230
+        },
+        setScale: {
+          x: 0.13,
+          y: 0.13
+        }
+      },
     ]);
 
     this.items.setDepth(1);
@@ -79,7 +91,9 @@ class ShowMap extends Phaser.Scene {
         // console.log(list);
 
         this.scene.scene.sleep('Farm');
+        this.scene.scene.sleep('Shop');
         this.scene.scene.sleep('Default');
+        this.scene.scene.sleep('Potion');
         this.scene.scene.run(choseScene);
         console.log(this.scene.scene.get(choseScene));
         // this.scene.scene.bringToTop(choseScene);

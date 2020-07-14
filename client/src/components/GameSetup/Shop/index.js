@@ -1,7 +1,6 @@
 // guide for making a menu in phaser https://www.youtube.com/watch?v=OS7neDUUhPE
 
 import Phaser from 'phaser';
-import ShopMenu from '../../../ui/ShopMenu';
 
 let controls;
 class Shop extends Phaser.Scene {
@@ -45,11 +44,9 @@ class Shop extends Phaser.Scene {
     });
     sign20L.on('pointerup', function() {
       sign20L.setScale(1);
-      // Shop.shopMenu("sign20L");
-      // let shopText = this.add.text(300, 100, "sign20L", { font: '24px Courier', fill: '#00ff00' })
-      // shopMenu.setText("You clicked sign20L!");
-      this.createShopMenu(Potion);
-      
+      // this.createShopMenu(Potion);
+      this.scene.wake("Potion");
+
     }, this);
 
     sign20R.on('pointerdown', function () {
@@ -60,8 +57,6 @@ class Shop extends Phaser.Scene {
     });
     sign20R.on('pointerup', function () {
       this.setScale(1);
-      // shopMenu.setText("You clicked sign20R!");
-
     });
 
     sign50.on('pointerdown', function () {
@@ -72,7 +67,6 @@ class Shop extends Phaser.Scene {
     });
     sign50.on('pointerup', function () {
       this.setScale(1);
-      // shopMenu.setText("You clicked sign50!");
     });
 
     freesignL.on('pointerdown', function () {
@@ -83,7 +77,6 @@ class Shop extends Phaser.Scene {
     });
     freesignL.on('pointerup', function () {
       this.setScale(1);
-      // shopMenu.setText("You clicked freesignL!");
     });
 
     freesignR.on('pointerdown', function () {
@@ -94,7 +87,6 @@ class Shop extends Phaser.Scene {
     });
     freesignR.on('pointerup', function () {
       this.setScale(1);
-      // shopMenu.setText("You clicked freesignR!");
     });
 
     sign1M.on('pointerdown', function () {
@@ -127,19 +119,20 @@ class Shop extends Phaser.Scene {
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
+    this.scene.sleep("Shop");
   }
 
-  createShopMenu(func)
-  {
-    // const style = { fontSize: '64px', color: '#fff' }
-    // const menu = new ShopMenu(this, x, y, value, style)
-    var handle = func.NAME;
-    // this.add.existing(menu);
-    // return menu;
-    var win = this.add.zone(550, 800, func.WIDTH, func.HEIGHT).setOrigin(0);
-    var demo = new func(win);
-    this.scene.add(handle, demo, true)
-  }
+  // createShopMenu(func)
+  // {
+  //   // const style = { fontSize: '64px', color: '#fff' }
+  //   // const menu = new ShopMenu(this, x, y, value, style)
+  //   var handle = func.NAME;
+  //   // this.add.existing(menu);
+  //   // return menu;
+  //   var win = this.add.zone(550, 800, func.WIDTH, func.HEIGHT).setOrigin(0);
+  //   var demo = new func(win);
+  //   this.scene.wake(handle);
+  // }
 
   update(time, delta) {
     controls.update(delta);
@@ -147,10 +140,10 @@ class Shop extends Phaser.Scene {
 }
 
 class Potion extends Phaser.Scene {
-  constructor(handle, parent)
+  constructor()
   {
-    super(handle);
-    this.parent = parent;
+    super({ key: "Potion" });
+    // this.parent = parent;
   }
 
   index = 0;
@@ -163,6 +156,7 @@ class Potion extends Phaser.Scene {
     this.load.image('arrowright', 'assets/arrow.png');
     this.load.image('arrowleft', 'assets/arrowleft.png');
     this.load.image('buybutton', 'assets/buybutton.png');
+    this.load.image('closeButton', 'assets/menuClose.png');
   }
 
   create() 
@@ -174,6 +168,7 @@ class Potion extends Phaser.Scene {
     let arrowleft = this.add.image(145, Potion.HEIGHT/1.35, 'arrowleft').setScale(0.15).setInteractive();
     let potion = this.add.image(Potion.WIDTH/1.75, Potion.HEIGHT/2, 'potionred').setScale(0.35);
     let buybutton = this.add.image(Potion.WIDTH/1.7, Potion.HEIGHT/1.35, 'buybutton').setScale(0.2).setInteractive();
+    let closeButton = this.add.image(110, 70, 'closeButton').setScale(0.1).setInteractive();
 
     arrowright.on('pointerdown', function () {
       this.setScale(0.13);
@@ -213,6 +208,21 @@ class Potion extends Phaser.Scene {
     buybutton.on('pointerup', function () {
       this.handleBuy();
     }, this);
+
+    closeButton.on('pointerdown', function () {
+      this.setScale(0.08);
+    });
+    closeButton.on('pointerout', function () {
+      this.setScale(0.1);
+    });
+    closeButton.on('pointerup', function () {
+      this.setScale(0.1);
+    });
+    closeButton.on('pointerup', function () {
+      this.scene.sleep("Potion");
+    }, this);
+
+    this.scene.sleep("Potion");
 
   }
 
@@ -281,4 +291,4 @@ class Potion extends Phaser.Scene {
 Potion.WIDTH = 400;
 Potion.HEIGHT = 300;
 
-export default Shop;
+export { Shop, Potion };
