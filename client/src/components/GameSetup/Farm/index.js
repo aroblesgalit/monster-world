@@ -122,10 +122,11 @@ class Farm extends Phaser.Scene {
         //     console.log("Button clicked!")
         // })
 
-        let buildWindow = this.add.image(0, 0, "buildWindow").setOrigin(0);
-        let dirt2 = this.add.image(8, 20, "dirt2").setOrigin(0).setInteractive({ useHandCursor: true });
+        // Build window
+        let buildWindow = this.add.image(0, 0, "buildWindow");
+        let dirt2 = this.add.image(0, 20, "dirt2").setInteractive({ useHandCursor: true });
 
-        let buildContainer = this.add.container(76, this.cameras.main.height / 6.3, [buildWindow, dirt2]);
+        let buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, dirt2]).setScale(3);
 
         buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
 
