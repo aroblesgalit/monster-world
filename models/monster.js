@@ -21,10 +21,11 @@ const monsterSchema = new Schema({
         speed:{ type: Number },
         int:{ type: Number },
 
-        ice:{ type: Number },
+        water:{ type: Number },
         fire:{ type: Number },
         earth:{ type: Number },
         air:{ type: Number }
+        // total stats points
         // decide on full magic/types chart
     },
     moves: [
