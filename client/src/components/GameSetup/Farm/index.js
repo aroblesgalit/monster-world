@@ -8,10 +8,10 @@ class Farm extends Phaser.Scene {
     }
 
     preload() {
-        // this.load.image("grass", "Assets/grass.png");
+        this.load.image("grass", "Assets/grass.png");
         this.load.spritesheet("crop", "Assets/Crop_Spritesheet.png", {
-            frameWidth: 10,
-            frameHeight: 14
+            frameWidth: 16,
+            frameHeight: 16
         });
         this.load.image("dirt", "Assets/tilledDirt.png");
         this.load.image("buttonUp", "Assets/blue_button04.png");
@@ -21,7 +21,7 @@ class Farm extends Phaser.Scene {
         this.load.image("buildWindow", "Assets/build_window.png");
         this.load.image("dirt2", "Assets/dirt2.png");
 
-        
+
         // Tilemap - grass
         this.load.image("grass_tiles", "Assets/tilesets/tallgrass.png");
         this.load.image("plowedSoil_tiles", "Asset/tilesets/plowed_soil.png");
@@ -43,7 +43,7 @@ class Farm extends Phaser.Scene {
         // this.cameras.main.setZoom(3);
 
         // Grass tilemap
-        const grassMap = this.make.tilemap({ key: "grass_tilemap"});
+        const grassMap = this.make.tilemap({ key: "grass_tilemap" });
         const tileset = grassMap.addTilesetImage("tallGrass_tileset", "grass_tiles");
         const grassPlatform = grassMap.createStaticLayer("grass", tileset);
 
@@ -63,28 +63,26 @@ class Farm extends Phaser.Scene {
 
         controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
-        const dirt = this.add.image(100, 100, "dirt", 0)
-
         // Crop
-        const crop = this.add.sprite(200, 100, "crop")
-        console.log(crop);
-
         let config = {
             key: "cropAnimation",
             frames: this.anims.generateFrameNumbers("crop", {
                 start: 5, end: 0
             }),
-            frameRate: 5,
+            frameRate: 0.1,
             repeat: -1
         };
 
         this.anims.create(config);
-        crop.play("cropAnimation");
+
+
 
         // Dirt
+        const dirt = this.add.image(40, this.cameras.main.height - 40, "dirt", 0);
+
         dirt.setInteractive();
         dirt.on("pointerdown", (pointer) => {
-            console.log(pointer);
+            this.plantTurnips();
         });
 
         // Build Button
@@ -142,6 +140,18 @@ class Farm extends Phaser.Scene {
         dirt2.on("pointerup", function () {
             console.log("Clicked on dirt2.");
         }, this);
+    }
+
+    plantTurnips() {
+        for (let i = 0; i < 9; i++) {
+            if (i < 3) {
+                this.add.sprite(100 + (i * 40), 100, "crop").setScale(2).play("cropAnimation");
+            } else if (i < 6) {
+                this.add.sprite(100 + (i - 3) * 40, 140, "crop").setScale(2).play("cropAnimation");
+            } else {
+                this.add.sprite(100 + (i - 6) * 40, 180, "crop").setScale(2).play("cropAnimation");
+            }
+        }
     }
 
     // createWindow(func) {
