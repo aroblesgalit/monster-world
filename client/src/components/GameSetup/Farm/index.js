@@ -21,8 +21,10 @@ class Farm extends Phaser.Scene {
         this.load.image("buildWindow", "Assets/build_window.png");
         this.load.image("dirt2", "Assets/dirt2.png");
 
+        
+        // Tilemap - grass
         this.load.image("grass_tiles", "Assets/tilesets/tallgrass.png");
-        // JSON - tilemap - grass
+        this.load.image("plowedSoil_tiles", "Asset/tilesets/plowed_soil.png");
         this.load.tilemapTiledJSON("grass_tilemap", "Assets/tilemaps/grass_tilemap.json");
     }
 
@@ -37,8 +39,8 @@ class Farm extends Phaser.Scene {
         // let grass = this.add.image(0, 0, "grass")
         //     .setOrigin(0, 0)
         //     .setScale(0.4);
-        this.cameras.main.setBounds(0, 0, 0, 0);
-        this.cameras.main.setZoom(3);
+        // this.cameras.main.setBounds(0, 0, 0, 0);
+        // this.cameras.main.setZoom(3);
 
         // Grass tilemap
         const grassMap = this.make.tilemap({ key: "grass_tilemap"});
@@ -87,13 +89,13 @@ class Farm extends Phaser.Scene {
 
         // Build Button
         let buildBtn = this.add.image(0, 0, "buttonUp")
-            .setOrigin(0)
-            .setScale(0.3)
+            // .setOrigin(0)
+            .setScale(0.8)
             .setInteractive({ useHandCursor: true })
             .on("pointerdown", () => {
                 buildBtn.setTexture("buttonDown")
                     .setPosition(0, 1);
-                buildBtnText.setPosition(buildBtn.x + 18, buildBtn.y);
+                buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
             })
             .on("pointerup", () => {
                 buildVisible = !buildVisible;
@@ -109,10 +111,10 @@ class Farm extends Phaser.Scene {
             .on("pointerout", () => {
                 buildBtn.setTexture("buttonUp")
                     .setPosition(0, 0);
-                buildBtnText.setPosition(buildBtn.x + 18, buildBtn.y);
+                buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
             })
-        let buildBtnText = this.add.text(buildBtn.x + 18, buildBtn.y, "Build", { font: "10px Arial", fill: "#000" });
-        this.add.container(100, this.cameras.main.height / 3.3, [buildBtn, buildBtnText]);
+        let buildBtnText = this.add.text(buildBtn.x - 20, buildBtn.y - 10, "Build", { font: "20px Arial", fill: "#000" });
+        this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 36, [buildBtn, buildBtnText]);
         // const buildBtn = this.add.text(100, 100, "Build", { fill: "#fff" })
         //     .setDepth(1)
         //     .setInteractive({ useHandCursor: true })
@@ -141,42 +143,42 @@ class Farm extends Phaser.Scene {
         }, this);
     }
 
-    createWindow(func) {
-        var x = Phaser.Math.Between(400, 600);
-        var y = Phaser.Math.Between(64, 128);
+    // createWindow(func) {
+    //     var x = Phaser.Math.Between(400, 600);
+    //     var y = Phaser.Math.Between(64, 128);
 
-        var handle = 'window';
+    //     var handle = 'window';
 
-        var win = this.add.zone(x, y, func.WIDTH, func.HEIGHT).setInteractive().setOrigin(0);
+    //     var win = this.add.zone(x, y, func.WIDTH, func.HEIGHT).setInteractive().setOrigin(0);
 
-        var demo = new func(handle, win);
+    //     var demo = new func(handle, win);
 
-        this.input.setDraggable(win);
+    //     this.input.setDraggable(win);
 
-        win.on('drag', function (pointer, dragX, dragY) {
+    //     win.on('drag', function (pointer, dragX, dragY) {
 
-            this.x = dragX;
-            this.y = dragY;
+    //         this.x = dragX;
+    //         this.y = dragY;
 
-            demo.refresh()
+    //         demo.refresh()
 
-        });
+    //     });
 
-        this.scene.add(handle, demo, true);
-    }
+    //     this.scene.add(handle, demo, true);
+    // }
 
     update(time, delta) {
         controls.update(delta);
-        if (this.game.input.activePointer.isDown) {
-            if (this.game.origDragPoint) {
-                // move the camera by the amount the mouse has moved since last update
-                this.cameras.main.scrollX += this.game.origDragPoint.x - this.game.input.activePointer.position.x;
-                this.cameras.main.scrollY += this.game.origDragPoint.y - this.game.input.activePointer.position.y;
-            } // set new drag origin to current position
-            this.game.origDragPoint = this.game.input.activePointer.position.clone();
-        } else {
-            this.game.origDragPoint = null;
-        }
+        // if (this.game.input.activePointer.isDown) {
+        //     if (this.game.origDragPoint) {
+        //         // move the camera by the amount the mouse has moved since last update
+        //         this.cameras.main.scrollX += this.game.origDragPoint.x - this.game.input.activePointer.position.x;
+        //         this.cameras.main.scrollY += this.game.origDragPoint.y - this.game.input.activePointer.position.y;
+        //     } // set new drag origin to current position
+        //     this.game.origDragPoint = this.game.input.activePointer.position.clone();
+        // } else {
+        //     this.game.origDragPoint = null;
+        // }
     }
 }
 
