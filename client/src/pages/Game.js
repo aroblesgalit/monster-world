@@ -4,7 +4,8 @@ import GameSetup from "../components/GameSetup";
 function Game() {
     GameSetup();
     return (
-        <div></div>
+        <div>
+        </div>
     );
 }
 
