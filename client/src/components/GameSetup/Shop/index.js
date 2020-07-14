@@ -49,7 +49,7 @@ class Shop extends Phaser.Scene {
       // let shopText = this.add.text(300, 100, "sign20L", { font: '24px Courier', fill: '#00ff00' })
       // shopMenu.setText("You clicked sign20L!");
       this.createShopMenu(Potion);
-
+      
     }, this);
 
     sign20R.on('pointerdown', function () {
