@@ -93,17 +93,17 @@ class ShowMap extends Phaser.Scene {
     }, this);
 
     // blow up image to 4 times the original size
-    // map.setScale(4);
+    map.setScale(4);
 
     // Set map to fill screen, and overflow on the smaller side
-    if (gameWidth > gameHeight) {
-      map.displayWidth = gameWidth;
-      map.displayHeight = map.height * map._scaleX;
-    }
-    else {
-      map.displayHeight = gameHeight;
-      map.displayWidth = map.width * map._scaleY;
-    }
+    // if (gameWidth > gameHeight) {
+    //   map.displayWidth = gameWidth;
+    //   map.displayHeight = map.height * map._scaleX;
+    // }
+    // else {
+    //   map.displayHeight = gameHeight;
+    //   map.displayWidth = map.width * map._scaleY;
+    // }
 
     // Set up camera settings on scene
     cam.setBackgroundColor('#D8DFEF')
