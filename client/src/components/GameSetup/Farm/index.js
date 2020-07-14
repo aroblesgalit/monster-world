@@ -136,6 +136,8 @@ class Farm extends Phaser.Scene {
             this.createPlantMarker();
             plantActive = true;
         }, this);
+
+        this.scene.sleep('Farm');
     }
 
     createPlantMarker() {
