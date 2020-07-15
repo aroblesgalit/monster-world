@@ -1,8 +1,9 @@
 import Phaser from "phaser";
 let buildVisible;
 let buildContainer;
-let plantActive = false;
-let plantMarker;
+let placeActive = false;
+let placeMarker;
+let groundLayer;
 
 class Farm extends Phaser.Scene {
     constructor() {
@@ -55,9 +56,9 @@ class Farm extends Phaser.Scene {
 
         // Dynamic Tilemap
 
-        const groundLayer = grassMap.createDynamicLayer("ground", tileset);
+        groundLayer = grassMap.createDynamicLayer("ground", tileset);
 
-        groundLayer.putTileAt(10, 10, 10);
+        // groundLayer.putTileAt(10, 10, 10);
 
         // Crop
         let config = {
@@ -69,14 +70,8 @@ class Farm extends Phaser.Scene {
             repeat: -1
         };
 
+        // create animation for plants
         this.anims.create(config);
-        // Dirt
-        // const dirt = this.add.image(40, this.cameras.main.height - 40, "dirt", 0);
-
-        // dirt.setInteractive({ useHandCursor: true });
-        // dirt.on("pointerdown", (pointer) => {
-        //     this.plantTurnips();
-        // });
 
         // Build Button
         let buildBtn = this.add.image(0, 0, "buttonUp")
@@ -121,23 +116,25 @@ class Farm extends Phaser.Scene {
         });
 
         dirt2.on("pointerup", function () {
-            this.toggleBuildWindow();
-            this.createPlantMarker();
-            plantActive = true;
-        }, this);
+            console.log(this.texture);
+            this.scene.toggleBuildWindow();
+            this.scene.createMarker(this.texture);
+            placeActive = true;
+        });
 
+        // put the scene to sleep untill it is used
         this.scene.sleep('Farm');
     }
 
-    createPlantMarker() {
-        plantMarker = this.add.graphics();
-        plantMarker.lineStyle(2, 0x000000, 1);
-        plantMarker.strokeRect(0, 0, 120, 120);
+    createMarker(item) {
+        placeMarker = this.add.graphics();
+        placeMarker.lineStyle(2, 0x000000, 1);
+        placeMarker.strokeRect(0, 0, 32, 32);
     }
 
     clearPlantMarker() {
-        if (plantMarker) {
-            plantMarker.clear();
+        if (placeMarker) {
+            placeMarker.clear();
         }
     }
 
@@ -150,24 +147,31 @@ class Farm extends Phaser.Scene {
         }
     }
 
-    plantTurnips(x, y) {
-        for (let i = 0; i < 9; i++) {
-            if (i < 3) {
-                this.add.sprite(x + (i * 40), y, "crop").setScale(2).play("cropAnimation");
-            } else if (i < 6) {
-                this.add.sprite(x + (i - 3) * 40, y + 40, "crop").setScale(2).play("cropAnimation");
-            } else {
-                this.add.sprite(x + (i - 6) * 40, y + 80, "crop").setScale(2).play("cropAnimation");
-            }
-        }
-    }
+    // plantTurnips(x, y) {
+    //     for (let i = 0; i < 9; i++) {
+    //         if (i < 3) {
+    //             this.add.sprite(x + (i * 40), y, "crop").setScale(2).play("cropAnimation");
+    //         } else if (i < 6) {
+    //             this.add.sprite(x + (i - 3) * 40, y + 40, "crop").setScale(2).play("cropAnimation");
+    //         } else {
+    //             this.add.sprite(x + (i - 6) * 40, y + 80, "crop").setScale(2).play("cropAnimation");
+    //         }
+    //     }
+    // }
 
     update(time, delta) {
+        // Placement Variables
+        // ========================================
+        const pointer = this.input.activePointer;
+        const worldPoint = pointer.positionToCamera(this.cameras.main);
+        // Place the marker in world space, but snap it to the tile grid. If we convert world -> tile and
+        // then tile -> world, we end up with the position of the tile under the pointer
+        const pointerTileXY = groundLayer.worldToTileXY(worldPoint.x, worldPoint.y);
+        const snappedWorldPoint = groundLayer.tileToWorldXY(pointerTileXY.x, pointerTileXY.y);
+
         // Camera Movement
         // ========================================
-        var pointer = this.input.activePointer;
-
-        if (pointer.isDown) {
+        if (pointer.isDown && !placeActive) {
             if (this.game.origDragPoint) {
                 // move the camera by the amount the mouse has moved since last update
                 this.cameras.main.scrollX +=
@@ -182,12 +186,13 @@ class Farm extends Phaser.Scene {
 
         // Plant Animations
         // ==========================================
-        if (plantActive) {
-            plantMarker.x = this.input.activePointer.worldX;
-            plantMarker.y = this.input.activePointer.worldY;
-            if (this.game.input.activePointer.isDown) {
-                plantActive = false;
-                this.plantTurnips(plantMarker.x + 20, plantMarker.y + 20);
+        if (placeActive) {
+            placeMarker.setPosition(snappedWorldPoint.x, snappedWorldPoint.y);
+            if (pointer.isDown) {
+                const tile = groundLayer.putTileAtWorldXY(10, worldPoint.x, worldPoint.y);
+                //placeActive = false;
+
+                //this.plantTurnips(plantMarker.x + 20, plantMarker.y + 20);
             }
         } else {
             this.clearPlantMarker();
