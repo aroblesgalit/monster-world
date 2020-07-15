@@ -4,6 +4,7 @@ let buildContainer;
 let placeActive = false;
 let placeMarker;
 let groundLayer;
+let dirtMarker;
 
 class Farm extends Phaser.Scene {
     constructor() {
@@ -80,11 +81,17 @@ class Farm extends Phaser.Scene {
             .setInteractive({ useHandCursor: true })
             .on("pointerdown", () => {
                 buildBtn.setTexture("buttonDown")
-                    .setPosition(0, 1);
+                .setPosition(0, 1);
                 buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
             })
             .on("pointerup", () => {
-                this.toggleBuildWindow();
+                if(!placeActive){
+                    this.toggleBuildWindow();
+                }
+                else{
+                    buildBtn.clearTint();
+                    placeActive=!placeActive
+                }
             }, this)
             .on("pointerover", () => {
                 buildBtn.setTexture("buttonHover");
@@ -120,6 +127,8 @@ class Farm extends Phaser.Scene {
             this.scene.toggleBuildWindow();
             this.scene.createMarker(this.texture);
             placeActive = true;
+            buildBtn.setTint(0xff2222);
+
         });
 
         // put the scene to sleep untill it is used
@@ -127,14 +136,18 @@ class Farm extends Phaser.Scene {
     }
 
     createMarker(item) {
-        placeMarker = this.add.graphics();
-        placeMarker.lineStyle(2, 0x000000, 1);
-        placeMarker.strokeRect(0, 0, 32, 32);
+        const image = this.add.sprite(0,0,item).setOrigin(0).setAlpha(.6).setDisplaySize(32,32);
+
+        const outline = this.add.graphics();
+        outline.lineStyle(2, 0x000000, 1);
+        outline.strokeRect(0, 0, 32, 32);
+
+        placeMarker = this.add.container(0,0,[outline, image])
     }
 
-    clearPlantMarker() {
+    clearPlaceMarker() {
         if (placeMarker) {
-            placeMarker.clear();
+            placeMarker.destroy();
         }
     }
 
@@ -184,10 +197,11 @@ class Farm extends Phaser.Scene {
             this.game.origDragPoint = null;
         }
 
-        // Plant Animations
+        // placeObject
         // ==========================================
         if (placeActive) {
             placeMarker.setPosition(snappedWorldPoint.x, snappedWorldPoint.y);
+            // dirtMarker.setPosition(snappedWorldPoint.x, snappedWorldPoint.y);
             if (pointer.isDown) {
                 const tile = groundLayer.putTileAtWorldXY(10, worldPoint.x, worldPoint.y);
                 //placeActive = false;
@@ -195,7 +209,7 @@ class Farm extends Phaser.Scene {
                 //this.plantTurnips(plantMarker.x + 20, plantMarker.y + 20);
             }
         } else {
-            this.clearPlantMarker();
+            this.clearPlaceMarker();
         }
     }
 }

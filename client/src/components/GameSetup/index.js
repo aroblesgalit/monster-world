@@ -19,7 +19,7 @@ function GameSetup() {
         gravity: { y: 200 }
       }
     },
-    scene: [Default,ShowMap, Farm, Shop, Potion]
+    scene: [Default, Farm, Shop, Potion, ShowMap]
   };
 
   var game = new Phaser.Game(config);
