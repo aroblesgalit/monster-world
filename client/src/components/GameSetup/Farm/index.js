@@ -5,7 +5,6 @@ let placeActive = false;
 let placeMarker;
 let groundLayer;
 let grassPlatform;
-let dirtMarker;
 let canPlace = false;
 
 class Farm extends Phaser.Scene {
@@ -223,17 +222,65 @@ class Farm extends Phaser.Scene {
             // dirtMarker.setPosition(snappedWorldPoint.x, snappedWorldPoint.y);
             if (pointer.isDown && canPlace) {
                 const placed = groundLayer.putTileAtWorldXY(10, worldPoint.x, worldPoint.y);
-                console.log(placed);
+                // weird that this next part isn't done automatically;
+                placed.properties = (placed.tileset.tileProperties[10]);
+
+                checkContig(placed);
 
                 // check nearby tiles
 
-
-                //placeActive = false;
 
                 //this.plantTurnips(plantMarker.x + 20, plantMarker.y + 20);
             }
         } else {
             this.clearPlaceMarker();
+        }
+
+        function checkContig(tile, justThis = false){
+            console.log(tile)
+            if(true || tile.properties["Contiguous"]){
+                const up = groundLayer.getTileAt(tile.x, tile.y-1).properties["Contiguous"];
+                const down = groundLayer.getTileAt(tile.x, tile.y+1).properties["Contiguous"];
+                const left = groundLayer.getTileAt(tile.x-1, tile.y).properties["Contiguous"];
+                const right = groundLayer.getTileAt(tile.x+1, tile.y).properties["Contiguous"];
+
+                console.log(groundLayer.getTileAt(tile.x, tile.y-1));
+                console.log(`tile at ${tile.x},${tile.y-1} is${up?"":" not"} contiguous`)
+                console.log(`tile at ${tile.x},${tile.y+1} is${down?"":" not"} contiguous`)
+                console.log(`tile at ${tile.x-1},${tile.y} is${left?"":" not"} contiguous`)
+                console.log(`tile at ${tile.x+1},${tile.y} is${right?"":" not"} contiguous`)
+
+                console.log(up, down, left, right);
+                console.log(up?"up":"",down?"down":"",left?"left":"",right?"right":"");
+
+                // change tileset to connect them
+                console.log(tile.x, tile.y);
+                if (up && down && left && right){groundLayer.putTileAt(29, tile.x, tile.y)}
+                if (up && down && left && !right){groundLayer.putTileAt(30, tile.x, tile.y)}
+                if (up && down && !left && right){groundLayer.putTileAt(28, tile.x, tile.y)}
+                if (up && down && !left && !right){groundLayer.putTileAt(48, tile.x, tile.y)}
+                if (up && !down && left && right){groundLayer.putTileAt(35, tile.x, tile.y)}
+                if (up && !down && left && !right){groundLayer.putTileAt(36, tile.x, tile.y)}
+                if (up && !down && !left && right){groundLayer.putTileAt(34, tile.x, tile.y)}
+                if (up && !down && !left && !right){groundLayer.putTileAt(59, tile.x, tile.y)}
+                if (!up && down && left && right){groundLayer.putTileAt(23, tile.x, tile.y)}
+                if (!up && down && left && !right){groundLayer.putTileAt(24, tile.x, tile.y)}
+                if (!up && down && !left && right){groundLayer.putTileAt(22, tile.x, tile.y)}
+                if (!up && down && !left && !right){groundLayer.putTileAt(47, tile.x, tile.y)}
+                if (!up && !down && left && right){groundLayer.putTileAt(46, tile.x, tile.y)}
+                if (!up && !down && left && !right){groundLayer.putTileAt(54, tile.x, tile.y)}
+                if (!up && !down && !left && right){groundLayer.putTileAt(52, tile.x, tile.y)}
+
+                // change connected too
+                if (!justThis){
+                    if (up){checkContig(groundLayer.getTileAt(tile.x, tile.y-1), true)};
+                    if (down){checkContig(groundLayer.getTileAt(tile.x, tile.y+1), true);};
+                    if (left){checkContig(groundLayer.getTileAt(tile.x-1, tile.y), true);};
+                    if (right){checkContig(groundLayer.getTileAt(tile.x+1, tile.y), true);};  
+                }
+                
+            }
+
         }
     }
 }
