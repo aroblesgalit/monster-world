@@ -4,7 +4,9 @@ let buildContainer;
 let placeActive = false;
 let placeMarker;
 let groundLayer;
+let grassPlatform;
 let dirtMarker;
+let canPlace = false;
 
 class Farm extends Phaser.Scene {
     constructor() {
@@ -53,7 +55,7 @@ class Farm extends Phaser.Scene {
 
         const grassMap = this.make.tilemap({ key: "grass_tilemap" });
         const tileset = grassMap.addTilesetImage("farmland", "farmland");
-        const grassPlatform = grassMap.createStaticLayer("grass", tileset);
+        grassPlatform = grassMap.createStaticLayer("grass", tileset);
 
         // Dynamic Tilemap
 
@@ -136,7 +138,7 @@ class Farm extends Phaser.Scene {
     }
 
     createMarker(item) {
-        const image = this.add.sprite(0,0,item).setOrigin(0).setAlpha(.6).setDisplaySize(32,32);
+        const image = this.add.sprite(0,0,item).setOrigin(0).setAlpha(.8).setDisplaySize(32,32);
 
         const outline = this.add.graphics();
         outline.lineStyle(2, 0x000000, 1);
@@ -200,10 +202,32 @@ class Farm extends Phaser.Scene {
         // placeObject
         // ==========================================
         if (placeActive) {
+
             placeMarker.setPosition(snappedWorldPoint.x, snappedWorldPoint.y);
+            if (!canPlace){
+                placeMarker.list[1].setTint(0xff0000);
+                placeMarker.list[0].lineStyle(2, 0xff0000, 1);
+                placeMarker.list[0].strokeRect(0, 0, 32, 32)}
+            else{
+                placeMarker.list[1].clearTint();
+                placeMarker.list[0].lineStyle(2, 0x00FF00, 1);
+                placeMarker.list[0].strokeRect(0, 0, 32, 32)}
+
+            //check if canPlace
+            const grassTile = grassPlatform.getTileAt(snappedWorldPoint.x/32, snappedWorldPoint.y/32);
+            const groundTile = groundLayer.getTileAt(snappedWorldPoint.x/32, snappedWorldPoint.y/32);
+            if(grassTile && groundTile && grassTile.index==26 && groundTile.index==1)
+                {canPlace = true;}
+            else{canPlace=false;}
+
             // dirtMarker.setPosition(snappedWorldPoint.x, snappedWorldPoint.y);
-            if (pointer.isDown) {
-                const tile = groundLayer.putTileAtWorldXY(10, worldPoint.x, worldPoint.y);
+            if (pointer.isDown && canPlace) {
+                const placed = groundLayer.putTileAtWorldXY(10, worldPoint.x, worldPoint.y);
+                console.log(placed);
+
+                // check nearby tiles
+
+
                 //placeActive = false;
 
                 //this.plantTurnips(plantMarker.x + 20, plantMarker.y + 20);
