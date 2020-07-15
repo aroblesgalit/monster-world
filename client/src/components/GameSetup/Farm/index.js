@@ -57,7 +57,7 @@ class Farm extends Phaser.Scene {
 
         const groundLayer = grassMap.createDynamicLayer("ground", tileset);
 
-        
+        groundLayer.putTileAt(10, 10, 10);
 
         // Crop
         let config = {
