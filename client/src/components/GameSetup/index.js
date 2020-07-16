@@ -33,10 +33,7 @@ function GameSetup() {
   game.scene.start("Potion");
   // game.scene.sleep("ShowMap");
 
-  ////////////
-  // game.inventory.gold
-  console.log(game);
-  ////////////
+
 }
 
 export default GameSetup;

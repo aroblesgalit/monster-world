@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import ShowMap from '../Map'
 
+let goldCount;
 class HeadsUpDisplay extends Phaser.Scene {
   constructor(game) {
     super({ key: "HeadsUpDisplay" });
@@ -74,9 +75,8 @@ class HeadsUpDisplay extends Phaser.Scene {
 
     // text readouts
     this.data.set('gold', 200);
-    var goldCount = this.add.text(10, 10).setText(this.data.get('gold') + ' Gold').setScrollFactor(0);
+    goldCount = this.add.text(10, 10).setText(this.data.get('gold') + ' Gold').setScrollFactor(0);
     goldCount.setShadow(1, 1, '#000000', 2);
-    console.log(this);
   }
 
   resize() {
@@ -105,6 +105,9 @@ class HeadsUpDisplay extends Phaser.Scene {
 
   }
 
+  update() {
+    goldCount.setText(this.data.get('gold') + ' Gold');
+  }
 }
 
 export default HeadsUpDisplay;

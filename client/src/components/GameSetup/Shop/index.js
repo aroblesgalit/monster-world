@@ -2,6 +2,7 @@
 
 import Phaser from 'phaser';
 
+let HUDdata;
 let controls;
 class Shop extends Phaser.Scene {
   constructor() {
@@ -19,6 +20,10 @@ class Shop extends Phaser.Scene {
   }
 
   create() {
+
+    // set up use of data from HUD scene
+    HUDdata = this.scene.get("HeadsUpDisplay").data;
+
     this.add.image(0, 0, 'shop').setOrigin(0).setDepth(0);
     let sign20L = this.add.sprite(280, 100, '20sign').setOrigin(0).setDepth(1).setInteractive();
     let sign20R = this.add.sprite(1480, 100, '20sign').setOrigin(0).setDepth(1).setInteractive();
@@ -27,14 +32,7 @@ class Shop extends Phaser.Scene {
     let freesignL = this.add.sprite(580, 330, 'freesign').setOrigin(0).setDepth(1).setInteractive();
     let freesignR = this.add.sprite(690, 240, 'freesign').setOrigin(0).setDepth(1).setInteractive();
     let sign1M = this.add.sprite(1110, 310, '1Msign').setOrigin(0).setDepth(1).setInteractive();
-    // let shopMenuBox = this.add.sprite(75, 800, 'shopMenuBox').setOrigin(0).setDepth(1).setScale(2);
-
-
-    // function setShopText(value) {
-    //   let shopText = this.add.text(300, 100, value, { font: '24px Courier', fill: '#00ff00' })
-    // }
-    // const shopMenu = this.shopMenu = this.createShopMenu(550, 1000, "Welcome!").setDepth(2);
-
+  
     // sign onclick functions
     sign20L.on('pointerdown', function () {
       this.setScale(0.97);
@@ -44,7 +42,6 @@ class Shop extends Phaser.Scene {
     });
     sign20L.on('pointerup', function() {
       sign20L.setScale(1);
-      // this.createShopMenu(Potion);
       this.scene.wake("Potion");
 
     }, this);
@@ -97,7 +94,6 @@ class Shop extends Phaser.Scene {
     });
     sign1M.on('pointerup', function () {
       this.setScale(1);
-      // shopMenu.setText("You clicked sign1M!");
     });
 
     this.cameras.main.setBounds(0, 0, 1920, 1600);
@@ -122,18 +118,6 @@ class Shop extends Phaser.Scene {
     this.scene.sleep("Shop");
   }
 
-  // createShopMenu(func)
-  // {
-  //   // const style = { fontSize: '64px', color: '#fff' }
-  //   // const menu = new ShopMenu(this, x, y, value, style)
-  //   var handle = func.NAME;
-  //   // this.add.existing(menu);
-  //   // return menu;
-  //   var win = this.add.zone(550, 800, func.WIDTH, func.HEIGHT).setOrigin(0);
-  //   var demo = new func(win);
-  //   this.scene.wake(handle);
-  // }
-
   update(time, delta) {
     controls.update(delta);
   }
@@ -143,7 +127,6 @@ class Potion extends Phaser.Scene {
   constructor()
   {
     super({ key: "Potion" });
-    // this.parent = parent;
   }
 
   index = 0;
@@ -174,12 +157,6 @@ class Potion extends Phaser.Scene {
     potion.setDataEnabled();
     // initiailize potion data with first sprite, in this case the red potion
     potion.data.set('price', 20);
-
-    //set scene data
-    this.data.set('gold', 200);
-    // let goldtext = this.add.text(40,400,this.data.get('gold'), {color: "white", fontSize: "20px"});
-
-    // console.log(HeadsUpDisplay.data.get('gold'));
 
     arrowright.on('pointerdown', function () {
       this.setScale(0.13);
@@ -232,9 +209,7 @@ class Potion extends Phaser.Scene {
     closeButton.on('pointerup', function () {
       this.scene.sleep("Potion");
     }, this);
-
     this.scene.sleep("Potion");
-
   }
 
   // this funtion takes a direction to increment, current index, and an image object as input
@@ -296,10 +271,10 @@ class Potion extends Phaser.Scene {
   }
 
   handleBuy(potion) {
-    let gold = this.data.get('gold');
+    let gold = HUDdata.get('gold');
     if (gold > potion.data.get('price')) {
-      this.data.set('gold', gold - potion.data.get('price'));
-      console.log('you spent ' + potion.data.get('price') + ' and now you have ' + this.data.get('gold') + ' gold');
+      HUDdata.set('gold', gold - potion.data.get('price'));
+      // console.log('you spent ' + potion.data.get('price') + ' and now you have ' + HUDdata.get('gold') + ' gold');
     }
     else {
       console.log('not enough money');
