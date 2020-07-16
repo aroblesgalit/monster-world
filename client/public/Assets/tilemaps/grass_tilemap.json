@@ -48,12 +48,12 @@
          "columns":6,
          "firstgid":1,
          "image":"..\/tilesets\/farmland.png",
-         "imageheight":256,
+         "imageheight":352,
          "imagewidth":192,
          "margin":0,
          "name":"farmland",
          "spacing":0,
-         "tilecount":48,
+         "tilecount":66,
          "tileheight":32,
          "tiles":[
                 {
@@ -71,7 +71,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -80,7 +80,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -89,7 +89,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -98,7 +98,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -107,7 +107,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -116,7 +116,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -125,7 +125,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -134,7 +134,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -170,7 +170,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -179,7 +179,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -188,7 +188,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -197,7 +197,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -224,7 +224,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -233,7 +233,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -242,7 +242,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -278,7 +278,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -287,7 +287,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -296,7 +296,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -332,7 +332,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -341,7 +341,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -350,7 +350,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -386,7 +386,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -395,7 +395,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -440,7 +440,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -449,7 +449,7 @@
                         {
                          "name":"Contiguous",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -481,6 +481,168 @@
                 }, 
                 {
                  "id":47,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":48,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":false
+                        }]
+                }, 
+                {
+                 "id":49,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":false
+                        }]
+                }, 
+                {
+                 "id":50,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":false
+                        }]
+                }, 
+                {
+                 "id":51,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":52,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":53,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":54,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":55,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":56,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":57,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":58,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":59,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":60,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":61,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":62,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":63,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":64,
+                 "properties":[
+                        {
+                         "name":"Contiguous",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":65,
                  "properties":[
                         {
                          "name":"Contiguous",

@@ -244,30 +244,102 @@ class Farm extends Phaser.Scene {
                 const left = groundLayer.getTileAt(tile.x-1, tile.y).properties["Contiguous"];
                 const right = groundLayer.getTileAt(tile.x+1, tile.y).properties["Contiguous"];
 
+                const ul = groundLayer.getTileAt(tile.x-1, tile.y-1).properties["Contiguous"];
+                const ur = groundLayer.getTileAt(tile.x+1, tile.y-1).properties["Contiguous"];
+                const dl = groundLayer.getTileAt(tile.x-1, tile.y+1).properties["Contiguous"];
+                const dr = groundLayer.getTileAt(tile.x+1, tile.y+1).properties["Contiguous"];
+
                 console.log(groundLayer.getTileAt(tile.x, tile.y-1));
                 console.log(`tile at ${tile.x},${tile.y-1} is${up?"":" not"} contiguous`)
                 console.log(`tile at ${tile.x},${tile.y+1} is${down?"":" not"} contiguous`)
                 console.log(`tile at ${tile.x-1},${tile.y} is${left?"":" not"} contiguous`)
                 console.log(`tile at ${tile.x+1},${tile.y} is${right?"":" not"} contiguous`)
 
-                console.log(up, down, left, right);
-                console.log(up?"up":"",down?"down":"",left?"left":"",right?"right":"");
-
                 // change tileset to connect them
+                //===============================
                 console.log(tile.x, tile.y);
-                if (up && down && left && right){groundLayer.putTileAt(29, tile.x, tile.y)}
-                if (up && down && left && !right){groundLayer.putTileAt(30, tile.x, tile.y)}
-                if (up && down && !left && right){groundLayer.putTileAt(28, tile.x, tile.y)}
+                // 4 connections
+                if (up && down && left && right){
+                    
+                    // All
+                    if(ul && ur && dl && dr){groundLayer.putTileAt(29, tile.x, tile.y)}
+
+                    // 3
+                    else if(ul && ur && dl && !dr){groundLayer.putTileAt(11, tile.x, tile.y)}
+                    else if(ul && ur && !dl && dr){groundLayer.putTileAt(12, tile.x, tile.y)}
+                    else if(ul && !ur && dl && dr){groundLayer.putTileAt(17, tile.x, tile.y)}
+                    else if(!ul && ur && dl && dr){groundLayer.putTileAt(18, tile.x, tile.y)}
+
+                    //2
+                    else if(ul && ur && !dl && !dr){groundLayer.putTileAt(74, tile.x, tile.y)}
+                    else if(ul && !ur && dl && !dr){groundLayer.putTileAt(67, tile.x, tile.y)}
+                    else if(ul && !ur && !dl && dr){groundLayer.putTileAt(76, tile.x, tile.y)}
+                    else if(!ul && ur && !dl && dr){groundLayer.putTileAt(68, tile.x, tile.y)}
+                    else if(!ul && ur && dl && !dr){groundLayer.putTileAt(75, tile.x, tile.y)}
+                    else if(!ul && !ur && dl && dr){groundLayer.putTileAt(73, tile.x, tile.y)}
+
+                    //1
+                    else if(ul && !ur && !dl && !dr){groundLayer.putTileAt(84, tile.x, tile.y)}
+                    else if(!ul && ur && !dl && !dr){groundLayer.putTileAt(83, tile.x, tile.y)}
+                    else if(!ul && !ur && dl && !dr){groundLayer.putTileAt(78, tile.x, tile.y)}
+                    else if(!ul && !ur && !dl && dr){groundLayer.putTileAt(77, tile.x, tile.y)}
+
+                    // none
+                    else if(!ul && !ur && !dl && !dr){groundLayer.putTileAt(53, tile.x, tile.y)}
+                }
+
+                // 3 connections
+                if (up && down && left && !right){
+                    if(!ul && !dl){ groundLayer.putTileAt(60, tile.x, tile.y)}
+                    else if(!ul && dl){ groundLayer.putTileAt(64, tile.x, tile.y)}
+                    else if(ul && !dl){ groundLayer.putTileAt(70, tile.x, tile.y)}
+                    else{groundLayer.putTileAt(30, tile.x, tile.y)}
+                }
+                if (up && down && !left && right){
+                    if(!ur && !dr){ groundLayer.putTileAt(58, tile.x, tile.y)}
+                    else if(!ur && dr){ groundLayer.putTileAt(63, tile.x, tile.y)}
+                    else if(ur && !dr){ groundLayer.putTileAt(69, tile.x, tile.y)}
+                    else{groundLayer.putTileAt(28, tile.x, tile.y)}
+                }
+                if (up && !down && left && right){
+                    if(!ul && !ur){ groundLayer.putTileAt(45, tile.x, tile.y)}
+                    else if(!ul && ur){ groundLayer.putTileAt(71, tile.x, tile.y)}
+                    else if(ul && !ur){ groundLayer.putTileAt(72, tile.x, tile.y)}
+                    else{groundLayer.putTileAt(35, tile.x, tile.y)}
+                }
+                if (!up && down && left && right){
+                    if(!dr && !dl){ groundLayer.putTileAt(39, tile.x, tile.y)}
+                    else if(!dr && dl){ groundLayer.putTileAt(66, tile.x, tile.y)}
+                    else if(dr && !dl){ groundLayer.putTileAt(65, tile.x, tile.y)}
+                    else{groundLayer.putTileAt(23, tile.x, tile.y)}
+                }
+
+                // 2 connections
                 if (up && down && !left && !right){groundLayer.putTileAt(48, tile.x, tile.y)}
-                if (up && !down && left && right){groundLayer.putTileAt(35, tile.x, tile.y)}
-                if (up && !down && left && !right){groundLayer.putTileAt(36, tile.x, tile.y)}
-                if (up && !down && !left && right){groundLayer.putTileAt(34, tile.x, tile.y)}
-                if (up && !down && !left && !right){groundLayer.putTileAt(59, tile.x, tile.y)}
-                if (!up && down && left && right){groundLayer.putTileAt(23, tile.x, tile.y)}
-                if (!up && down && left && !right){groundLayer.putTileAt(24, tile.x, tile.y)}
-                if (!up && down && !left && right){groundLayer.putTileAt(22, tile.x, tile.y)}
-                if (!up && down && !left && !right){groundLayer.putTileAt(47, tile.x, tile.y)}
                 if (!up && !down && left && right){groundLayer.putTileAt(46, tile.x, tile.y)}
+
+                if (up && !down && left && !right){
+                    if(!ul){groundLayer.putTileAt(62, tile.x, tile.y)}
+                    else {groundLayer.putTileAt(36, tile.x, tile.y)}
+                }
+                if (up && !down && !left && right){
+                    if(!ur){groundLayer.putTileAt(61, tile.x, tile.y)}
+                    else {groundLayer.putTileAt(34, tile.x, tile.y)}
+                }
+                if (!up && down && left && !right){
+                    if(!dl){groundLayer.putTileAt(56, tile.x, tile.y)}
+                    else {groundLayer.putTileAt(24, tile.x, tile.y)}
+                }
+
+                if (!up && down && !left && right){
+                    if(!dr){groundLayer.putTileAt(55, tile.x, tile.y)}
+                    else {groundLayer.putTileAt(22, tile.x, tile.y)}
+                }
+                
+
+                // 1 connections
+                if (up && !down && !left && !right){groundLayer.putTileAt(59, tile.x, tile.y)}
+                if (!up && down && !left && !right){groundLayer.putTileAt(47, tile.x, tile.y)}
                 if (!up && !down && left && !right){groundLayer.putTileAt(54, tile.x, tile.y)}
                 if (!up && !down && !left && right){groundLayer.putTileAt(52, tile.x, tile.y)}
 
@@ -277,6 +349,10 @@ class Farm extends Phaser.Scene {
                     if (down){checkContig(groundLayer.getTileAt(tile.x, tile.y+1), true);};
                     if (left){checkContig(groundLayer.getTileAt(tile.x-1, tile.y), true);};
                     if (right){checkContig(groundLayer.getTileAt(tile.x+1, tile.y), true);};  
+                    if (ul){checkContig(groundLayer.getTileAt(tile.x-1, tile.y-1), true);};  
+                    if (ur){checkContig(groundLayer.getTileAt(tile.x+1, tile.y-1), true);};  
+                    if (dl){checkContig(groundLayer.getTileAt(tile.x-1, tile.y+1), true);};  
+                    if (dr){checkContig(groundLayer.getTileAt(tile.x+1, tile.y+1), true);};  
                 }
                 
             }
