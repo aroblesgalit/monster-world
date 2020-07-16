@@ -175,6 +175,12 @@ class Potion extends Phaser.Scene {
     // initiailize potion data with first sprite, in this case the red potion
     potion.data.set('price', 20);
 
+    //set scene data
+    this.data.set('gold', 200);
+    // let goldtext = this.add.text(40,400,this.data.get('gold'), {color: "white", fontSize: "20px"});
+
+    // console.log(HeadsUpDisplay.data.get('gold'));
+
     arrowright.on('pointerdown', function () {
       this.setScale(0.13);
     });
@@ -290,7 +296,14 @@ class Potion extends Phaser.Scene {
   }
 
   handleBuy(potion) {
-    console.log("That'll be " + potion.data.get('price') + " gold please.");
+    let gold = this.data.get('gold');
+    if (gold > potion.data.get('price')) {
+      this.data.set('gold', gold - potion.data.get('price'));
+      console.log('you spent ' + potion.data.get('price') + ' and now you have ' + this.data.get('gold') + ' gold');
+    }
+    else {
+      console.log('not enough money');
+    }
   }
 
 }

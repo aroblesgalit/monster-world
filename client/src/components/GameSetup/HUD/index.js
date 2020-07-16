@@ -73,8 +73,10 @@ class HeadsUpDisplay extends Phaser.Scene {
 
 
     // text readouts
-    var goldCount = this.add.text(10, 10).setText('0 Gold').setScrollFactor(0);
+    this.data.set('gold', 200);
+    var goldCount = this.add.text(10, 10).setText(this.data.get('gold') + ' Gold').setScrollFactor(0);
     goldCount.setShadow(1, 1, '#000000', 2);
+    console.log(this);
   }
 
   resize() {

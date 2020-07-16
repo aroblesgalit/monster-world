@@ -34,7 +34,8 @@ function GameSetup() {
   // game.scene.sleep("ShowMap");
 
   ////////////
-  // add game.inventory.gold
+  // game.inventory.gold
+  console.log(game);
   ////////////
 }
 
