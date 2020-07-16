@@ -170,6 +170,11 @@ class Potion extends Phaser.Scene {
     let buybutton = this.add.image(Potion.WIDTH/1.7, Potion.HEIGHT/1.35, 'buybutton').setScale(0.2).setInteractive();
     let closeButton = this.add.image(110, 70, 'closeButton').setScale(0.1).setInteractive();
 
+    // enable data on potion
+    potion.setDataEnabled();
+    // initiailize potion data with first sprite, in this case the red potion
+    potion.data.set('price', 20);
+
     arrowright.on('pointerdown', function () {
       this.setScale(0.13);
     });
@@ -206,7 +211,7 @@ class Potion extends Phaser.Scene {
       this.setScale(0.2);
     });
     buybutton.on('pointerup', function () {
-      this.handleBuy();
+      this.handleBuy(potion);
     }, this);
 
     closeButton.on('pointerdown', function () {
@@ -248,42 +253,44 @@ class Potion extends Phaser.Scene {
     switch (this.index) {
       case 0: 
         potion.setTexture('potionred');
-        price.setText("20g");
         break;
       case 1:
         potion.setTexture('potionblue');
-        price.setText("25g");
         break;
       case 2:
         potion.setTexture('potionpurple');
-        price.setText("50g");
         break;
       case 3:
         potion.setTexture('potiongreen');
-        price.setText("100g");
         break;
       default:
+        return;
+    }
+    this.updateData(potion);
+    price.setText(potion.data.get('price'));
+  }
+
+  updateData(potion) {
+    switch (potion.frame.texture.key) {
+      case 'potionred':
+        potion.data.set('price', 20);
+        break;
+      case 'potionblue':
+        potion.data.set('price', 25);
+        break;
+      case 'potionpurple':
+        potion.data.set('price', 50);
+        break;
+      case 'potiongreen':
+        potion.data.set('price', 100);
+        break;
+      default: 
         return;
     }
   }
 
-  handleBuy() {
-    switch (this.index) {
-      case 0: 
-      console.log("You bought the red potion!");
-        break;
-      case 1:
-        console.log("You bought the blue potion!");
-        break;
-      case 2:
-        console.log("You bought the purple potion!");
-        break;
-      case 3:
-        console.log("You bought the green potion!");
-        break;
-      default:
-        return;
-    }
+  handleBuy(potion) {
+    console.log("That'll be " + potion.data.get('price') + " gold please.");
   }
 
 }

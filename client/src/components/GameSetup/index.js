@@ -23,7 +23,7 @@ function GameSetup() {
   };
 
   var game = new Phaser.Game(config);
-  
+
   // Add heads up display to game.  This will start the scene on top of the existing one.
   game.scene.add('HUD', HUD, true);
 
@@ -32,6 +32,10 @@ function GameSetup() {
   game.scene.start("Shop");
   game.scene.start("Potion");
   // game.scene.sleep("ShowMap");
+
+  ////////////
+  // add game.inventory.gold
+  ////////////
 }
 
 export default GameSetup;
