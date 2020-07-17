@@ -57,15 +57,14 @@ class Farm extends Phaser.Scene {
 
         const grassMap = this.make.tilemap({ key: "grass_tilemap" });
         const tileset = grassMap.addTilesetImage("farmland", "farmland");
-        const dirtTiles = grassMap.addTilesetImage("plowedDirt", "plowedDirt");
+        grassMap.addTilesetImage("plowedDirt", "plowedDirt");
         
         // Static Layer
         grassPlatform = grassMap.createStaticLayer("grass", tileset);
 
         // Dynamic Tilemap
-        //console.log("creating layer with: ", dirtTiles);
+
         groundLayer = grassMap.createDynamicLayer("ground", "plowedDirt");
-        console.log(groundLayer);
 
         // setTile= 10, 10, 10);
 
@@ -131,7 +130,6 @@ class Farm extends Phaser.Scene {
         });
 
         dirt2.on("pointerup", function () {
-            console.log(this.texture);
             this.scene.toggleBuildWindow();
             this.scene.createMarker(this.texture);
             placeActive = true;
@@ -227,14 +225,14 @@ class Farm extends Phaser.Scene {
             else{canPlace=false;}
 
             // dirtMarker.setPosition(snappedWorldPoint.x, snappedWorldPoint.y);
-            if(pointer.isDown){
-                console.log(groundLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
-            }
+            // if(pointer.isDown){
+            //     console.log(groundLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
+            // }
             if (pointer.isDown && canPlace) {
                 const placed = groundLayer.putTileAtWorldXY(12+farmTileCount, worldPoint.x, worldPoint.y);
                 // weird that this next part isn't done automatically;
                 placed.properties = (placed.tileset.tileProperties[10]);
-                //console.log(placed);
+
                 checkContig(placed);
 
                 // check nearby tiles
@@ -247,7 +245,6 @@ class Farm extends Phaser.Scene {
         }
 
         function checkContig(tile, justThis = false){
-            console.log(tile)
             if(true || tile.properties["Contiguous"]){
                 let setTile;
 
@@ -261,15 +258,14 @@ class Farm extends Phaser.Scene {
                 const dl = groundLayer.getTileAt(tile.x-1, tile.y+1).properties["Contiguous"];
                 const dr = groundLayer.getTileAt(tile.x+1, tile.y+1).properties["Contiguous"];
 
-                console.log(groundLayer.getTileAt(tile.x, tile.y-1));
-                console.log(`tile at ${tile.x},${tile.y-1} is${up?"":" not"} contiguous`)
-                console.log(`tile at ${tile.x},${tile.y+1} is${down?"":" not"} contiguous`)
-                console.log(`tile at ${tile.x-1},${tile.y} is${left?"":" not"} contiguous`)
-                console.log(`tile at ${tile.x+1},${tile.y} is${right?"":" not"} contiguous`)
+                // console.log(groundLayer.getTileAt(tile.x, tile.y-1));
+                // console.log(`tile at ${tile.x},${tile.y-1} is${up?"":" not"} contiguous`)
+                // console.log(`tile at ${tile.x},${tile.y+1} is${down?"":" not"} contiguous`)
+                // console.log(`tile at ${tile.x-1},${tile.y} is${left?"":" not"} contiguous`)
+                // console.log(`tile at ${tile.x+1},${tile.y} is${right?"":" not"} contiguous`)
 
                 // change tileset to connect them
                 //===============================
-                console.log(tile.x, tile.y);
                 // 4 connections
                 if (up && down && left && right){
                     
@@ -367,7 +363,7 @@ class Farm extends Phaser.Scene {
                     if (dr){checkContig(groundLayer.getTileAt(tile.x+1, tile.y+1), true);};  
                 }
                 
-                if (setTile){console.log("Changing values: "); groundLayer.putTileAt(farmTileCount + setTile,  tile.x, tile.y)}
+                if (setTile){groundLayer.putTileAt(farmTileCount + setTile,  tile.x, tile.y)}
             }
 
         }
