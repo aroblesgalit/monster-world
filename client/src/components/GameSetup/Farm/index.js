@@ -1,9 +1,10 @@
 import Phaser from "phaser";
+import helpers from "./helpers.js";
 let buildVisible;
 let buildContainer;
 let placeActive = false;
 let placeMarker;
-let groundLayer;
+let dirtLayer;
 let grassPlatform;
 let canPlace = false;
 
@@ -63,8 +64,9 @@ class Farm extends Phaser.Scene {
         grassPlatform = grassMap.createStaticLayer("grass", tileset);
 
         // Dynamic Tilemap
-
-        groundLayer = grassMap.createDynamicLayer("ground", "plowedDirt");
+        dirtLayer = grassMap.createDynamicLayer("dirt", "plowedDirt");
+        plantLayer = grassMap.createDynamicLayer("plants", "plowedDirt");
+        
 
         // setTile= 10, 10, 10);
 
@@ -113,6 +115,7 @@ class Farm extends Phaser.Scene {
 
 
         // Build window
+        // =================================
         let buildWindow = this.add.image(0, 0, "buildWindow");
         let dirt2 = this.add.image(0, 20, "dirt2").setInteractive({ useHandCursor: true });
 
@@ -141,6 +144,8 @@ class Farm extends Phaser.Scene {
         this.scene.sleep('Farm');
     }
 
+    // Marker Style
+    // =====================================
     createMarker(item) {
         const image = this.add.sprite(0,0,item).setOrigin(0).setAlpha(.8).setDisplaySize(32,32);
 
@@ -151,12 +156,15 @@ class Farm extends Phaser.Scene {
         placeMarker = this.add.container(0,0,[outline, image])
     }
 
+    // Clear Marker Style
+    // =====================================
     clearPlaceMarker() {
         if (placeMarker) {
             placeMarker.destroy();
         }
     }
 
+    // Toggle Build Window on or off
     toggleBuildWindow() {
         buildVisible = !buildVisible;
         if (buildVisible) {
@@ -179,14 +187,16 @@ class Farm extends Phaser.Scene {
     // }
 
     update(time, delta) {
+
         // Placement Variables
         // ========================================
         const pointer = this.input.activePointer;
         const worldPoint = pointer.positionToCamera(this.cameras.main);
         // Place the marker in world space, but snap it to the tile grid. If we convert world -> tile and
         // then tile -> world, we end up with the position of the tile under the pointer
-        const pointerTileXY = groundLayer.worldToTileXY(worldPoint.x, worldPoint.y);
-        const snappedWorldPoint = groundLayer.tileToWorldXY(pointerTileXY.x, pointerTileXY.y);
+        const pointerTileXY = dirtLayer.worldToTileXY(worldPoint.x, worldPoint.y);
+        const snappedWorldPoint = dirtLayer.tileToWorldXY(pointerTileXY.x, pointerTileXY.y);
+
 
         // Camera Movement
         // ========================================
@@ -202,6 +212,7 @@ class Farm extends Phaser.Scene {
         } else {
             this.game.origDragPoint = null;
         }
+
 
         // placeObject
         // ==========================================
@@ -219,21 +230,21 @@ class Farm extends Phaser.Scene {
 
             //check if canPlace
             const grassTile = grassPlatform.getTileAt(snappedWorldPoint.x/32, snappedWorldPoint.y/32);
-            const groundTile = groundLayer.getTileAt(snappedWorldPoint.x/32, snappedWorldPoint.y/32);
+            const groundTile = dirtLayer.getTileAt(snappedWorldPoint.x/32, snappedWorldPoint.y/32);
             if(grassTile && groundTile && grassTile.index==26 && groundTile.index==85)
                 {canPlace = true;}
             else{canPlace=false;}
 
             // dirtMarker.setPosition(snappedWorldPoint.x, snappedWorldPoint.y);
             // if(pointer.isDown){
-            //     console.log(groundLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
+            //     console.log(dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
             // }
             if (pointer.isDown && canPlace) {
-                const placed = groundLayer.putTileAtWorldXY(12+farmTileCount, worldPoint.x, worldPoint.y);
+                const placed = dirtLayer.putTileAtWorldXY(12+farmTileCount, worldPoint.x, worldPoint.y);
                 // weird that this next part isn't done automatically;
                 placed.properties = (placed.tileset.tileProperties[10]);
 
-                checkContig(placed);
+                helpers.checkContig(placed, dirtLayer, farmTileCount);
 
                 // check nearby tiles
 
@@ -244,129 +255,6 @@ class Farm extends Phaser.Scene {
             this.clearPlaceMarker();
         }
 
-        function checkContig(tile, justThis = false){
-            if(true || tile.properties["Contiguous"]){
-                let setTile;
-
-                const up = groundLayer.getTileAt(tile.x, tile.y-1).properties["Contiguous"];
-                const down = groundLayer.getTileAt(tile.x, tile.y+1).properties["Contiguous"];
-                const left = groundLayer.getTileAt(tile.x-1, tile.y).properties["Contiguous"];
-                const right = groundLayer.getTileAt(tile.x+1, tile.y).properties["Contiguous"];
-
-                const ul = groundLayer.getTileAt(tile.x-1, tile.y-1).properties["Contiguous"];
-                const ur = groundLayer.getTileAt(tile.x+1, tile.y-1).properties["Contiguous"];
-                const dl = groundLayer.getTileAt(tile.x-1, tile.y+1).properties["Contiguous"];
-                const dr = groundLayer.getTileAt(tile.x+1, tile.y+1).properties["Contiguous"];
-
-                // console.log(groundLayer.getTileAt(tile.x, tile.y-1));
-                // console.log(`tile at ${tile.x},${tile.y-1} is${up?"":" not"} contiguous`)
-                // console.log(`tile at ${tile.x},${tile.y+1} is${down?"":" not"} contiguous`)
-                // console.log(`tile at ${tile.x-1},${tile.y} is${left?"":" not"} contiguous`)
-                // console.log(`tile at ${tile.x+1},${tile.y} is${right?"":" not"} contiguous`)
-
-                // change tileset to connect them
-                //===============================
-                // 4 connections
-                if (up && down && left && right){
-                    
-                    // All
-                    if(ul && ur && dl && dr){setTile= 10}
-
-                    // 3
-                    else if(ul && ur && dl && !dr){setTile= 20}
-                    else if(ul && ur && !dl && dr){setTile= 21}
-                    else if(ul && !ur && dl && dr){setTile= 26}
-                    else if(!ul && ur && dl && dr){setTile= 27}
-
-                    //2
-                    else if(ul && ur && !dl && !dr){setTile= 47}
-                    else if(ul && !ur && dl && !dr){setTile= 46}
-                    else if(ul && !ur && !dl && dr){setTile= 45}
-                    else if(!ul && ur && !dl && dr){setTile= 43}
-                    else if(!ul && ur && dl && !dr){setTile= 44}
-                    else if(!ul && !ur && dl && dr){setTile= 42}
-
-                    //1
-                    else if(ul && !ur && !dl && !dr){setTile= 41}
-                    else if(!ul && ur && !dl && !dr){setTile= 40}
-                    else if(!ul && !ur && dl && !dr){setTile= 35}
-                    else if(!ul && !ur && !dl && dr){setTile= 34}
-
-                    // none
-                    else if(!ul && !ur && !dl && !dr){setTile= 7}
-                }
-
-                // 3 connections
-                if (up && down && left && !right){
-                    if(!ul && !dl){ setTile= 23}
-                    else if(!ul && dl){ setTile= 31}
-                    else if(ul && !dl){ setTile= 37}
-                    else{setTile= 11}
-                }
-                if (up && down && !left && right){
-                    if(!ur && !dr){ setTile= 22}
-                    else if(!ur && dr){ setTile= 30}
-                    else if(ur && !dr){ setTile= 36}
-                    else{setTile= 9}
-                }
-                if (up && !down && left && right){
-                    if(!ul && !ur){ setTile= 28}
-                    else if(!ul && ur){ setTile= 38}
-                    else if(ul && !ur){ setTile= 39}
-                    else{setTile= 16}
-                }
-                if (!up && down && left && right){
-                    if(!dr && !dl){ setTile= 29}
-                    else if(!dr && dl){ setTile= 33}
-                    else if(dr && !dl){ setTile= 32}
-                    else{setTile= 4}
-                }
-
-                // 2 connections
-                if (up && down && !left && !right){setTile= 14}
-                if (!up && !down && left && right){setTile= 2}
-
-                if (up && !down && left && !right){
-                    if(!ul){setTile= 25}
-                    else {setTile= 17}
-                }
-                if (up && !down && !left && right){
-                    if(!ur){setTile= 24}
-                    else {setTile= 15}
-                }
-                if (!up && down && left && !right){
-                    if(!dl){setTile= 19}
-                    else {setTile= 5}
-                }
-
-                if (!up && down && !left && right){
-                    if(!dr){setTile= 18}
-                    else {setTile= 3}
-                }
-                
-
-                // 1 connections
-                if (up && !down && !left && !right){setTile= 13}
-                if (!up && down && !left && !right){setTile= 1}
-                if (!up && !down && left && !right){setTile= 8}
-                if (!up && !down && !left && right){setTile= 6}
-
-                // change connected too
-                if (!justThis){
-                    if (up){checkContig(groundLayer.getTileAt(tile.x, tile.y-1), true)};
-                    if (down){checkContig(groundLayer.getTileAt(tile.x, tile.y+1), true);};
-                    if (left){checkContig(groundLayer.getTileAt(tile.x-1, tile.y), true);};
-                    if (right){checkContig(groundLayer.getTileAt(tile.x+1, tile.y), true);};  
-                    if (ul){checkContig(groundLayer.getTileAt(tile.x-1, tile.y-1), true);};  
-                    if (ur){checkContig(groundLayer.getTileAt(tile.x+1, tile.y-1), true);};  
-                    if (dl){checkContig(groundLayer.getTileAt(tile.x-1, tile.y+1), true);};  
-                    if (dr){checkContig(groundLayer.getTileAt(tile.x+1, tile.y+1), true);};  
-                }
-                
-                if (setTile){groundLayer.putTileAt(farmTileCount + setTile,  tile.x, tile.y)}
-            }
-
-        }
     }
 }
 
