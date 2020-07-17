@@ -1,11 +1,16 @@
 import Phaser from "phaser";
 import helpers from "./helpers.js";
+
+import Crops from "./crops.js";
+import Dirt from "./Dirt.js";
+
 let buildVisible;
 let buildContainer;
 let placeActive = false;
 let placeMarker;
 let dirtLayer;
 let plantLayer;
+let allLayers;
 let grassPlatform;
 let canPlace = false;
 
@@ -57,16 +62,18 @@ class Farm extends Phaser.Scene {
 
         // Grass tilemap
 
-        const grassMap = this.make.tilemap({ key: "grass_tilemap" });
-        const tileset = grassMap.addTilesetImage("farmland", "farmland");
-        grassMap.addTilesetImage("plowedDirt", "plowedDirt");
+        this.grassMap = this.make.tilemap({ key: "grass_tilemap" });
+        const tileset = this.grassMap.addTilesetImage("farmland", "farmland");
+        this.grassMap.addTilesetImage("plowedDirt", "plowedDirt");
         
         // Static Layer
-        grassPlatform = grassMap.createStaticLayer("grass", tileset);
+        grassPlatform = this.grassMap.createStaticLayer("grass", tileset);
 
         // Dynamic Tilemap
-        dirtLayer = grassMap.createDynamicLayer("dirt", "plowedDirt");
-        plantLayer = grassMap.createDynamicLayer("plants", "farmland");
+        dirtLayer = this.grassMap.createDynamicLayer("dirt", "plowedDirt");
+        plantLayer = this.grassMap.createDynamicLayer("plants", "farmland");
+
+        allLayers = this.grassMap.layers;
         
 
         // setTile= 10, 10, 10);
@@ -225,6 +232,7 @@ class Farm extends Phaser.Scene {
         // placeObject
         // ==========================================
         if (placeActive) {
+            let className;
             let object;
             let layer;
             let tilesetOffset;
@@ -235,23 +243,34 @@ class Farm extends Phaser.Scene {
 
             switch(placeActive){
                 case "dirt2":
-                    layer = dirtLayer;
-                    tilesetOffset = farmTileCount;
-                    object = 12;
-                    if(grassTile && groundTile && grassTile.index===26 && groundTile.index===farmTileCount)
-                        {canPlace = true;}
-                    else{canPlace=false;}
+                    className = Dirt;
+                    layer = this.grassMap.getLayer(className.layer).tilemapLayer;
+                    tilesetOffset = className.tilesetOffset;
+                    object = className.object;
+                    canPlace = className.canPlace(grassPlatform, dirtLayer, snappedWorldPoint.x/32, snappedWorldPoint.y/32)
                     break;
                 case "seeds":
-                    layer = plantLayer;
-                    tilesetOffset = 1;
-                    object = 48;
-                    if(grassTile && groundTile && grassTile.index===26 && groundTile.properties["Contiguous"])
-                        {canPlace = true;}
-                    else{canPlace=false;}
+                    className = Crops;
                     break;
             }
 
+            checkPlacement();
+            
+
+            // if(pointer.isDown){
+            //     console.log(dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
+            // }
+            if (pointer.isDown && className.canPlace(grassPlatform, dirtLayer, snappedWorldPoint.x/32, snappedWorldPoint.y/32)) {
+                const placed = className.put(this.grassMap, worldPoint.x, worldPoint.y)
+                //const placed = layer.putTileAtWorldXY(object+tilesetOffset, worldPoint.x, worldPoint.y);
+
+                //this.plantTurnips(plantMarker.x + 20, plantMarker.y + 20);
+            }
+        } else {
+            this.clearPlaceMarker();
+        }
+
+        function checkPlacement(){
             placeMarker.setPosition(snappedWorldPoint.x, snappedWorldPoint.y);
             if (!canPlace){
                 placeMarker.list[1].setTint(0xff0000);
@@ -261,25 +280,6 @@ class Farm extends Phaser.Scene {
                 placeMarker.list[1].clearTint();
                 placeMarker.list[0].lineStyle(2, 0x00FF00, 1);
                 placeMarker.list[0].strokeRect(0, 0, 32, 32)}
-            
-
-            // if(pointer.isDown){
-            //     console.log(dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
-            // }
-            if (pointer.isDown && canPlace) {
-                const placed = layer.putTileAtWorldXY(object+tilesetOffset, worldPoint.x, worldPoint.y);
-                // weird that this next part isn't done automatically;
-                placed.properties = (placed.tileset.tileProperties[object]);
-
-                helpers.checkContig(placed, layer, farmTileCount);
-
-                // check nearby tiles
-
-
-                //this.plantTurnips(plantMarker.x + 20, plantMarker.y + 20);
-            }
-        } else {
-            this.clearPlaceMarker();
         }
 
     }
