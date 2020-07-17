@@ -1,7 +1,7 @@
 // Function to change the tileset on contiguous tiles (Tilled dirt) so they merge seemlessly
 //============================================================================================
 exports.checkContig = function checkContig(tile, map, tileCount, justThis = false) {
-  if (true || tile.properties["Contiguous"]) {
+  if (tile.properties["Contiguous"]) {
     let setTile;
 
     const up = map.getTileAt(tile.x, tile.y - 1).properties["Contiguous"];

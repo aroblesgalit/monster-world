@@ -5,6 +5,7 @@ let buildContainer;
 let placeActive = false;
 let placeMarker;
 let dirtLayer;
+let plantLayer;
 let grassPlatform;
 let canPlace = false;
 
@@ -21,13 +22,13 @@ class Farm extends Phaser.Scene {
             frameWidth: 16,
             frameHeight: 16
         });
-        //this.load.image("dirt", "Assets/tilledDirt.png");
         this.load.image("buttonUp", "Assets/blue_button04.png");
         this.load.image("buttonDown", "Assets/blue_button05.png");
         this.load.image("buttonHover", "Assets/blue_button02.png");
 
         this.load.image("buildWindow", "Assets/build_window.png");
         this.load.image("dirt2", "Assets/dirt2.png");
+        this.load.image("seeds", "Assets/seeds.png");
 
 
         // Tilemap - Static - grass
@@ -65,7 +66,7 @@ class Farm extends Phaser.Scene {
 
         // Dynamic Tilemap
         dirtLayer = grassMap.createDynamicLayer("dirt", "plowedDirt");
-        plantLayer = grassMap.createDynamicLayer("plants", "plowedDirt");
+        plantLayer = grassMap.createDynamicLayer("plants", "farmland");
         
 
         // setTile= 10, 10, 10);
@@ -99,7 +100,7 @@ class Farm extends Phaser.Scene {
                 }
                 else{
                     buildBtn.clearTint();
-                    placeActive=!placeActive
+                    placeActive=null;
                 }
             }, this)
             .on("pointerover", () => {
@@ -117,28 +118,35 @@ class Farm extends Phaser.Scene {
         // Build window
         // =================================
         let buildWindow = this.add.image(0, 0, "buildWindow");
-        let dirt2 = this.add.image(0, 20, "dirt2").setInteractive({ useHandCursor: true });
+        let buildObjects = []
+        buildObjects.push(this.add.image(0, 20, "dirt2").setInteractive({ useHandCursor: true }));
+        buildObjects.push(this.add.image(32, 20, "seeds").setInteractive({ useHandCursor: true }));
 
-        buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, dirt2]).setScale(3).setDepth(2);
+        buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, ...buildObjects]).setScale(3).setDepth(2);
 
         buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
 
         buildContainer.visible = false;
 
         this.input.setDraggable(buildContainer);
-
+        
         buildContainer.on('drag', function (pointer, dragX, dragY) {
             this.x = dragX;
             this.y = dragY;
         });
+        
+        console.log(buildObjects);
 
-        dirt2.on("pointerup", function () {
+        buildObjects.forEach( function(object){
+            object.on("pointerup", function () {
             this.scene.toggleBuildWindow();
             this.scene.createMarker(this.texture);
-            placeActive = true;
+            placeActive = this.texture.key;
             buildBtn.setTint(0xff2222);
-
+            });
         });
+        
+
 
         // put the scene to sleep untill it is used
         this.scene.sleep('Farm');
@@ -217,6 +225,32 @@ class Farm extends Phaser.Scene {
         // placeObject
         // ==========================================
         if (placeActive) {
+            let object;
+            let layer;
+            let tilesetOffset;
+
+            //check if canPlace
+            const grassTile = grassPlatform.getTileAt(snappedWorldPoint.x/32, snappedWorldPoint.y/32);
+            const groundTile = dirtLayer.getTileAt(snappedWorldPoint.x/32, snappedWorldPoint.y/32);
+
+            switch(placeActive){
+                case "dirt2":
+                    layer = dirtLayer;
+                    tilesetOffset = farmTileCount;
+                    object = 12;
+                    if(grassTile && groundTile && grassTile.index===26 && groundTile.index===farmTileCount)
+                        {canPlace = true;}
+                    else{canPlace=false;}
+                    break;
+                case "seeds":
+                    layer = plantLayer;
+                    tilesetOffset = 1;
+                    object = 48;
+                    if(grassTile && groundTile && grassTile.index===26 && groundTile.properties["Contiguous"])
+                        {canPlace = true;}
+                    else{canPlace=false;}
+                    break;
+            }
 
             placeMarker.setPosition(snappedWorldPoint.x, snappedWorldPoint.y);
             if (!canPlace){
@@ -227,24 +261,17 @@ class Farm extends Phaser.Scene {
                 placeMarker.list[1].clearTint();
                 placeMarker.list[0].lineStyle(2, 0x00FF00, 1);
                 placeMarker.list[0].strokeRect(0, 0, 32, 32)}
+            
 
-            //check if canPlace
-            const grassTile = grassPlatform.getTileAt(snappedWorldPoint.x/32, snappedWorldPoint.y/32);
-            const groundTile = dirtLayer.getTileAt(snappedWorldPoint.x/32, snappedWorldPoint.y/32);
-            if(grassTile && groundTile && grassTile.index==26 && groundTile.index==85)
-                {canPlace = true;}
-            else{canPlace=false;}
-
-            // dirtMarker.setPosition(snappedWorldPoint.x, snappedWorldPoint.y);
             // if(pointer.isDown){
             //     console.log(dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
             // }
             if (pointer.isDown && canPlace) {
-                const placed = dirtLayer.putTileAtWorldXY(12+farmTileCount, worldPoint.x, worldPoint.y);
+                const placed = layer.putTileAtWorldXY(object+tilesetOffset, worldPoint.x, worldPoint.y);
                 // weird that this next part isn't done automatically;
-                placed.properties = (placed.tileset.tileProperties[10]);
+                placed.properties = (placed.tileset.tileProperties[object]);
 
-                helpers.checkContig(placed, dirtLayer, farmTileCount);
+                helpers.checkContig(placed, layer, farmTileCount);
 
                 // check nearby tiles
 
