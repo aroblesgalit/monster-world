@@ -1,13 +1,12 @@
+import helpers from "./helpers";
 
-class Crop{
-
-  static layer = "plants";
-  static tilesetOffset = 1;
-  static object = 48;
+class Dirt{
+  static layer = "dirt";
+  static tilesetOffset = 85;
+  static object = 12
 
   constructor(type){
     this.type = type;
-    this.plantTime = Date.now();
   }
 
   // Check if Object can be placed
@@ -16,7 +15,7 @@ class Crop{
     const grassTile = grassPlatform.getTileAt(x, y);
     const groundTile = dirtLayer.getTileAt(x, y);
 
-    if(grassTile && groundTile && grassTile.index===26 && groundTile.properties["Contiguous"])
+    if(grassTile && groundTile && grassTile.index===26 && groundTile.index===this.tilesetOffset)
       {return true;}
     return false;
   }
@@ -26,7 +25,9 @@ class Crop{
     let placed =  mapLayer.putTileAtWorldXY(this.object+this.tilesetOffset, x, y);
     // weird that this next part isn't done automatically;
     placed.properties = (placed.tileset.tileProperties[this.object]);
+
+    helpers.checkContig(placed, mapLayer, this.tilesetOffset);
   }
 }
 
-export default Crop
+export default Dirt
