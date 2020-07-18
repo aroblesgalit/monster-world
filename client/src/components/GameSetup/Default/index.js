@@ -6,15 +6,16 @@ class Default extends Phaser.Scene{
   }
 
   preload(){ 
-    this.load.setBaseURL('http://labs.phaser.io');
-
-    this.load.image('sky', 'assets/skies/space3.png');
-    this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-    this.load.image('red', 'assets/particles/red.png');
+    this.load.image('sky', 'Assets/Default/space3.png');
+    this.load.image('logo', 'Assets/Default/phaser3-logo.png');
+    this.load.image('red', 'Assets/Default/red.png');
   }
 
   create() {
-    this.add.image(400, 300, 'sky');
+
+    let background = this.add.image(0, 0, 'sky').setOrigin(0);
+    background.displayWidth=this.game.config.width;
+    background.displayHeight = this.game.config.height;
 
     var particles = this.add.particles('red');
 
