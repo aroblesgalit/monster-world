@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import helpers from "./helpers.js";
 
 import Crops from "./crops.js";
 import Dirt from "./Dirt.js";
@@ -12,9 +11,6 @@ let dirtLayer;
 let plantLayer;
 let allLayers;
 let grassPlatform;
-let canPlace = false;
-
-let farmTileCount = 85;
 
 class Farm extends Phaser.Scene {
     constructor() {
@@ -62,18 +58,18 @@ class Farm extends Phaser.Scene {
 
         // Grass tilemap
 
-        this.grassMap = this.make.tilemap({ key: "grass_tilemap" });
-        const tileset = this.grassMap.addTilesetImage("farmland", "farmland");
-        this.grassMap.addTilesetImage("plowedDirt", "plowedDirt");
+        this.map = this.make.tilemap({ key: "grass_tilemap" });
+        const tileset = this.map.addTilesetImage("farmland", "farmland");
+        this.map.addTilesetImage("plowedDirt", "plowedDirt");
         
         // Static Layer
-        grassPlatform = this.grassMap.createStaticLayer("grass", tileset);
+        grassPlatform = this.map.createStaticLayer("grass", tileset);
 
         // Dynamic Tilemap
-        dirtLayer = this.grassMap.createDynamicLayer("dirt", "plowedDirt");
-        plantLayer = this.grassMap.createDynamicLayer("plants", "farmland");
+        dirtLayer = this.map.createDynamicLayer("dirt", "plowedDirt");
+        plantLayer = this.map.createDynamicLayer("plants", "farmland");
 
-        allLayers = this.grassMap.layers;
+        allLayers = this.map.layers;
         
 
         // setTile= 10, 10, 10);
@@ -147,7 +143,7 @@ class Farm extends Phaser.Scene {
         buildObjects.forEach( function(object){
             object.on("pointerup", function () {
             this.scene.toggleBuildWindow();
-            this.scene.createMarker(this.texture);
+            createMarker(this.scene, this.texture);
             placeActive = this.texture.key;
             buildBtn.setTint(0xff2222);
             });
@@ -157,26 +153,6 @@ class Farm extends Phaser.Scene {
 
         // put the scene to sleep untill it is used
         this.scene.sleep('Farm');
-    }
-
-    // Marker Style
-    // =====================================
-    createMarker(item) {
-        const image = this.add.sprite(0,0,item).setOrigin(0).setAlpha(.8).setDisplaySize(32,32);
-
-        const outline = this.add.graphics();
-        outline.lineStyle(2, 0x000000, 1);
-        outline.strokeRect(0, 0, 32, 32);
-
-        placeMarker = this.add.container(0,0,[outline, image])
-    }
-
-    // Clear Marker Style
-    // =====================================
-    clearPlaceMarker() {
-        if (placeMarker) {
-            placeMarker.destroy();
-        }
     }
 
     // Toggle Build Window on or off
@@ -233,56 +209,73 @@ class Farm extends Phaser.Scene {
         // ==========================================
         if (placeActive) {
             let className;
-            let object;
-            let layer;
-            let tilesetOffset;
-
-            //check if canPlace
-            const grassTile = grassPlatform.getTileAt(snappedWorldPoint.x/32, snappedWorldPoint.y/32);
-            const groundTile = dirtLayer.getTileAt(snappedWorldPoint.x/32, snappedWorldPoint.y/32);
 
             switch(placeActive){
                 case "dirt2":
                     className = Dirt;
-                    layer = this.grassMap.getLayer(className.layer).tilemapLayer;
-                    tilesetOffset = className.tilesetOffset;
-                    object = className.object;
-                    canPlace = className.canPlace(grassPlatform, dirtLayer, snappedWorldPoint.x/32, snappedWorldPoint.y/32)
                     break;
                 case "seeds":
                     className = Crops;
                     break;
             }
 
-            checkPlacement();
+            //check if canPlace
+            let canPlace = className.canPlace(grassPlatform, dirtLayer, snappedWorldPoint.x/32, snappedWorldPoint.y/32);
+            UpdatePlaceMarker(placeMarker, canPlace, snappedWorldPoint.x, snappedWorldPoint.y);
             
 
             // if(pointer.isDown){
             //     console.log(dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
             // }
-            if (pointer.isDown && className.canPlace(grassPlatform, dirtLayer, snappedWorldPoint.x/32, snappedWorldPoint.y/32)) {
-                const placed = className.put(this.grassMap, worldPoint.x, worldPoint.y)
+            if (pointer.isDown && canPlace) {
+                const placed = className.put(this.map, worldPoint.x, worldPoint.y)
                 //const placed = layer.putTileAtWorldXY(object+tilesetOffset, worldPoint.x, worldPoint.y);
 
                 //this.plantTurnips(plantMarker.x + 20, plantMarker.y + 20);
             }
         } else {
-            this.clearPlaceMarker();
+            clearPlaceMarker(placeMarker);
         }
-
-        function checkPlacement(){
-            placeMarker.setPosition(snappedWorldPoint.x, snappedWorldPoint.y);
-            if (!canPlace){
-                placeMarker.list[1].setTint(0xff0000);
-                placeMarker.list[0].lineStyle(2, 0xff0000, 1);
-                placeMarker.list[0].strokeRect(0, 0, 32, 32)}
-            else{
-                placeMarker.list[1].clearTint();
-                placeMarker.list[0].lineStyle(2, 0x00FF00, 1);
-                placeMarker.list[0].strokeRect(0, 0, 32, 32)}
-        }
-
     }
 }
 
 export default Farm;
+
+
+
+
+
+
+// placeMarker Stuff
+//================================
+
+function createMarker(scene, item) {
+    const image = scene.add.sprite(0,0,item).setOrigin(0).setAlpha(.8).setDisplaySize(32,32);
+
+    const outline = scene.add.graphics();
+    outline.lineStyle(2, 0x000000, 1);
+    outline.strokeRect(0, 0, 32, 32);
+
+    placeMarker = scene.add.container(0,0,[outline, image])
+    return placeMarker;
+}
+
+// Clear Marker Style
+// =====================================
+function clearPlaceMarker(placeMarker) {
+    if (placeMarker) {
+        placeMarker.destroy();
+    }
+}
+
+function UpdatePlaceMarker(placeMarker, canPlace, x, y){
+    placeMarker.setPosition(x, y);
+    if (!canPlace){
+        placeMarker.list[1].setTint(0xff0000);
+        placeMarker.list[0].lineStyle(2, 0xff0000, 1);
+        placeMarker.list[0].strokeRect(0, 0, 32, 32)}
+    else{
+        placeMarker.list[1].clearTint();
+        placeMarker.list[0].lineStyle(2, 0x00FF00, 1);
+        placeMarker.list[0].strokeRect(0, 0, 32, 32)}
+}
