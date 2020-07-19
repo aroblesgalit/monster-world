@@ -336,7 +336,19 @@ class Shelf extends Phaser.Scene {
 
   create() {
     // add close button
-    let closeButton = this.add.image(110, 70, 'closeButton').setScale(0.1).setInteractive();
+    let closeButton = this.add.image(180, 200, 'closeButton').setScale(0.1).setInteractive();
+    closeButton.on('pointerdown', function () {
+            this.setScale(0.08);
+          });
+          closeButton.on('pointerout', function () {
+            this.setScale(0.1);
+          });
+          closeButton.on('pointerup', function () {
+            this.setScale(0.1);
+          });
+          closeButton.on('pointerup', function () {
+            this.scene.sleep("Shelf");
+          }, this);
 
     // define contents of menu
     const data = {
