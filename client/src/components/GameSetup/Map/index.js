@@ -19,8 +19,8 @@ class ShowMap extends Phaser.Scene {
   preload() {
     this.load.image('map', 'Assets/map.png');
     this.load.image('FarmOnMap', 'Assets/farmOnMap.png');
-    this.load.image('DefaultOnMap', 'Assets/defaultOnMap.png');
-    this.load.image('ShopOnMap', 'assets/potion.png');
+    this.load.image('DefaultOnMap', 'Assets/DefaultOnMap.png');
+    this.load.image('ShopOnMap', 'Assets/potion.png');
   }
 
   create() {
@@ -95,7 +95,7 @@ class ShowMap extends Phaser.Scene {
         this.scene.scene.sleep('Default');
         this.scene.scene.sleep('FarmHUD');
         this.scene.scene.sleep('Potion');
-        this.scene.scene.run(choseScene);
+        this.scene.scene.wake(choseScene);
         console.log(this.scene.scene.get(choseScene));
         // this.scene.scene.bringToTop(choseScene);
         // this.scene.scene.bringToTop('HeadsUpDisplay');
