@@ -319,94 +319,120 @@ class Shelf extends Phaser.Scene {
   }
 
   preload() {
+    // load plugin file
     this.load.scenePlugin({
       key: 'rexuiplugin',
       url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
       sceneKey: 'rexUI'
     });
+    // load images
     this.load.image('shopMenuBox', 'Assets/shopMenuBox.png');
     this.load.image('potionred', 'Assets/potion.png');
     this.load.image('potionblue', 'Assets/potionblue.png');
     this.load.image('potiongreen', 'Assets/potiongreen.png');
     this.load.image('potionpurple', 'Assets/potionpurple.png');
-
+    this.load.image('closeButton', 'Assets/menuClose.png');
   }
 
   create() {
+    // add close button
+    let closeButton = this.add.image(110, 70, 'closeButton').setScale(0.1).setInteractive();
+
+    // define contents of menu
     const data = {
+      // single row section of table
       potions1: [
         {
-          name: 'Red',
+          name: '20g',
+          image: 'potionred',
           price: 20
         },
         {
-          name: 'Blue',
+          name: '50g',
+          image: 'potionblue',
           price: 50
         },
         {
-          name: 'Green',
+          name: '75g',
+          image: 'potiongreen',
           price: 75
         },
         {
-          name: 'Purple',
+          name: '100g',
+          image: 'potionpurple',
           price: 100
         }
       ],
+
+      // two row section of table
       potions2: [
         {
-          name: 'Red',
+          name: '20g',
+          image: 'potionred',
           price: 20
         },
         {
-          name: 'Blue',
+          name: '50g',
+          image: 'potionblue',
           price: 50
         },
         {
-          name: 'Green',
+          name: '75g',
+          image: 'potiongreen',
           price: 75
         },
         {
-          name: 'Purple',
+          name: '100g',
+          image: 'potionpurple',
           price: 100
         },
         {
-          name: 'Red',
+          name: '120g',
+          image: 'potionred',
           price: 120
         },
         {
-          name: 'Blue',
+          name: '150g',
+          image: 'potionblue',
           price: 150
         },
         {
-          name: 'Green',
+          name: '175g',
+          image: 'potiongreen',
           price: 175
         },
         {
-          name: 'Purple',
+          name: '200g',
+          image: 'potionpurple',
           price: 200
         },
         {
-          name: 'Red',
+          name: '220g',
+          image: 'potionred',
           price: 220
         },
         {
-          name: 'Blue',
+          name: '250g',
+          image: 'potionblue',
           price: 250
         },
         {
-          name: 'Green',
+          name: '275g',
+          image: 'potiongreen',
           price: 275
         },
         {
-          name: 'Purple',
+          name: '300g',
+          image: 'potionpurple',
           price: 300
         }
-      ],
+      ]
 
     };
 
-    this.print = this.add.text(0, 0, '');
+    // set up table
     var scrollablePanel = this.rexUI.add.scrollablePanel({
+      // table config
       x: 400,
       y: 300,
       width: 400,
@@ -441,11 +467,11 @@ class Shelf extends Phaser.Scene {
       .layout()
 
     // Set icon interactive
-    var print = this.add.text(0, 0, '');
     this.input.topOnly = false;
     var labels = [];
     labels.push(...scrollablePanel.getElement('#potions1.items', true));
     labels.push(...scrollablePanel.getElement('#potions2.items', true));
+    console.log(labels);
     var scene = this;
     labels.forEach(function (label) {
       if (!label) {
@@ -492,7 +518,7 @@ var createPanel = function (scene, data) {
 var createHeader = function (scene, data) {
   var title = scene.rexUI.add.label({
     orientation: 'x',
-    text: scene.add.text(0, 0, 'Character'),
+    text: scene.add.text(0, 0, 'Potion Shop'),
   });
   var header = scene.rexUI.add.label({
     orientation: 'y',
@@ -575,23 +601,7 @@ var createTable = function (scene, data, key, rows) {
 }
 
 var createIcon = function (scene, item) {
-  let icon;
-  switch (item.name) {
-    case 'Red':
-      icon = scene.add.image(0, 0, 'potionred').setScale(0.12);
-      break;
-    case 'Blue':
-      icon = scene.add.image(0, 0, 'potionblue').setScale(0.12);
-      break;
-    case 'Purple':
-      icon = scene.add.image(0, 0, 'potionpurple').setScale(0.12);
-      break;
-    case 'Green':
-      icon = scene.add.image(0, 0, 'potiongreen').setScale(0.12);
-      break;
-    default:
-      return;
-  }
+  let icon = scene.add.image(0, 0, item.image).setScale(0.12);
 
   icon.setDataEnabled();
   icon.data.set('price', item.price);
@@ -609,7 +619,7 @@ var createIcon = function (scene, item) {
 
 function handleBuy(price) {
   let gold = HUDdata.get('gold');
-  if (gold > price) {
+  if (gold >= price) {
     HUDdata.set('gold', gold - price);
     // console.log('you spent ' + potion.data.get('price') + ' and now you have ' + HUDdata.get('gold') + ' gold');
   }
