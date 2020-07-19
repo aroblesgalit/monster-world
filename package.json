@@ -32,5 +32,5 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "phaser": "^3.23.0"
-  }
+    }
 }
