@@ -11,11 +11,11 @@ class Shop extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('shop', 'assets/shop.jpg');
-    this.load.image('20sign', 'assets/shop20sign.jpg');
-    this.load.image('50sign', 'assets/shop50sign.jpg');
-    this.load.image('freesign', 'assets/shopfreesign.jpg');
-    this.load.image('1Msign', 'assets/shop1Msign.jpg');
+    this.load.image('shop', 'Assets/shop.jpg');
+    this.load.image('20sign', 'Assets/shop20sign.jpg');
+    this.load.image('50sign', 'Assets/shop50sign.jpg');
+    this.load.image('freesign', 'Assets/shopfreesign.jpg');
+    this.load.image('1Msign', 'Assets/shop1Msign.jpg');
   }
 
   create() {
@@ -139,15 +139,15 @@ class Shop extends Phaser.Scene {
 //   index = 0;
 
 //   preload() {
-//     this.load.image('potionred', 'assets/potion.png');
-//     this.load.image('potionblue', 'assets/potionblue.png');
-//     this.load.image('potiongreen', 'assets/potiongreen.png');
-//     this.load.image('potionpurple', 'assets/potionpurple.png');
-//     this.load.image('arrowright', 'assets/arrow.png');
-//     this.load.image('arrowleft', 'assets/arrowleft.png');
-//     this.load.image('buybutton', 'assets/buybutton.png');
-//     this.load.image('closeButton', 'assets/menuClose.png');
-//     this.load.image('shopMenuBox', 'assets/shopMenuBox.png');
+//     this.load.image('potionred', 'Assets/potion.png');
+//     this.load.image('potionblue', 'Assets/potionblue.png');
+//     this.load.image('potiongreen', 'Assets/potiongreen.png');
+//     this.load.image('potionpurple', 'Assets/potionpurple.png');
+//     this.load.image('arrowright', 'Assets/arrow.png');
+//     this.load.image('arrowleft', 'Assets/arrowleft.png');
+//     this.load.image('buybutton', 'Assets/buybutton.png');
+//     this.load.image('closeButton', 'Assets/menuClose.png');
+//     this.load.image('shopMenuBox', 'Assets/shopMenuBox.png');
 //   }
 
 //   create() {
