@@ -14,15 +14,22 @@ class FarmHUD extends Phaser.Scene {
     }
 
     preload() {
+        // Button
         this.load.image("buttonUp", "Assets/blue_button04.png");
         this.load.image("buttonDown", "Assets/blue_button05.png");
         this.load.image("buttonHover", "Assets/blue_button02.png");
+        
+        // Build window
+        this.load.image("buildWindow", "Assets/build_window.png");
+        this.load.image("dirt2", "Assets/dirt2.png");
+        this.load.image("seeds", "Assets/seeds.png");
     }
 
     create() {
 
         // Get reference to the Farm scene
         this.Farm = this.scene.get("Farm");
+
 
         // Build Button
         let buildBtn = this.add.image(0, 0, "buttonUp")
@@ -45,7 +52,29 @@ class FarmHUD extends Phaser.Scene {
                 buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
             })
         let buildBtnText = this.add.text(buildBtn.x - 20, buildBtn.y - 10, "Build", { font: "20px Arial", fill: "#000" });
-        this.add.container(100, 100, [buildBtn, buildBtnText]);
+        this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 36, [buildBtn, buildBtnText]);
+
+
+        // Build window
+        // =================================
+        let buildWindow = this.add.image(0, 0, "buildWindow");
+        let buildObjects = []
+        buildObjects.push(this.add.image(0, 20, "dirt2").setInteractive({ useHandCursor: true }));
+        buildObjects.push(this.add.image(32, 20, "seeds").setInteractive({ useHandCursor: true }));
+
+        this.buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, ...buildObjects]).setScale(3).setDepth(2);
+
+        this.buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
+
+        this.buildContainer.visible = false;
+
+        this.input.setDraggable(this.buildContainer);
+
+        this.buildContainer.on('drag', function (pointer, dragX, dragY) {
+            this.x = dragX;
+            this.y = dragY;
+        });
+
 
         this.scene.sleep("FarmHUD");
     }
@@ -53,13 +82,10 @@ class FarmHUD extends Phaser.Scene {
     toggleBuildWindow() {
         buildVisible = !buildVisible;
 
-        var buildContainer = this.Farm.buildContainer;
-        // console.log(buildContainer);
-
         if (buildVisible) {
-            buildContainer.visible = true;
+            this.buildContainer.visible = true;
         } else {
-            buildContainer.visible = false;
+            this.buildContainer.visible = false;
         }
     }
 

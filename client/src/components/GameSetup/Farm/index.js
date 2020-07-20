@@ -23,13 +23,10 @@ class Farm extends Phaser.Scene {
             frameWidth: 16,
             frameHeight: 16
         });
-        this.load.image("buttonUp", "Assets/blue_button04.png");
-        this.load.image("buttonDown", "Assets/blue_button05.png");
-        this.load.image("buttonHover", "Assets/blue_button02.png");
 
-        this.load.image("buildWindow", "Assets/build_window.png");
-        this.load.image("dirt2", "Assets/dirt2.png");
-        this.load.image("seeds", "Assets/seeds.png");
+        // this.load.image("buildWindow", "Assets/build_window.png");
+        // this.load.image("dirt2", "Assets/dirt2.png");
+        // this.load.image("seeds", "Assets/seeds.png");
 
 
         // Tilemap - Static - grass
@@ -43,20 +40,8 @@ class Farm extends Phaser.Scene {
     }
 
     create() {
-        // Width and Height of game setup
-        // let gameW = this.sys.game.config.width;
-        // let gameH = this.sys.game.config.height;
-
-        // Set up farmBg image to centered on screen
-        // this.image = this.add.image(this.game.config.width / 2, this.game.config.height / 2, "farmBg");
-        // let grass = this.add.image(0, 0, "grass")
-        //     .setOrigin(0, 0)
-        //     .setScale(0.4);
-        // this.cameras.main.setBounds(0, 0, 0, 0);
-        // this.cameras.main.setZoom(3);
 
         // Grass tilemap
-
         this.map = this.make.tilemap({ key: "grass_tilemap" });
         const tileset = this.map.addTilesetImage("farmland", "farmland");
         this.map.addTilesetImage("plowedDirt", "plowedDirt");
@@ -87,58 +72,28 @@ class Farm extends Phaser.Scene {
         // create animation for plants
         this.anims.create(config);
 
-        // // Build Button
-        // let buildBtn = this.add.image(0, 0, "buttonUp")
-        //     // .setOrigin(0)
-        //     .setScale(0.8)
-        //     .setInteractive({ useHandCursor: true })
-        //     .on("pointerdown", () => {
-        //         buildBtn.setTexture("buttonDown")
-        //             .setPosition(0, 1);
-        //         buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
-        //     })
-        //     .on("pointerup", () => {
-        //         if (!placeActive) {
-        //             this.toggleBuildWindow();
-        //         }
-        //         else {
-        //             buildBtn.clearTint();
-        //             placeActive = null;
-        //         }
-        //     }, this)
-        //     .on("pointerover", () => {
-        //         buildBtn.setTexture("buttonHover");
-        //     })
-        //     .on("pointerout", () => {
-        //         buildBtn.setTexture("buttonUp")
-        //             .setPosition(0, 0);
-        //         buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
-        //     })
-        // let buildBtnText = this.add.text(buildBtn.x - 20, buildBtn.y - 10, "Build", { font: "20px Arial", fill: "#000" });
-        // this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 36, [buildBtn, buildBtnText]);
 
+        // // Build window
+        // // =================================
+        // let buildWindow = this.add.image(0, 0, "buildWindow");
+        // let buildObjects = []
+        // buildObjects.push(this.add.image(0, 20, "dirt2").setInteractive({ useHandCursor: true }));
+        // buildObjects.push(this.add.image(32, 20, "seeds").setInteractive({ useHandCursor: true }));
 
-        // Build window
-        // =================================
-        let buildWindow = this.add.image(0, 0, "buildWindow");
-        let buildObjects = []
-        buildObjects.push(this.add.image(0, 20, "dirt2").setInteractive({ useHandCursor: true }));
-        buildObjects.push(this.add.image(32, 20, "seeds").setInteractive({ useHandCursor: true }));
+        // this.buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, ...buildObjects]).setScale(3).setDepth(2);
 
-        this.buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, ...buildObjects]).setScale(3).setDepth(2);
+        // this.buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
 
-        this.buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
+        // this.buildContainer.visible = false;
 
-        this.buildContainer.visible = false;
+        // this.input.setDraggable(this.buildContainer);
 
-        this.input.setDraggable(this.buildContainer);
+        // this.buildContainer.on('drag', function (pointer, dragX, dragY) {
+        //     this.x = dragX;
+        //     this.y = dragY;
+        // });
 
-        this.buildContainer.on('drag', function (pointer, dragX, dragY) {
-            this.x = dragX;
-            this.y = dragY;
-        });
-
-        console.log(buildObjects);
+        // console.log(buildObjects);
 
         // buildObjects.forEach(function (object) {
         //     object.on("pointerup", function () {
@@ -152,16 +107,6 @@ class Farm extends Phaser.Scene {
 
         // put the scene to sleep untill it is used
         this.scene.sleep('Farm');
-    }
-
-    // Toggle Build Window on or off
-    toggleBuildWindow() {
-        buildVisible = !buildVisible;
-        if (buildVisible) {
-            this.buildContainer.visible = true;
-        } else {
-            this.buildContainer.visible = false;
-        }
     }
 
     // plantTurnips(x, y) {
@@ -178,7 +123,7 @@ class Farm extends Phaser.Scene {
 
     update(time, delta) {
 
-        this.scene.wake("FarmHUD");
+        this.scene.wake("FarmHUD", {x: 100, y: 100});
 
         // Placement Variables
         // ========================================
