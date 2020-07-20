@@ -1,4 +1,4 @@
-// guide for making a menu in phaser https://www.youtube.com/watch?v=OS7neDUUhPE
+// scroll menu example https://codepen.io/rexrainbow/pen/YMyBom?editors=0010
 
 import Phaser from 'phaser';
 
