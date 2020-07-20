@@ -1,10 +1,9 @@
 import Phaser from "phaser";
-
 import Crops from "./crops.js";
 import Dirt from "./Dirt.js";
+import FarmHUD from "../FarmHUD";
 
 let buildVisible;
-let buildContainer;
 let placeActive = false;
 let placeMarker;
 let dirtLayer;
@@ -15,6 +14,7 @@ let grassPlatform;
 class Farm extends Phaser.Scene {
     constructor() {
         super({ key: "Farm" });
+        var buildContainer;
     }
 
     preload() {
@@ -43,7 +43,6 @@ class Farm extends Phaser.Scene {
     }
 
     create() {
-
         // Width and Height of game setup
         // let gameW = this.sys.game.config.width;
         // let gameH = this.sys.game.config.height;
@@ -61,7 +60,8 @@ class Farm extends Phaser.Scene {
         this.map = this.make.tilemap({ key: "grass_tilemap" });
         const tileset = this.map.addTilesetImage("farmland", "farmland");
         this.map.addTilesetImage("plowedDirt", "plowedDirt");
-        
+
+
         // Static Layer
         grassPlatform = this.map.createStaticLayer("grass", tileset);
 
@@ -70,7 +70,7 @@ class Farm extends Phaser.Scene {
         plantLayer = this.map.createDynamicLayer("plants", "farmland");
 
         allLayers = this.map.layers;
-        
+
 
         // setTile= 10, 10, 10);
 
@@ -87,35 +87,35 @@ class Farm extends Phaser.Scene {
         // create animation for plants
         this.anims.create(config);
 
-        // Build Button
-        let buildBtn = this.add.image(0, 0, "buttonUp")
-            // .setOrigin(0)
-            .setScale(0.8)
-            .setInteractive({ useHandCursor: true })
-            .on("pointerdown", () => {
-                buildBtn.setTexture("buttonDown")
-                .setPosition(0, 1);
-                buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
-            })
-            .on("pointerup", () => {
-                if(!placeActive){
-                    this.toggleBuildWindow();
-                }
-                else{
-                    buildBtn.clearTint();
-                    placeActive=null;
-                }
-            }, this)
-            .on("pointerover", () => {
-                buildBtn.setTexture("buttonHover");
-            })
-            .on("pointerout", () => {
-                buildBtn.setTexture("buttonUp")
-                    .setPosition(0, 0);
-                buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
-            })
-        let buildBtnText = this.add.text(buildBtn.x - 20, buildBtn.y - 10, "Build", { font: "20px Arial", fill: "#000" });
-        this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 36, [buildBtn, buildBtnText]);
+        // // Build Button
+        // let buildBtn = this.add.image(0, 0, "buttonUp")
+        //     // .setOrigin(0)
+        //     .setScale(0.8)
+        //     .setInteractive({ useHandCursor: true })
+        //     .on("pointerdown", () => {
+        //         buildBtn.setTexture("buttonDown")
+        //             .setPosition(0, 1);
+        //         buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
+        //     })
+        //     .on("pointerup", () => {
+        //         if (!placeActive) {
+        //             this.toggleBuildWindow();
+        //         }
+        //         else {
+        //             buildBtn.clearTint();
+        //             placeActive = null;
+        //         }
+        //     }, this)
+        //     .on("pointerover", () => {
+        //         buildBtn.setTexture("buttonHover");
+        //     })
+        //     .on("pointerout", () => {
+        //         buildBtn.setTexture("buttonUp")
+        //             .setPosition(0, 0);
+        //         buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
+        //     })
+        // let buildBtnText = this.add.text(buildBtn.x - 20, buildBtn.y - 10, "Build", { font: "20px Arial", fill: "#000" });
+        // this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 36, [buildBtn, buildBtnText]);
 
 
         // Build window
@@ -125,30 +125,29 @@ class Farm extends Phaser.Scene {
         buildObjects.push(this.add.image(0, 20, "dirt2").setInteractive({ useHandCursor: true }));
         buildObjects.push(this.add.image(32, 20, "seeds").setInteractive({ useHandCursor: true }));
 
-        buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, ...buildObjects]).setScale(3).setDepth(2);
+        this.buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, ...buildObjects]).setScale(3).setDepth(2);
 
-        buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
+        this.buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
 
-        buildContainer.visible = false;
+        this.buildContainer.visible = false;
 
-        this.input.setDraggable(buildContainer);
-        
-        buildContainer.on('drag', function (pointer, dragX, dragY) {
+        this.input.setDraggable(this.buildContainer);
+
+        this.buildContainer.on('drag', function (pointer, dragX, dragY) {
             this.x = dragX;
             this.y = dragY;
         });
-        
+
         console.log(buildObjects);
 
-        buildObjects.forEach( function(object){
-            object.on("pointerup", function () {
-            this.scene.toggleBuildWindow();
-            createMarker(this.scene, this.texture);
-            placeActive = this.texture.key;
-            buildBtn.setTint(0xff2222);
-            });
-        });
-        
+        // buildObjects.forEach(function (object) {
+        //     object.on("pointerup", function () {
+        //         this.scene.toggleBuildWindow();
+        //         createMarker(this.scene, this.texture);
+        //         placeActive = this.texture.key;
+        //         buildBtn.setTint(0xff2222);
+        //     });
+        // });
 
 
         // put the scene to sleep untill it is used
@@ -159,9 +158,9 @@ class Farm extends Phaser.Scene {
     toggleBuildWindow() {
         buildVisible = !buildVisible;
         if (buildVisible) {
-            buildContainer.visible = true;
+            this.buildContainer.visible = true;
         } else {
-            buildContainer.visible = false;
+            this.buildContainer.visible = false;
         }
     }
 
@@ -178,6 +177,8 @@ class Farm extends Phaser.Scene {
     // }
 
     update(time, delta) {
+
+        this.scene.wake("FarmHUD");
 
         // Placement Variables
         // ========================================
@@ -210,7 +211,7 @@ class Farm extends Phaser.Scene {
         if (placeActive) {
             let className;
 
-            switch(placeActive){
+            switch (placeActive) {
                 case "dirt2":
                     className = Dirt;
                     break;
@@ -220,9 +221,9 @@ class Farm extends Phaser.Scene {
             }
 
             //check if canPlace
-            let canPlace = className.canPlace(grassPlatform, dirtLayer, snappedWorldPoint.x/32, snappedWorldPoint.y/32);
+            let canPlace = className.canPlace(grassPlatform, dirtLayer, snappedWorldPoint.x / 32, snappedWorldPoint.y / 32);
             UpdatePlaceMarker(placeMarker, canPlace, snappedWorldPoint.x, snappedWorldPoint.y);
-            
+
 
             // if(pointer.isDown){
             //     console.log(dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
@@ -250,13 +251,13 @@ export default Farm;
 //================================
 
 function createMarker(scene, item) {
-    const image = scene.add.sprite(0,0,item).setOrigin(0).setAlpha(.8).setDisplaySize(32,32);
+    const image = scene.add.sprite(0, 0, item).setOrigin(0).setAlpha(.8).setDisplaySize(32, 32);
 
     const outline = scene.add.graphics();
     outline.lineStyle(2, 0x000000, 1);
     outline.strokeRect(0, 0, 32, 32);
 
-    placeMarker = scene.add.container(0,0,[outline, image])
+    placeMarker = scene.add.container(0, 0, [outline, image])
     return placeMarker;
 }
 
@@ -268,14 +269,16 @@ function clearPlaceMarker(placeMarker) {
     }
 }
 
-function UpdatePlaceMarker(placeMarker, canPlace, x, y){
+function UpdatePlaceMarker(placeMarker, canPlace, x, y) {
     placeMarker.setPosition(x, y);
-    if (!canPlace){
+    if (!canPlace) {
         placeMarker.list[1].setTint(0xff0000);
         placeMarker.list[0].lineStyle(2, 0xff0000, 1);
-        placeMarker.list[0].strokeRect(0, 0, 32, 32)}
-    else{
+        placeMarker.list[0].strokeRect(0, 0, 32, 32)
+    }
+    else {
         placeMarker.list[1].clearTint();
         placeMarker.list[0].lineStyle(2, 0x00FF00, 1);
-        placeMarker.list[0].strokeRect(0, 0, 32, 32)}
+        placeMarker.list[0].strokeRect(0, 0, 32, 32)
+    }
 }
