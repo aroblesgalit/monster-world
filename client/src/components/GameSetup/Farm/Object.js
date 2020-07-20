@@ -4,6 +4,8 @@ class Object{
   static layer;
   static tilesetOffset;
   static tileIndex;
+  static tileHeight = 32;
+  static tileWidth = 32;
 
   constructor(type){
     this.type = type;
@@ -23,9 +25,11 @@ class Object{
 
   static put(map, x, y){
     let mapLayer = map.getLayer(this.layer).tilemapLayer;
+    y-=(this.tileHeight-32);
     let placed =  mapLayer.putTileAtWorldXY(this.tileIndex+this.tilesetOffset, x, y);
-    // weird that this next part isn't done automatically;
     placed.properties = (placed.tileset.tileProperties[this.tileIndex]);
+    placed.setSize(this.tileWidth, this.tileHeight, 32, 32)
+    console.log(placed);
   }
 }
 

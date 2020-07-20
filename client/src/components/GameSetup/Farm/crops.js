@@ -3,8 +3,10 @@ import Object from "./Object";
 class Crop extends Object{
 
   static layer = "plants";
-  static tilesetOffset = 1;
-  static tileIndex = 48;
+  static tilesetOffset = 85+48;
+  static tileIndex = 0;
+  static tileHeight = 64;
+  static tileWidth = 32;
 
   constructor(type){
     this.type = type;
