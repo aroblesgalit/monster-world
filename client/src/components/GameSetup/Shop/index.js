@@ -350,6 +350,9 @@ class Shelf extends Phaser.Scene {
             this.scene.sleep("Shelf");
           }, this);
 
+          const backgroundImage = this.add.image(400, 300, 'shopMenuBox');
+          backgroundImage.displayHeight = 220;
+          backgroundImage.displayWidth = 400;
     // define contents of menu
     const data = {
       // single row section of table
@@ -454,6 +457,9 @@ class Shelf extends Phaser.Scene {
 
       background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
 
+      // background: backgroundImage,
+
+
       panel: {
         child: createPanel(this, data),
 
@@ -512,10 +518,10 @@ var createPanel = function (scene, data) {
     orientation: 'x',
     space: { item: 10 }
   })
-    .add(
-      createHeader(scene, data), // child
-      { expand: true }
-    )
+    // .add(
+    //   createHeader(scene, data), // child
+    //   { expand: true }
+    // )
     .add(
       createTable(scene, data, 'potions1', 1), // child
       { expand: true }
