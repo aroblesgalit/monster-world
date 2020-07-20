@@ -17,6 +17,7 @@ class Crop extends Object{
     this.phase = 0;
     this.nextPhase = this.plantTime+3000;
     this.phases = [0, 9, 18, 27];
+    this.harvestable = false;
   }
 
   // Check if Object can be placed
@@ -49,6 +50,9 @@ class Crop extends Object{
       this.phase+=1;
       this.tile.index = 85+48+this.phases[this.phase];
       this.nextPhase += 3000;
+    }
+    else if(this.phase+1 == this.phases.length){
+      this.harvestable = true;
     }
   }
 
