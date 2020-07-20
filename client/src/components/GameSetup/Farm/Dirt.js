@@ -1,9 +1,10 @@
 import helpers from "./helpers";
+import Object from "./Object";
 
-class Dirt{
+class Dirt extends Object{
   static layer = "dirt";
   static tilesetOffset = 85;
-  static object = 12
+  static tileIndex = 12
 
   constructor(type){
     this.type = type;
@@ -22,9 +23,9 @@ class Dirt{
 
   static put(map, x, y){
     let mapLayer = map.getLayer(this.layer).tilemapLayer;
-    let placed =  mapLayer.putTileAtWorldXY(this.object+this.tilesetOffset, x, y);
+    let placed =  mapLayer.putTileAtWorldXY(this.tileIndex+this.tilesetOffset, x, y);
     // weird that this next part isn't done automatically;
-    placed.properties = (placed.tileset.tileProperties[this.object]);
+    placed.properties = (placed.tileset.tileProperties[this.tileIndex]);
 
     helpers.checkContig(placed, mapLayer, this.tilesetOffset);
   }

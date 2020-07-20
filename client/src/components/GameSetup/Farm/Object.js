@@ -1,10 +1,9 @@
-import Object from "./Object";
 
-class Crop extends Object{
+class Object{
 
-  static layer = "plants";
-  static tilesetOffset = 1;
-  static tileIndex = 48;
+  static layer;
+  static tilesetOffset;
+  static tileIndex;
 
   constructor(type){
     this.type = type;
@@ -21,6 +20,13 @@ class Crop extends Object{
       {return true;}
     return false;
   }
+
+  static put(map, x, y){
+    let mapLayer = map.getLayer(this.layer).tilemapLayer;
+    let placed =  mapLayer.putTileAtWorldXY(this.tileIndex+this.tilesetOffset, x, y);
+    // weird that this next part isn't done automatically;
+    placed.properties = (placed.tileset.tileProperties[this.tileIndex]);
+  }
 }
 
-export default Crop
+export default Object
