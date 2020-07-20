@@ -12,7 +12,7 @@ class Dirt extends Object{
 
   // Check if Object can be placed
   // static methods allow us to call the Crop method, before creating a new Crop.
-  static canPlace(grassPlatform, dirtLayer, x, y){
+  static canPlace(grassPlatform, dirtLayer, plantLayer, x, y){
     const grassTile = grassPlatform.getTileAt(x, y);
     const groundTile = dirtLayer.getTileAt(x, y);
 
