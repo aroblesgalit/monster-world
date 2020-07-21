@@ -1,13 +1,13 @@
-import helpers from "./helpers";
-import Object from "./Object";
 
-class Dirt extends Object{
-  static layer = "dirt";
-  static tilesetOffset = 85;
-  static tileIndex = 12
+class Object{
 
-  constructor(type){
-    this.type = type;
+  static layer;
+  static tilesetOffset;
+  static tileIndex;
+  static tileHeight = 32;
+  static tileWidth = 32;
+
+  constructor(){
   }
 
   // Check if Object can be placed
@@ -16,19 +16,18 @@ class Dirt extends Object{
     const grassTile = grassPlatform.getTileAt(x, y);
     const groundTile = dirtLayer.getTileAt(x, y);
 
-    if(grassTile && groundTile && grassTile.index===26 && groundTile.index===this.tilesetOffset)
+    if(grassTile && groundTile && grassTile.index===26 && groundTile.properties["Contiguous"])
       {return true;}
     return false;
   }
 
   static put(map, x, y){
     let mapLayer = map.getLayer(this.layer).tilemapLayer;
+    y-=(this.tileHeight-32);
     let placed =  mapLayer.putTileAtWorldXY(this.tileIndex+this.tilesetOffset, x, y);
-    // weird that this next part isn't done automatically;
     placed.properties = (placed.tileset.tileProperties[this.tileIndex]);
-
-    helpers.checkContig(placed, mapLayer, this.tilesetOffset);
+    placed.setSize(this.tileWidth, this.tileHeight, 32, 32)
   }
 }
 
-export default Dirt
+export default Object
