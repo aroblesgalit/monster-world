@@ -119,7 +119,7 @@ class FarmHUD extends Phaser.Scene {
         // Placement Variables
         // ========================================
         const pointer = this.input.activePointer;
-        const worldPoint = pointer.positionToCamera(this.cameras.main);
+        const worldPoint = pointer.positionToCamera(this.Farm.cameras.main);
         // Place the marker in world space, but snap it to the tile grid. If we convert world -> tile and
         // then tile -> world, we end up with the position of the tile under the pointer
         const pointerTileXY = this.Farm.dirtLayer.worldToTileXY(worldPoint.x, worldPoint.y);
@@ -154,7 +154,6 @@ class FarmHUD extends Phaser.Scene {
                 if (placed.type === "crop") {
                     this.Farm.crops.push(placed.data);
                 }
-                console.log(this.Farm.crops);
             }
         } else {
             clearPlaceMarker(placeMarker);

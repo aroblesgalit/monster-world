@@ -46,7 +46,7 @@ class Crop extends Object{
   }
 
   update(time, delta){
-    console.log(Crop.layer);
+    //console.log(time, this.tile.tilemap.scene.game.getTime())
     if (Date.now()>this.nextPhase && this.phase+1 < Crop.phases.length){
       this.phase+=1;
       this.tile.index = Crop.tilesetOffset+Crop.phases[this.phase];
