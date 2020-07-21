@@ -154,7 +154,6 @@ class FarmHUD extends Phaser.Scene {
                 if (placed.type === "crop") {
                     this.Farm.crops.push(placed.data);
                 }
-                console.log(this.Farm.crops);
             }
         } else {
             clearPlaceMarker(placeMarker);
