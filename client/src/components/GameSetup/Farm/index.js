@@ -2,6 +2,8 @@ import Phaser from "phaser";
 import Crops from "./crops.js";
 import Dirt from "./Dirt.js";
 
+const crops = [];
+
 class Farm extends Phaser.Scene {
     constructor() {
         super({ key: "Farm" });
@@ -24,6 +26,7 @@ class Farm extends Phaser.Scene {
         // Tilemap - Static - grass
         this.load.image("farmland", "Assets/tilesets/farmland.png");
         this.load.image("plowedDirt", "Assets/tilesets/plowedDirt.png");
+        this.load.image("plants", "Assets/tilesets/plants.png");
         this.load.tilemapTiledJSON("grass_tilemap", "Assets/tilemaps/grass_tilemap.json");
 
         // Tilemap - Dynamic - Placed Items
@@ -35,18 +38,19 @@ class Farm extends Phaser.Scene {
 
         // Grass tilemap
         this.map = this.make.tilemap({ key: "grass_tilemap" });
+
         const tileset = this.map.addTilesetImage("farmland", "farmland");
         this.map.addTilesetImage("plowedDirt", "plowedDirt");
-
-
+        this.map.addTilesetImage("plants", "plants");
+        
         // Static Layer
         this.grassPlatform = this.map.createStaticLayer("grass", tileset);
 
         // Dynamic Tilemap
-        this.dirtLayer = this.map.createDynamicLayer("dirt", "plowedDirt");
-        this.plantLayer = this.map.createDynamicLayer("plants", "farmland");
-
-        this.allLayers = this.map.layers;
+        dirtLayer = this.map.createDynamicLayer("dirt", "plowedDirt",0,0);
+        plantLayer = this.map.createDynamicLayer("plants", "plants",0,-32);
+        console.log(plantLayer);
+        // plantLayer.anchor.set(1);
 
 
         // setTile= 10, 10, 10);
@@ -81,6 +85,7 @@ class Farm extends Phaser.Scene {
     // }
 
     update(time, delta) {
+        crops.forEach(crop => crop.update(time, delta));
 
         this.scene.wake("FarmHUD");
 
@@ -92,6 +97,11 @@ class Farm extends Phaser.Scene {
         // Camera Movement
         // ========================================
         if (pointer.isDown && !this.placeActive) {
+            console.log(grassPlatform.getTileAtWorldXY(worldPoint.x, worldPoint.y));
+            console.log(dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
+            console.log(plantLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y-32));
+
+
             if (this.game.origDragPoint) {
                 // move the camera by the amount the mouse has moved since last update
                 this.cameras.main.scrollX +=

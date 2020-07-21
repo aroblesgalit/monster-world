@@ -134,7 +134,7 @@ class FarmHUD extends Phaser.Scene {
             }
 
             //check if canPlace
-            let canPlace = className.canPlace(this.Farm.grassPlatform, this.Farm.dirtLayer, snappedWorldPoint.x / 32, snappedWorldPoint.y / 32);
+            let canPlace = className.canPlace(this.Farm.grassPlatform, this.Farm.dirtLayer, this.Farm.plantLayer, snappedWorldPoint.x / 32, snappedWorldPoint.y / 32);
             UpdatePlaceMarker(placeMarker, canPlace, snappedWorldPoint.x, snappedWorldPoint.y);
 
 
@@ -144,8 +144,10 @@ class FarmHUD extends Phaser.Scene {
             if (pointer.isDown && canPlace) {
                 const placed = className.put(this.Farm.map, worldPoint.x, worldPoint.y)
                 //const placed = layer.putTileAtWorldXY(object+tilesetOffset, worldPoint.x, worldPoint.y);
-
-                //this.plantTurnips(plantMarker.x + 20, plantMarker.y + 20);
+                if(placed.type === "crop"){
+                    crops.push(placed.data);
+                }
+                console.log(crops);
             }
         } else {
             clearPlaceMarker(placeMarker);
