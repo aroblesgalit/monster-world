@@ -47,12 +47,12 @@ class Crop extends Object{
 
   update(time, delta){
     console.log(Crop.layer);
-    if (Date.now()>this.nextPhase && this.phase+1 < this.phases.length){
+    if (Date.now()>this.nextPhase && this.phase+1 < Crop.phases.length){
       this.phase+=1;
       this.tile.index = Crop.tilesetOffset+Crop.phases[this.phase];
       this.nextPhase += 3000;
     }
-    else if(this.phase+1 == this.phases.length){
+    else if(this.phase+1 == Crop.phases.length){
       this.harvestable = true;
     }
   }
