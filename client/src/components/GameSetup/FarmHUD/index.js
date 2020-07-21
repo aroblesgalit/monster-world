@@ -1,14 +1,20 @@
 import Phaser from "phaser";
+import Crops from "../Farm/crops.js";
+import Dirt from "../Farm/Dirt.js";
+
 let controls;
 let buildVisible;
 let buildContainer;
+let placeActive = false;
+let placeMarker;
+
 
 class FarmHUD extends Phaser.Scene {
     constructor(game) {
         super({ key: "FarmHUD" });
 
         // var Farm = this.scene.scenes.get("Farm");
-        var Farm;
+        let Farm;
 
         var game = game;
     }
@@ -18,7 +24,7 @@ class FarmHUD extends Phaser.Scene {
         this.load.image("buttonUp", "Assets/blue_button04.png");
         this.load.image("buttonDown", "Assets/blue_button05.png");
         this.load.image("buttonHover", "Assets/blue_button02.png");
-        
+
         // Build window
         this.load.image("buildWindow", "Assets/build_window.png");
         this.load.image("dirt2", "Assets/dirt2.png");
@@ -29,6 +35,7 @@ class FarmHUD extends Phaser.Scene {
 
         // Get reference to the Farm scene
         this.Farm = this.scene.get("Farm");
+        console.log("this.Farm...", this.Farm);
 
 
         // Build Button
@@ -75,13 +82,23 @@ class FarmHUD extends Phaser.Scene {
             this.y = dragY;
         });
 
+        buildObjects.forEach(function (object) {
+            object.on("pointerup", function () {
+                this.scene.toggleBuildWindow();
+                console.log("logging this.scene: ", this.scene)
+                createMarker(this.scene.Farm, this.texture);
+                placeActive = this.texture.key;
+                this.scene.Farm.placeActive = true;
+                buildBtn.setTint(0xff2222);
+            });
+        });
+
 
         this.scene.sleep("FarmHUD");
     }
 
     toggleBuildWindow() {
         buildVisible = !buildVisible;
-
         if (buildVisible) {
             this.buildContainer.visible = true;
         } else {
@@ -91,7 +108,85 @@ class FarmHUD extends Phaser.Scene {
 
     update(time, delta) {
         // controls.update(delta);
+
+        // Placement Variables
+        // ========================================
+        const pointer = this.input.activePointer;
+        const worldPoint = pointer.positionToCamera(this.cameras.main);
+        // Place the marker in world space, but snap it to the tile grid. If we convert world -> tile and
+        // then tile -> world, we end up with the position of the tile under the pointer
+        const pointerTileXY = this.Farm.dirtLayer.worldToTileXY(worldPoint.x, worldPoint.y);
+        const snappedWorldPoint = this.Farm.dirtLayer.tileToWorldXY(pointerTileXY.x, pointerTileXY.y);
+
+
+        // placeObject
+        // ==========================================
+        if (placeActive) {
+            let className;
+
+            switch (placeActive) {
+                case "dirt2":
+                    className = Dirt;
+                    break;
+                case "seeds":
+                    className = Crops;
+                    break;
+            }
+
+            //check if canPlace
+            let canPlace = className.canPlace(this.Farm.grassPlatform, this.Farm.dirtLayer, snappedWorldPoint.x / 32, snappedWorldPoint.y / 32);
+            UpdatePlaceMarker(placeMarker, canPlace, snappedWorldPoint.x, snappedWorldPoint.y);
+
+
+            // if(pointer.isDown){
+            //     console.log(dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
+            // }
+            if (pointer.isDown && canPlace) {
+                const placed = className.put(this.Farm.map, worldPoint.x, worldPoint.y)
+                //const placed = layer.putTileAtWorldXY(object+tilesetOffset, worldPoint.x, worldPoint.y);
+
+                //this.plantTurnips(plantMarker.x + 20, plantMarker.y + 20);
+            }
+        } else {
+            clearPlaceMarker(placeMarker);
+        }
     }
 }
 
 export default FarmHUD;
+
+// placeMarker Stuff
+//================================
+
+function createMarker(scene, item) {
+    const image = scene.add.sprite(0, 0, item).setOrigin(0).setAlpha(.8).setDisplaySize(32, 32);
+
+    const outline = scene.add.graphics();
+    outline.lineStyle(2, 0x000000, 1);
+    outline.strokeRect(0, 0, 32, 32);
+
+    placeMarker = scene.add.container(0, 0, [outline, image])
+    return placeMarker;
+}
+
+// Clear Marker Style
+// =====================================
+function clearPlaceMarker(placeMarker) {
+    if (placeMarker) {
+        placeMarker.destroy();
+    }
+}
+
+function UpdatePlaceMarker(placeMarker, canPlace, x, y) {
+    placeMarker.setPosition(x, y);
+    if (!canPlace) {
+        placeMarker.list[1].setTint(0xff0000);
+        placeMarker.list[0].lineStyle(2, 0xff0000, 1);
+        placeMarker.list[0].strokeRect(0, 0, 32, 32)
+    }
+    else {
+        placeMarker.list[1].clearTint();
+        placeMarker.list[0].lineStyle(2, 0x00FF00, 1);
+        placeMarker.list[0].strokeRect(0, 0, 32, 32)
+    }
+}
