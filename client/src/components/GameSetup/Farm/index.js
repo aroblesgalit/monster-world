@@ -2,7 +2,6 @@ import Phaser from "phaser";
 import Crops from "./crops.js";
 import Dirt from "./Dirt.js";
 
-const crops = [];
 
 class Farm extends Phaser.Scene {
     constructor() {
@@ -13,6 +12,7 @@ class Farm extends Phaser.Scene {
         let plantLayer;
         let allLayers;
         let grassPlatform;
+        let crops;
     }
 
     preload() {
@@ -36,6 +36,8 @@ class Farm extends Phaser.Scene {
 
     create() {
 
+        this.crops = [];
+
         // Grass tilemap
         this.map = this.make.tilemap({ key: "grass_tilemap" });
 
@@ -47,9 +49,9 @@ class Farm extends Phaser.Scene {
         this.grassPlatform = this.map.createStaticLayer("grass", tileset);
 
         // Dynamic Tilemap
-        dirtLayer = this.map.createDynamicLayer("dirt", "plowedDirt",0,0);
-        plantLayer = this.map.createDynamicLayer("plants", "plants",0,-32);
-        console.log(plantLayer);
+        this.dirtLayer = this.map.createDynamicLayer("dirt", "plowedDirt",0,0);
+        this.plantLayer = this.map.createDynamicLayer("plants", "plants",0,-32);
+        console.log(this.plantLayer);
         // plantLayer.anchor.set(1);
 
 
@@ -85,7 +87,9 @@ class Farm extends Phaser.Scene {
     // }
 
     update(time, delta) {
-        crops.forEach(crop => crop.update(time, delta));
+        if (this.crops.length > 0) {
+            this.crops.forEach(crop => crop.update(time, delta));
+        }        
 
         this.scene.wake("FarmHUD");
 
@@ -97,9 +101,9 @@ class Farm extends Phaser.Scene {
         // Camera Movement
         // ========================================
         if (pointer.isDown && !this.placeActive) {
-            console.log(grassPlatform.getTileAtWorldXY(worldPoint.x, worldPoint.y));
-            console.log(dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
-            console.log(plantLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y-32));
+            // console.log(this.grassPlatform.getTileAtWorldXY(worldPoint.x, worldPoint.y));
+            // console.log(this.dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
+            // console.log(this.plantLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y-32));
 
 
             if (this.game.origDragPoint) {

@@ -48,7 +48,14 @@ class FarmHUD extends Phaser.Scene {
                 buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
             })
             .on("pointerup", () => {
-                this.toggleBuildWindow();
+                if (!placeActive) {
+                    this.toggleBuildWindow();
+                }
+                else {
+                    buildBtn.clearTint();
+                    placeActive = null;
+                    this.Farm.placeActive = false;
+                }
             }, this)
             .on("pointerover", () => {
                 buildBtn.setTexture("buttonHover");
@@ -144,10 +151,10 @@ class FarmHUD extends Phaser.Scene {
             if (pointer.isDown && canPlace) {
                 const placed = className.put(this.Farm.map, worldPoint.x, worldPoint.y)
                 //const placed = layer.putTileAtWorldXY(object+tilesetOffset, worldPoint.x, worldPoint.y);
-                if(placed.type === "crop"){
-                    crops.push(placed.data);
+                if (placed.type === "crop") {
+                    this.Farm.crops.push(placed.data);
                 }
-                console.log(crops);
+                console.log(this.Farm.crops);
             }
         } else {
             clearPlaceMarker(placeMarker);

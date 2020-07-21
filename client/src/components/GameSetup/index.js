@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 // Scenes
 import Default from './Default';
 import ShowMap from './Map';
-import { Shop, Potion, Shelf } from './Shop';
+import { Shop, Shelf } from './Shop';
 import HUD from './HUD';
 import Farm from "./Farm";
 import FarmHUD from "./FarmHUD";
@@ -19,7 +19,7 @@ function GameSetup() {
         gravity: { y: 200 }
       }
     },
-    scene: [Default, Farm, Shop, Potion, FarmHUD, ShowMap]
+    scene: [Default, Farm, Shop, FarmHUD, ShowMap]
   };
 
   var game = new Phaser.Game(config);

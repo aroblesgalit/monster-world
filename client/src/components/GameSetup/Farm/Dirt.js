@@ -28,6 +28,7 @@ class Dirt extends Object{
     placed.properties = (placed.tileset.tileProperties[this.tileIndex]);
 
     helpers.checkContig(placed, mapLayer, this.tilesetOffset);
+    return {type:"dirt", data: ""};
   }
 }
 
