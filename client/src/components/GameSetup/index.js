@@ -3,11 +3,10 @@ import Phaser from 'phaser';
 // Scenes
 import Default from './Default';
 import ShowMap from './Map';
-import { Shop, Potion } from './Shop';
+import { Shop, Potion, Shelf } from './Shop';
 import HUD from './HUD';
 import Farm from "./Farm";
 import FarmHUD from "./FarmHUD";
-
 
 function GameSetup() {
   var config = {
@@ -30,6 +29,7 @@ function GameSetup() {
   game.scene.start("Shop");
   game.scene.start("Potion");
   game.scene.start("FarmHUD");
+  game.scene.start("Shelf");
   // game.scene.sleep("ShowMap");
 
   // Add heads up display to game.  This will start on the very top of all existing scenes.
