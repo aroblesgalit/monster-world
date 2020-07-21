@@ -2,13 +2,6 @@ import Object from "./Object";
 
 class Crop extends Object{
 
-  static layer = "plants";
-  static tilesetOffset = 85+48;
-  static tileIndex = 0;
-  static tileHeight = 64;
-  static tileWidth = 32;
-  static phases = [0, 9, 18, 27];
-
   constructor(type, tile){
     super();
     this.type = type;
@@ -16,9 +9,17 @@ class Crop extends Object{
     this.plantTime = Date.now();
     this.phase = 0;
     this.nextPhase = this.plantTime+3000;
-    this.phases = [0, 9, 18, 27];
     this.harvestable = false;
   }
+
+  // Static Variables
+
+  static layer = "plants";
+  static tilesetOffset = 85+48;
+  static tileIndex = 0;
+  static tileHeight = 64;
+  static tileWidth = 32;
+  static phases = [0, 9, 18, 27];
 
   // Check if Object can be placed
   // static methods allow us to call the Crop method, before creating a new Crop.
@@ -27,7 +28,6 @@ class Crop extends Object{
     const groundTile = dirtLayer.getTileAt(x, y);
     const plantTile = plantLayer.getTileAt(x, y);
     //console.log(grassTile, groundTile, plantTile);
-
     if(grassTile && groundTile && !plantTile && grassTile.index===26 && groundTile.properties["Contiguous"])
       {return true;}
     return false;
@@ -46,9 +46,10 @@ class Crop extends Object{
   }
 
   update(time, delta){
+    console.log(Crop.layer);
     if (Date.now()>this.nextPhase && this.phase+1 < this.phases.length){
       this.phase+=1;
-      this.tile.index = 85+48+this.phases[this.phase];
+      this.tile.index = Crop.tilesetOffset+Crop.phases[this.phase];
       this.nextPhase += 3000;
     }
     else if(this.phase+1 == this.phases.length){
