@@ -1,6 +1,6 @@
-import Object from "./Object";
+import farmObject from "./Object";
 
-class Crop extends Object{
+class Crop extends farmObject{
 
   constructor(type, tile){
     super(type);
