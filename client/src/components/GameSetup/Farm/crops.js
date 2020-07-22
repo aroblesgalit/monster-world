@@ -3,8 +3,7 @@ import Object from "./Object";
 class Crop extends Object{
 
   constructor(type, tile){
-    super();
-    this.type = type;
+    super(type);
     this.tile = tile;
     this.plantTime = Date.now();
     this.phase = 0;

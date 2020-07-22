@@ -7,7 +7,7 @@ class Dirt extends Object{
   static tileIndex = 12
 
   constructor(type){
-    this.type = type;
+    super(type);
   }
 
   // Check if Object can be placed
