@@ -7,6 +7,9 @@ class Object{
   static tileHeight = 32;
   static tileWidth = 32;
 
+  constructor(type){
+    this.type = type;
+  }
 
   // Check if Object can be placed
   // static methods allow us to call the Crop method, before creating a new Crop.
