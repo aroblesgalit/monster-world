@@ -1,5 +1,5 @@
 
-class Object{
+class farmObject{
 
   static layer;
   static tilesetOffset;
@@ -31,4 +31,4 @@ class Object{
   }
 }
 
-export default Object
+export default farmObject

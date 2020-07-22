@@ -1,7 +1,7 @@
 import helpers from "./helpers";
-import Object from "./Object";
+import farmObject from "./Object";
 
-class Dirt extends Object{
+class Dirt extends farmObject{
   static layer = "dirt";
   static tilesetOffset = 85;
   static tileIndex = 12
