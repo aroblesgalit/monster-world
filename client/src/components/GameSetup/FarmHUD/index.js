@@ -68,6 +68,19 @@ class FarmHUD extends Phaser.Scene {
         let fenceButton = this.add.container(38, this.cameras.main.height - 86, [fenceCircButton, fenceIcon]);
         fenceButton.setScale(0.75);
 
+        // Plow dirt action
+        shovelCircButton.on("pointerup", () => {
+            if (!placeActive) {
+                createMarker(this.Farm, "dirt2");
+                placeActive = "dirt2";
+                this.Farm.placeActive = true;
+            }
+            else {
+                placeActive = null;
+                this.Farm.placeActive = false;
+            }
+        }, this)
+
 
 
         // Build Button
