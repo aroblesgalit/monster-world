@@ -68,7 +68,7 @@ class FarmHUD extends Phaser.Scene {
         let fenceButton = this.add.container(38, this.cameras.main.height - 86, [fenceCircButton, fenceIcon]);
         fenceButton.setScale(0.75);
 
-        // Plow dirt action
+        // Activating plowing dirt
         shovelCircButton.on("pointerup", () => {
             if (!placeActive) {
                 createMarker(this.Farm, "dirt2");
@@ -79,39 +79,18 @@ class FarmHUD extends Phaser.Scene {
                 placeActive = null;
                 this.Farm.placeActive = false;
             }
-        }, this)
+        }, this);
 
-
-
-        // Build Button
-        let buildBtn = this.add.image(0, 0, "buttonUp")
-            .setScale(0.8)
-            .setInteractive({ useHandCursor: true })
-            .on("pointerdown", () => {
-                buildBtn.setTexture("buttonDown")
-                    .setPosition(0, 1);
-                buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
-            })
-            .on("pointerup", () => {
-                if (!placeActive) {
-                    this.toggleBuildWindow();
-                }
-                else {
-                    buildBtn.clearTint();
-                    placeActive = null;
-                    this.Farm.placeActive = false;
-                }
-            }, this)
-            .on("pointerover", () => {
-                buildBtn.setTexture("buttonHover");
-            })
-            .on("pointerout", () => {
-                buildBtn.setTexture("buttonUp")
-                    .setPosition(0, 0);
-                buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
-            })
-        let buildBtnText = this.add.text(buildBtn.x - 20, buildBtn.y - 10, "Build", { font: "20px Arial", fill: "#000" });
-        this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 36, [buildBtn, buildBtnText]);
+        // Activating planting crops
+        cropsCircButton.on("pointerup", () => {
+            if (!placeActive) {
+                this.toggleBuildWindow();
+            }
+            else {
+                placeActive = null;
+                this.Farm.placeActive = false;
+            }
+        }, this);
 
 
         // Build window
@@ -141,7 +120,7 @@ class FarmHUD extends Phaser.Scene {
                 createMarker(this.scene.Farm, this.texture);
                 placeActive = this.texture.key;
                 this.scene.Farm.placeActive = true;
-                buildBtn.setTint(0xff2222);
+                // buildBtn.setTint(0xff2222);
             });
         });
 
