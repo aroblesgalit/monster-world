@@ -25,6 +25,15 @@ class FarmHUD extends Phaser.Scene {
         this.load.image("buttonDown", "Assets/blue_button05.png");
         this.load.image("buttonHover", "Assets/blue_button02.png");
 
+        // Circular Button
+        this.load.image("circButton", "Assets/hudButton.png");
+
+        // Icons
+        this.load.image("barnIcon", "Assets/barnIcon.png");
+        this.load.image("shovelIcon", "Assets/shovelIcon.png");
+        this.load.image("cropsIcon", "Assets/cropsIcon.png");
+        this.load.image("fenceIcon", "Assets/fenceIcon.png");
+
         // Build window
         this.load.image("buildWindow", "Assets/build_window.png");
         this.load.image("dirt2", "Assets/dirt2.png");
@@ -35,7 +44,30 @@ class FarmHUD extends Phaser.Scene {
 
         // Get reference to the Farm scene
         this.Farm = this.scene.get("Farm");
-        console.log("this.Farm...", this.Farm);
+
+        // Main farm button
+        let mainCircButton = this.add.image(0, 0, "circButton");
+        let barnIcon = this.add.image(0, 0, "barnIcon").setScale(0.04).setTint(0xddddff);
+        let farmButton = this.add.container(40, this.cameras.main.height - 36, [mainCircButton, barnIcon]);
+
+        // Plow dirt button
+        let shovelCircButton = this.add.image(0, 0, "circButton").setInteractive({ useHandCursor: true });;
+        let shovelIcon = this.add.image(0, 0, "shovelIcon").setScale(0.04).setTint(0xddddff);
+        let shovelButton = this.add.container(90, this.cameras.main.height - 30, [shovelCircButton, shovelIcon]);
+        shovelButton.setScale(0.75);
+
+        // Plant crops button
+        let cropsCircButton = this.add.image(0, 0, "circButton").setInteractive({ useHandCursor: true });
+        let cropsIcon = this.add.image(0, 0, "cropsIcon").setScale(0.05).setTint(0xddddff);
+        let cropsButton = this.add.container(78, this.cameras.main.height - 70, [cropsCircButton, cropsIcon]);
+        cropsButton.setScale(0.75);
+
+        // Build button
+        let fenceCircButton = this.add.image(0, 0, "circButton").setInteractive({ useHandCursor: true });
+        let fenceIcon = this.add.image(0, 0, "fenceIcon").setScale(0.06).setTint(0xddddff);
+        let fenceButton = this.add.container(38, this.cameras.main.height - 86, [fenceCircButton, fenceIcon]);
+        fenceButton.setScale(0.75);
+
 
 
         // Build Button
