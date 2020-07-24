@@ -99,15 +99,10 @@ class FarmHUD extends Phaser.Scene {
         let buildObjects = []
         buildObjects.push(this.add.image(0, 20, "dirt2").setInteractive({ useHandCursor: true }));
         buildObjects.push(this.add.image(32, 20, "seeds").setInteractive({ useHandCursor: true }));
-
         this.buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, ...buildObjects]).setScale(3).setDepth(2);
-
         this.buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
-
         this.buildContainer.visible = false;
-
         this.input.setDraggable(this.buildContainer);
-
         this.buildContainer.on('drag', function (pointer, dragX, dragY) {
             this.x = dragX;
             this.y = dragY;
@@ -116,7 +111,6 @@ class FarmHUD extends Phaser.Scene {
         buildObjects.forEach(function (object) {
             object.on("pointerup", function () {
                 this.scene.toggleBuildWindow();
-                console.log("logging this.scene: ", this.scene)
                 createMarker(this.scene.Farm, this.texture);
                 placeActive = this.texture.key;
                 this.scene.Farm.placeActive = true;
