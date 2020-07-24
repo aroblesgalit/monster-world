@@ -3,6 +3,7 @@ import Dirt from "../Farm/Dirt.js";
 import Crops from "../Farm/crops.js";
 import Potato from "../Farm/Crops/Potato.js";
 import Tomato from "../Farm/Crops/Tomato.js";
+import Carrot from "../Farm/Crops/Carrot.js";
 
 let controls;
 let buildVisible;
@@ -138,7 +139,7 @@ class FarmHUD extends Phaser.Scene {
                     className = Dirt;
                     break;
                 case "seeds":
-                    className = Tomato;
+                    className = Carrot;
                     break;
             }
 
