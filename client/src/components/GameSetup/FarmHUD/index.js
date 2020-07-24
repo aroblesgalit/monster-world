@@ -28,6 +28,15 @@ class FarmHUD extends Phaser.Scene {
         this.load.image("buttonDown", "Assets/blue_button05.png");
         this.load.image("buttonHover", "Assets/blue_button02.png");
 
+        // Circular Button
+        this.load.image("circButton", "Assets/hudButton.png");
+
+        // Icons
+        this.load.image("barnIcon", "Assets/barnIcon.png");
+        this.load.image("shovelIcon", "Assets/shovelIcon.png");
+        this.load.image("cropsIcon", "Assets/cropsIcon.png");
+        this.load.image("fenceIcon", "Assets/fenceIcon.png");
+
         // Build window
         this.load.image("buildWindow", "Assets/build_window.png");
         this.load.image("dirt2", "Assets/dirt2.png");
@@ -38,38 +47,53 @@ class FarmHUD extends Phaser.Scene {
 
         // Get reference to the Farm scene
         this.Farm = this.scene.get("Farm");
-        console.log("this.Farm...", this.Farm);
 
+        // Main farm button
+        let mainCircButton = this.add.image(0, 0, "circButton");
+        let barnIcon = this.add.image(0, 0, "barnIcon").setScale(0.04).setTint(0xddddff);
+        let farmButton = this.add.container(40, this.cameras.main.height - 36, [mainCircButton, barnIcon]);
 
-        // Build Button
-        let buildBtn = this.add.image(0, 0, "buttonUp")
-            .setScale(0.8)
-            .setInteractive({ useHandCursor: true })
-            .on("pointerdown", () => {
-                buildBtn.setTexture("buttonDown")
-                    .setPosition(0, 1);
-                buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
-            })
-            .on("pointerup", () => {
-                if (!placeActive) {
-                    this.toggleBuildWindow();
-                }
-                else {
-                    buildBtn.clearTint();
-                    placeActive = null;
-                    this.Farm.placeActive = false;
-                }
-            }, this)
-            .on("pointerover", () => {
-                buildBtn.setTexture("buttonHover");
-            })
-            .on("pointerout", () => {
-                buildBtn.setTexture("buttonUp")
-                    .setPosition(0, 0);
-                buildBtnText.setPosition(buildBtn.x - 20, buildBtn.y - 10);
-            })
-        let buildBtnText = this.add.text(buildBtn.x - 20, buildBtn.y - 10, "Build", { font: "20px Arial", fill: "#000" });
-        this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 36, [buildBtn, buildBtnText]);
+        // Plow dirt button
+        let shovelCircButton = this.add.image(0, 0, "circButton").setInteractive({ useHandCursor: true });;
+        let shovelIcon = this.add.image(0, 0, "shovelIcon").setScale(0.04).setTint(0xddddff);
+        let shovelButton = this.add.container(90, this.cameras.main.height - 30, [shovelCircButton, shovelIcon]);
+        shovelButton.setScale(0.75);
+
+        // Plant crops button
+        let cropsCircButton = this.add.image(0, 0, "circButton").setInteractive({ useHandCursor: true });
+        let cropsIcon = this.add.image(0, 0, "cropsIcon").setScale(0.05).setTint(0xddddff);
+        let cropsButton = this.add.container(78, this.cameras.main.height - 70, [cropsCircButton, cropsIcon]);
+        cropsButton.setScale(0.75);
+
+        // Build button
+        let fenceCircButton = this.add.image(0, 0, "circButton").setInteractive({ useHandCursor: true });
+        let fenceIcon = this.add.image(0, 0, "fenceIcon").setScale(0.06).setTint(0xddddff);
+        let fenceButton = this.add.container(38, this.cameras.main.height - 86, [fenceCircButton, fenceIcon]);
+        fenceButton.setScale(0.75);
+
+        // Activating plowing dirt
+        shovelCircButton.on("pointerup", () => {
+            if (!placeActive) {
+                createMarker(this.Farm, "dirt2");
+                placeActive = "dirt2";
+                this.Farm.placeActive = true;
+            }
+            else {
+                placeActive = null;
+                this.Farm.placeActive = false;
+            }
+        }, this);
+
+        // Activating planting crops
+        cropsCircButton.on("pointerup", () => {
+            if (!placeActive) {
+                this.toggleBuildWindow();
+            }
+            else {
+                placeActive = null;
+                this.Farm.placeActive = false;
+            }
+        }, this);
 
 
         // Build window
@@ -78,15 +102,10 @@ class FarmHUD extends Phaser.Scene {
         let buildObjects = []
         buildObjects.push(this.add.image(0, 20, "dirt2").setInteractive({ useHandCursor: true }));
         buildObjects.push(this.add.image(32, 20, "seeds").setInteractive({ useHandCursor: true }));
-
         this.buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, ...buildObjects]).setScale(3).setDepth(2);
-
         this.buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
-
         this.buildContainer.visible = false;
-
         this.input.setDraggable(this.buildContainer);
-
         this.buildContainer.on('drag', function (pointer, dragX, dragY) {
             this.x = dragX;
             this.y = dragY;
@@ -95,11 +114,10 @@ class FarmHUD extends Phaser.Scene {
         buildObjects.forEach(function (object) {
             object.on("pointerup", function () {
                 this.scene.toggleBuildWindow();
-                console.log("logging this.scene: ", this.scene)
                 createMarker(this.scene.Farm, this.texture);
                 placeActive = this.texture.key;
                 this.scene.Farm.placeActive = true;
-                buildBtn.setTint(0xff2222);
+                // buildBtn.setTint(0xff2222);
             });
         });
 
