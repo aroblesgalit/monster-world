@@ -1,6 +1,9 @@
 import Phaser from "phaser";
-import Crops from "../Farm/crops.js";
 import Dirt from "../Farm/Dirt.js";
+import Crops from "../Farm/crops.js";
+import Potato from "../Farm/Crops/Potato.js";
+import Tomato from "../Farm/Crops/Tomato.js";
+import Carrot from "../Farm/Crops/Carrot.js";
 
 let controls;
 let buildVisible;
@@ -38,6 +41,7 @@ class FarmHUD extends Phaser.Scene {
         this.load.image("buildWindow", "Assets/build_window.png");
         this.load.image("dirt2", "Assets/dirt2.png");
         this.load.image("seeds", "Assets/seeds.png");
+        this.load.spritesheet("plantButtons", "Assets/tilesets/plants.png", {frameWidth:32, frameHeight:64});
     }
 
     create() {
@@ -97,8 +101,11 @@ class FarmHUD extends Phaser.Scene {
         // =================================
         let buildWindow = this.add.image(0, 0, "buildWindow");
         let buildObjects = []
-        buildObjects.push(this.add.image(0, 20, "dirt2").setInteractive({ useHandCursor: true }));
+
+        //buildObjects.push(this.add.image(0, 20, "buttonUp").setInteractive({ useHandCursor: true }));
         buildObjects.push(this.add.image(32, 20, "seeds").setInteractive({ useHandCursor: true }));
+        buildObjects.push(this.add.sprite(-32, 0, "plantButtons").setFrame(46).setInteractive({ useHandCursor: true }));
+
         this.buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, ...buildObjects]).setScale(3).setDepth(2);
         this.buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
         this.buildContainer.visible = false;
@@ -154,7 +161,10 @@ class FarmHUD extends Phaser.Scene {
                     className = Dirt;
                     break;
                 case "seeds":
-                    className = Crops;
+                    className = Carrot;
+                    break;
+                case "plantButtons":
+                    className = Potato;
                     break;
             }
 
