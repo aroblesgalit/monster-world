@@ -2,9 +2,13 @@ import helpers from "./helpers";
 import farmObject from "./Object";
 
 class Dirt extends farmObject{
+  static objName = "Dirt";
   static layer = "dirt";
   static tilesetOffset = 85;
   static tileIndex = 12
+
+  static imageLoc = "Assets/dirt2.png";
+  static baseIndex = 0;
 
   constructor(type){
     super(type);

@@ -1,6 +1,4 @@
 import Phaser from "phaser";
-import Crops from "./crops.js";
-import Dirt from "./Dirt.js";
 
 
 class Farm extends Phaser.Scene {
@@ -27,7 +25,7 @@ class Farm extends Phaser.Scene {
         this.load.image("farmland", "Assets/tilesets/farmland.png");
         this.load.image("plowedDirt", "Assets/tilesets/plowedDirt.png");
         this.load.image("plants", "Assets/tilesets/plants.png");
-        this.load.tilemapTiledJSON("grass_tilemap", "Assets/tilemaps/grass_tilemap.json");
+        this.load.tilemapTiledJSON("grass_tilemap", "Assets/tilemaps/grass_tilemap.json")
 
         // Tilemap - Dynamic - Placed Items
         // this.load.image("buildings", "Assets/tilesets/plowed_soil.png")

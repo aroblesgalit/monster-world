@@ -8,7 +8,7 @@ class Carrot extends Crop{
 
   // Static Variables
   static Class = Carrot;
-  static plantName = "Carrot";
+  static objName = "Carrot";
   static layer = "plants";
   static tilesetOffset = 85+48;
   static tileIndex = 0;
@@ -16,6 +16,11 @@ class Carrot extends Crop{
   static tileWidth = 32;
   static phases = [2, 11, 20, 29];
   static phaseLength = 1000;
+  static postHarvestPhase = 0;
+
+  // Object Image Settings
+  static imageLoc = "Assets/Objects/objects.png";
+  static baseIndex = 2;
 }
 
 export default Carrot

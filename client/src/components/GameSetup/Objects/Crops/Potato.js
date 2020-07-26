@@ -8,7 +8,7 @@ class Potato extends Crop{
 
   // Static Variables
   static Class = Potato;
-  static plantName = "Potato";
+  static objName = "Potato";
   static layer = "plants";
   static tilesetOffset = 85+48;
   static tileIndex = 0;
@@ -16,6 +16,11 @@ class Potato extends Crop{
   static tileWidth = 32;
   static phases = [1, 10, 19, 28];
   static phaseLength = 3000;
+  static postHarvestPhase = 0;
+
+  // Object Image Settings
+  static imageLoc = "Assets/Objects/objects.png";
+  static baseIndex = 1;
 }
 
 export default Potato

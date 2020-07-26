@@ -8,7 +8,7 @@ class Tomato extends Crop{
 
   // Static Variables
   static Class = Tomato;
-  static plantName = "Tomato";
+  static objName = "Tomato";
   static layer = "plants";
   static tilesetOffset = 85+48;
   static tileIndex = 0;
@@ -16,6 +16,11 @@ class Tomato extends Crop{
   static tileWidth = 32;
   static phases = [0, 9, 18, 27];
   static phaseLength = 6000;
+  static postHarvestPhase = 1;
+
+  // Object Image Settings
+  static imageLoc = "Assets/Objects/objects.png";
+  static baseIndex = 0;
 }
 
 export default Tomato
