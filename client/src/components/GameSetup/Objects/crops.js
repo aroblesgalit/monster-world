@@ -41,16 +41,19 @@ class Crop extends farmObject{
 
   // The ability to harvest plants
   harvest(){
-    this.phase-=2;
-    this.nextPhase = Date.now;
-    console.log(`Harvested ${this.Class.plantName}`)
+    if(this.harvestable){
+      this.harvestable = false;
+      this.phase=this.Class.postHarvestPhase;
+      this.nextPhase = Date.now()+this.Class.phaseLength;
+      console.log(`Harvested ${this.Class.objName}`)
+    }
   }
 
   
   // check a placed crop, to see if it is at its next 
   update(time, delta){
     // end immediatly if the plant is fully grown
-    if (this.harvestable) return;
+    if (this.harvestable) {this.harvest();};
 
 
     //console.log(time, this.tile.tilemap.scene.game.getTime())
