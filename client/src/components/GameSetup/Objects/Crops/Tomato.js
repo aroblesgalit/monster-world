@@ -17,8 +17,9 @@ class Tomato extends Crop{
   static phases = [0, 9, 18, 27];
   static phaseLength = 6000;
 
-  static imageLoc = "Assets/tilesets/plants.png";
-  static baseIndex = 45;
+  // Object Image Settings
+  static imageLoc = "Assets/Objects/objects.png";
+  static baseIndex = 0;
 }
 
 export default Tomato

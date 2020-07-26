@@ -6,6 +6,12 @@ class farmObject{
   static tileIndex;
   static tileHeight = 32;
   static tileWidth = 32;
+  //static crop = [0,0,this.tileHeight,this.tileWidth];
+
+  // Object Image Settings
+  static imageHeight = 32;
+  static imageWidth = 32;
+
 
   constructor(type){
     this.type = type;
@@ -32,12 +38,17 @@ class farmObject{
 
  // Load image, then immmidiatly callback createImage, place it on screen, and return the image to the file.
   static loadImage(scene){
-    scene.load.spritesheet(this.objName, this.imageLoc, {frameWidth:this.tileWidth, frameHeight:this.tileHeight})
+    scene.load.spritesheet(this.objName, this.imageLoc, {frameWidth:this.imageWidth, frameHeight:this.imageHeight})
   }
 
   static getImage(scene, x, y){
     let image = scene.add.sprite(x , y, this.objName)
     image.setFrame(this.baseIndex);
+    // crop of data if needed
+    //image.setSize(30, 30, true);
+    image.setOrigin(0);
+    // image.body.setOffset(-32,0);
+    //image.setDisplayOrigin( 16, 50)
     return image;
   }
 }

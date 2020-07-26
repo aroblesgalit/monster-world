@@ -110,20 +110,27 @@ class FarmHUD extends Phaser.Scene {
 
         // Build window
         // =================================
-        let buildWindow = this.add.image(0, 0, "buildWindow");
+        let buildWindow = this.add.image(0, 0, "buildWindow").setOrigin(0);
         let buildObjects = []
 
         // Add buttons to plant window
-        //buildObjects.push(this.add.image(0, 20, "buttonUp").setInteractive({ useHandCursor: true }));
+        // 5 pixle frame/margin, 32x32 each cell, 15 px on top
         let self = this;
-        buildObjects.push( Potato.getImage(self, 32, 0).setInteractive({ useHandCursor: true }));
-        buildObjects.push( Carrot.getImage(self, 0, 0).setInteractive({ useHandCursor: true }));
-        buildObjects.push( Tomato.getImage(self, -32, 0).setInteractive({ useHandCursor: true }));
+        buildObjects.push( Tomato.getImage(self, 5, 20).setInteractive({ useHandCursor: true }));
+        buildObjects.push( Carrot.getImage(self, 10+32, 20).setInteractive({ useHandCursor: true }));
+        buildObjects.push( Potato.getImage(self, 15+32*2, 20).setInteractive({ useHandCursor: true }));
 
-        this.buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, ...buildObjects]).setScale(3).setDepth(2);
+        let scale = (2.5)
+        this.buildContainer = this.add.container(this.cameras.main.width/2 - (buildWindow.width/2*scale) , this.cameras.main.height - (5+ buildWindow.height*scale), [buildWindow, ...buildObjects]).setScale(scale).setDepth(2);
         this.buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
         this.buildContainer.visible = false;
         this.input.setDraggable(this.buildContainer);
+
+        // remove background draging when moving window
+        this.buildContainer.on('pointerdown',() => {this.Farm.placeActive = true;});
+        this.buildContainer.on('pointerup',() => {this.Farm.placeActive = false;});
+
+        // allow movement of build window
         this.buildContainer.on('drag', function (pointer, dragX, dragY) {
             this.x = dragX;
             this.y = dragY;

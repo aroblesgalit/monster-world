@@ -17,8 +17,9 @@ class Carrot extends Crop{
   static phases = [2, 11, 20, 29];
   static phaseLength = 1000;
 
-  static imageLoc = "Assets/tilesets/plants.png";
-  static baseIndex = 47;
+  // Object Image Settings
+  static imageLoc = "Assets/Objects/objects.png";
+  static baseIndex = 2;
 }
 
 export default Carrot
