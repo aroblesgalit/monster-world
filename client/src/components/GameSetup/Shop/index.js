@@ -325,8 +325,10 @@ class Shelf extends Phaser.Scene {
       url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
       sceneKey: 'rexUI'
     });
+    var url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexninepatchplugin.min.js';
+    this.load.plugin('rexninepatchplugin', url, true); 
     // load images
-    this.load.image('shopMenuBox', 'Assets/shopMenuBox.png');
+    this.load.image('shopMenuBox', 'Assets/shelf.png');
     this.load.image('potionred', 'Assets/potion.png');
     this.load.image('potionblue', 'Assets/potionblue.png');
     this.load.image('potiongreen', 'Assets/potiongreen.png');
@@ -336,6 +338,8 @@ class Shelf extends Phaser.Scene {
 
   create() {
     // add close button
+    this.add.image(400,300,'shopMenuBox');
+
     let closeButton = this.add.image(180, 200, 'closeButton').setScale(0.1).setInteractive();
     closeButton.on('pointerdown', function () {
             this.setScale(0.08);
@@ -350,9 +354,6 @@ class Shelf extends Phaser.Scene {
             this.scene.sleep("Shelf");
           }, this);
 
-          const backgroundImage = this.add.image(400, 300, 'shopMenuBox');
-          backgroundImage.displayHeight = 220;
-          backgroundImage.displayWidth = 400;
     // define contents of menu
     const data = {
       // single row section of table
@@ -455,10 +456,19 @@ class Shelf extends Phaser.Scene {
 
       scrollMode: 1,
 
-      background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
+      // background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
 
-      // background: backgroundImage,
+      // background: this.add.rexNinePatch({
+      //   x: 0,
+      //   y: 0,
+      //   width: 400,
+      //   height: 220,
+      //   key: 'shopMenuBox',
+      //   columns: [10],
+      //   rows: [10]
+      // }),
 
+      // background: this.add.image(0, 0, 'shopMenuBox'),
 
       panel: {
         child: createPanel(this, data),
