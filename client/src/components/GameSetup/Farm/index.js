@@ -1,7 +1,4 @@
 import Phaser from "phaser";
-import Crops from "./crops.js";
-import Dirt from "./Dirt.js";
-import Potato from "./Crops/Potato.js";
 
 
 class Farm extends Phaser.Scene {

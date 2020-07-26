@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import Potato from '../Farm/Crops/Potato';
 
 class Default extends Phaser.Scene{
   constructor(){

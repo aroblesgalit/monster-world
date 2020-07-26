@@ -1,9 +1,9 @@
 import Phaser from "phaser";
-import Dirt from "../Farm/Dirt.js";
-import Crops from "../Farm/crops.js";
-import Potato from "../Farm/Crops/Potato.js";
-import Tomato from "../Farm/Crops/Tomato.js";
-import Carrot from "../Farm/Crops/Carrot.js";
+import Dirt from "../Objects/Dirt.js";
+import Crops from "../Objects/crops.js";
+import Potato from "../Objects/Crops/Potato.js";
+import Tomato from "../Objects/Crops/Tomato.js";
+import Carrot from "../Objects/Crops/Carrot.js";
 
 let controls;
 let buildVisible;
