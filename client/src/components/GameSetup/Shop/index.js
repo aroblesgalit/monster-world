@@ -362,32 +362,32 @@ class Shelf extends Phaser.Scene {
     // define contents of menu
     // name defines text that will be printed below item
     // image must be a string, key that is defined in preload
-    // type is used to set the scale of each image of the same type to the same value
+    // scale is used in setScale() when icons are added to the screen
     // price is used handleBuy()
     const data = {
       // single row section of table
       potions: [
         {
           name: '20g',
-          type: 'potion',
+          scale: 0.3,
           image: 'potionred',
           price: 20
         },
         {
           name: '50g',
-          type: 'potion',
+          scale: 0.3,
           image: 'potionblue',
           price: 50
         },
         {
           name: '75g',
-          type: 'potion',
+          scale: 0.3,
           image: 'potiongreen',
           price: 75
         },
         {
           name: '100g',
-          type: 'potion',
+          scale: 0.3,
           image: 'potionpurple',
           price: 100
         }
@@ -396,25 +396,25 @@ class Shelf extends Phaser.Scene {
       swords: [
         {
           name: '200g',
-          type: 'sword',
+          scale: 0.35,
           image: 'redsword',
           price: 200
         },
         {
           name: '500g',
-          type: 'sword',
+          scale: 0.35,
           image: 'yellowsword',
           price: 500
         },
         {
           name: '750g',
-          type: 'sword',
+          scale: 0.35,
           image: 'greensword',
           price: 750
         },
         {
           name: '1000g',
-          type: 'sword',
+          scale: 0.35,
           image: 'bluesword',
           price: 1000
         }
@@ -585,19 +585,7 @@ var createTable = function (scene, data, key, rows) {
 
 var createIcon = function (scene, item) {
 
-  let icon = scene.add.image(0, 0, item.image);
-  
-  switch (item.type) {
-    case 'potion': 
-      icon.setScale(0.3);
-      break;
-    case 'sword':
-      icon.setScale(0.35);
-      break;
-    default :
-      icon.setScale(0.2);
-      break;
-  }
+  let icon = scene.add.image(0, 0, item.image).setScale(item.scale);
 
   icon.setDataEnabled();
   icon.data.set('price', item.price);
