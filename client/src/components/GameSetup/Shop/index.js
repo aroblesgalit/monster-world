@@ -333,6 +333,11 @@ class Shelf extends Phaser.Scene {
     this.load.image('potionblue', 'Assets/potionblue.png');
     this.load.image('potiongreen', 'Assets/potiongreen.png');
     this.load.image('potionpurple', 'Assets/potionpurple.png');
+    this.load.image('redsword', 'Assets/redsword.png');
+    this.load.image('yellowsword', 'Assets/yellowsword.png');
+    this.load.image('bluesword', 'Assets/bluesword.png');
+    this.load.image('greensword', 'Assets/greensword.png');
+
     this.load.image('closeButton', 'Assets/menuClose.png');
   }
 
@@ -355,92 +360,63 @@ class Shelf extends Phaser.Scene {
           }, this);
 
     // define contents of menu
+    // name defines text that will be printed below item
+    // image must be a string, key that is defined in preload
+    // type is used to set the scale of each image of the same type to the same value
+    // price is used handleBuy()
     const data = {
       // single row section of table
-      potions1: [
+      potions: [
         {
           name: '20g',
+          type: 'potion',
           image: 'potionred',
           price: 20
         },
         {
           name: '50g',
+          type: 'potion',
           image: 'potionblue',
           price: 50
         },
         {
           name: '75g',
+          type: 'potion',
           image: 'potiongreen',
           price: 75
         },
         {
           name: '100g',
+          type: 'potion',
           image: 'potionpurple',
           price: 100
         }
       ],
 
-      // two row section of table
-      potions2: [
-        {
-          name: '20g',
-          image: 'potionred',
-          price: 20
-        },
-        {
-          name: '50g',
-          image: 'potionblue',
-          price: 50
-        },
-        {
-          name: '75g',
-          image: 'potiongreen',
-          price: 75
-        },
-        {
-          name: '100g',
-          image: 'potionpurple',
-          price: 100
-        },
-        {
-          name: '120g',
-          image: 'potionred',
-          price: 120
-        },
-        {
-          name: '150g',
-          image: 'potionblue',
-          price: 150
-        },
-        {
-          name: '175g',
-          image: 'potiongreen',
-          price: 175
-        },
+      swords: [
         {
           name: '200g',
-          image: 'potionpurple',
+          type: 'sword',
+          image: 'redsword',
           price: 200
         },
         {
-          name: '220g',
-          image: 'potionred',
-          price: 220
+          name: '500g',
+          type: 'sword',
+          image: 'yellowsword',
+          price: 500
         },
         {
-          name: '250g',
-          image: 'potionblue',
-          price: 250
+          name: '750g',
+          type: 'sword',
+          image: 'greensword',
+          price: 750
         },
         {
-          name: '275g',
-          image: 'potiongreen',
-          price: 275
-        },
-        {
-          name: '300g',
-          image: 'potionpurple',
-          price: 300
+          name: '1000g',
+          type: 'sword',
+          image: 'bluesword',
+          price: 1000
         }
       ]
 
@@ -455,20 +431,6 @@ class Shelf extends Phaser.Scene {
       height: 220,
 
       scrollMode: 1,
-
-      // background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
-
-      // background: this.add.rexNinePatch({
-      //   x: 0,
-      //   y: 0,
-      //   width: 400,
-      //   height: 220,
-      //   key: 'shopMenuBox',
-      //   columns: [10],
-      //   rows: [10]
-      // }),
-
-      // background: this.add.image(0, 0, 'shopMenuBox'),
 
       panel: {
         child: createPanel(this, data),
@@ -497,8 +459,8 @@ class Shelf extends Phaser.Scene {
     // Set icon interactive
     this.input.topOnly = false;
     var labels = [];
-    labels.push(...scrollablePanel.getElement('#potions1.items', true));
-    labels.push(...scrollablePanel.getElement('#potions2.items', true));
+    labels.push(...scrollablePanel.getElement('#potions.items', true));
+    labels.push(...scrollablePanel.getElement('#swords.items', true));
     console.log(labels);
     var scene = this;
     labels.forEach(function (label) {
@@ -533,11 +495,11 @@ var createPanel = function (scene, data) {
     //   { expand: true }
     // )
     .add(
-      createTable(scene, data, 'potions1', 1), // child
+      createTable(scene, data, 'potions', 1), // child
       { expand: true }
     )
     .add(
-      createTable(scene, data, 'potions2', 2), // child
+      createTable(scene, data, 'swords', 1), // child
       { expand: true }
     )
   return sizer;
@@ -550,7 +512,6 @@ var createHeader = function (scene, data) {
   });
   var header = scene.rexUI.add.label({
     orientation: 'y',
-    icon: scene.rexUI.add.roundRectangle(0, 0, 100, 100, 5, COLOR_LIGHT),
     text: scene.add.text(0, 0, data.name),
 
     space: { icon: 10 }
@@ -560,9 +521,6 @@ var createHeader = function (scene, data) {
     orientation: 'y',
     space: { left: 5, right: 5, top: 5, bottom: 5, item: 10 }
   })
-    .addBackground(
-      scene.rexUI.add.roundRectangle(0, 0, 0, 0, 0, undefined).setStrokeStyle(2, COLOR_LIGHT, 1)
-    )
     .add(
       title, // child
       { expand: true, align: 'left' }
@@ -591,7 +549,7 @@ var createTable = function (scene, data, key, rows) {
   });
 
   var item, r, c;
-  var iconSize = (rows === 1) ? 80 : 40;
+  var iconSize = (rows === 1) ? 120 : 40;
   for (var i = 0, cnt = items.length; i < cnt; i++) {
     item = items[i];
     r = i % rows;
@@ -610,16 +568,13 @@ var createTable = function (scene, data, key, rows) {
     orientation: 'y',
     space: { left: 10, right: 10, top: 10, bottom: 10, item: 10 }
   })
-    .addBackground(
-      scene.rexUI.add.roundRectangle(0, 0, 0, 0, 0, undefined).setStrokeStyle(2, COLOR_LIGHT, 1)
-    )
-    .add(
-      title, // child
-      0, // proportion
-      'left', // align
-      0, // paddingConfig
-      true // expand
-    )
+    // .add(
+    //   title, // child
+    //   0, // proportion
+    //   'left', // align
+    //   0, // paddingConfig
+    //   true // expand
+    // )
     .add(table, // child
       1, // proportion
       'center', // align
@@ -629,7 +584,20 @@ var createTable = function (scene, data, key, rows) {
 }
 
 var createIcon = function (scene, item) {
-  let icon = scene.add.image(0, 0, item.image).setScale(0.12);
+
+  let icon = scene.add.image(0, 0, item.image);
+  
+  switch (item.type) {
+    case 'potion': 
+      icon.setScale(0.3);
+      break;
+    case 'sword':
+      icon.setScale(0.35);
+      break;
+    default :
+      icon.setScale(0.2);
+      break;
+  }
 
   icon.setDataEnabled();
   icon.data.set('price', item.price);
