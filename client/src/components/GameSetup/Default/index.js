@@ -33,8 +33,6 @@ class Default extends Phaser.Scene{
     logo.setCollideWorldBounds(true);
 
     emitter.startFollow(logo);
-
-    console.log(Potato.getImage(this, 100,100));
   }
 }
 

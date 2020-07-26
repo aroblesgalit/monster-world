@@ -6,6 +6,10 @@ class Dirt extends farmObject{
   static tilesetOffset = 85;
   static tileIndex = 12
 
+  static imageKey = "dirt";
+  static imageLoc = "Assets/dirt2.png";
+  static baseIndex = 0;
+
   constructor(type){
     super(type);
   }

@@ -16,6 +16,10 @@ class Carrot extends Crop{
   static tileWidth = 32;
   static phases = [2, 11, 20, 29];
   static phaseLength = 1000;
+
+  static imageKey = "carrot";
+  static imageLoc = "Assets/tilesets/plants.png";
+  static baseIndex = 47;
 }
 
 export default Carrot

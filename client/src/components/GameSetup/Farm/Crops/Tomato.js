@@ -16,6 +16,10 @@ class Tomato extends Crop{
   static tileWidth = 32;
   static phases = [0, 9, 18, 27];
   static phaseLength = 6000;
+
+  static imageKey = "tomato";
+  static imageLoc = "Assets/tilesets/plants.png";
+  static baseIndex = 45;
 }
 
 export default Tomato

@@ -31,18 +31,15 @@ class farmObject{
   }
 
  // Load image, then immmidiatly callback createImage, place it on screen, and return the image to the file.
- static getImage(scene, x, y){
-  var image = scene.load.once("complete", ()=>{return this.createImage(scene, x, y)}, scene);
-  scene.load.spritesheet(this.imageKey, this.imageLoc, {frameWidth:this.tileWidth, frameHeight:this.tileHeight});
-  scene.load.start();
-  return image;
-}
+  static loadImage(scene){
+    scene.load.spritesheet(this.imageKey, this.imageLoc, {frameWidth:this.tileWidth, frameHeight:this.tileHeight})
+  }
 
-static createImage(scene, x, y){
-  var image = scene.add.sprite(x , y, this.imageKey)
-  image.setFrame(this.baseIndex);
-  return image;
-}
+  static getImage(scene, x, y){
+    let image = scene.add.sprite(x , y, this.imageKey)
+    image.setFrame(this.baseIndex);
+    return image;
+  }
 }
 
 export default farmObject
