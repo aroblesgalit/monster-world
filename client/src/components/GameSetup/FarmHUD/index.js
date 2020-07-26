@@ -11,6 +11,12 @@ let buildContainer;
 let placeActive = false;
 let placeMarker;
 
+var classes = {
+    "Tomato": Tomato,
+    "Potato": Potato,
+    "Carrot": Carrot
+};
+
 
 class FarmHUD extends Phaser.Scene {
     constructor(game) {
@@ -42,6 +48,11 @@ class FarmHUD extends Phaser.Scene {
         this.load.image("dirt2", "Assets/dirt2.png");
         this.load.image("seeds", "Assets/seeds.png");
         this.load.spritesheet("plantButtons", "Assets/tilesets/plants.png", {frameWidth:32, frameHeight:64});
+
+        //Plant Icons
+        Carrot.loadImage(this);
+        Potato.loadImage(this);
+        Tomato.loadImage(this);
     }
 
     create() {
@@ -76,7 +87,7 @@ class FarmHUD extends Phaser.Scene {
         shovelCircButton.on("pointerup", () => {
             if (!placeActive) {
                 createMarker(this.Farm, "dirt2");
-                placeActive = "dirt2";
+                placeActive = Dirt;
                 this.Farm.placeActive = true;
             }
             else {
@@ -102,9 +113,12 @@ class FarmHUD extends Phaser.Scene {
         let buildWindow = this.add.image(0, 0, "buildWindow");
         let buildObjects = []
 
+        // Add buttons to plant window
         //buildObjects.push(this.add.image(0, 20, "buttonUp").setInteractive({ useHandCursor: true }));
-        buildObjects.push(this.add.image(32, 20, "seeds").setInteractive({ useHandCursor: true }));
-        buildObjects.push(this.add.sprite(-32, 0, "plantButtons").setFrame(46).setInteractive({ useHandCursor: true }));
+        let self = this;
+        buildObjects.push( Potato.getImage(self, 32, 0).setInteractive({ useHandCursor: true }));
+        buildObjects.push( Carrot.getImage(self, 0, 0).setInteractive({ useHandCursor: true }));
+        buildObjects.push( Tomato.getImage(self, -32, 0).setInteractive({ useHandCursor: true }));
 
         this.buildContainer = this.add.container(this.cameras.main.width / 2, this.cameras.main.height - 200, [buildWindow, ...buildObjects]).setScale(3).setDepth(2);
         this.buildContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, buildWindow.width, buildWindow.height), Phaser.Geom.Rectangle.Contains);
@@ -118,8 +132,21 @@ class FarmHUD extends Phaser.Scene {
         buildObjects.forEach(function (object) {
             object.on("pointerup", function () {
                 this.scene.toggleBuildWindow();
-                createMarker(this.scene.Farm, this.texture);
-                placeActive = this.texture.key;
+                console.log(this);
+                createMarker(this.scene.Farm, this.texture, this.frame.name);
+                placeActive = classes[this.texture.key];
+                // switch (this.texture.key) {
+                //     case "Potato":
+                //         placeActive = Potato;
+                //         break;
+                //     case "Tomato":
+                //         placeActive = Tomato;
+                //         break;
+                //     case "Carrot":
+                //         placeActive = Carrot;
+                //         break;
+                // }
+                console.log(placeActive);
                 this.scene.Farm.placeActive = true;
                 // buildBtn.setTint(0xff2222);
             });
@@ -154,22 +181,9 @@ class FarmHUD extends Phaser.Scene {
         // placeObject
         // ==========================================
         if (placeActive) {
-            let className;
-
-            switch (placeActive) {
-                case "dirt2":
-                    className = Dirt;
-                    break;
-                case "seeds":
-                    className = Carrot;
-                    break;
-                case "plantButtons":
-                    className = Potato;
-                    break;
-            }
 
             //check if canPlace
-            let canPlace = className.canPlace(this.Farm.grassPlatform, this.Farm.dirtLayer, this.Farm.plantLayer, snappedWorldPoint.x / 32, snappedWorldPoint.y / 32);
+            let canPlace = placeActive.canPlace(this.Farm.grassPlatform, this.Farm.dirtLayer, this.Farm.plantLayer, snappedWorldPoint.x / 32, snappedWorldPoint.y / 32);
             UpdatePlaceMarker(placeMarker, canPlace, snappedWorldPoint.x, snappedWorldPoint.y);
 
 
@@ -177,7 +191,7 @@ class FarmHUD extends Phaser.Scene {
             //     console.log(dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
             // }
             if (pointer.isDown && canPlace) {
-                const placed = className.put(this.Farm.map, worldPoint.x, worldPoint.y)
+                const placed = placeActive.put(this.Farm.map, worldPoint.x, worldPoint.y)
                 //const placed = layer.putTileAtWorldXY(object+tilesetOffset, worldPoint.x, worldPoint.y);
                 if (placed.type === "crop") {
                     this.Farm.crops.push(placed.data);
@@ -194,8 +208,8 @@ export default FarmHUD;
 // placeMarker Stuff
 //================================
 
-function createMarker(scene, item) {
-    const image = scene.add.sprite(0, 0, item).setOrigin(0).setAlpha(.8).setDisplaySize(32, 32);
+function createMarker(scene, item, frame) {
+    const image = scene.add.sprite(0, 0, item).setOrigin(0).setAlpha(.8).setDisplaySize(32, 32).setFrame(frame);
 
     const outline = scene.add.graphics();
     outline.lineStyle(2, 0x000000, 1);

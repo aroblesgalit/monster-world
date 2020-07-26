@@ -32,11 +32,11 @@ class farmObject{
 
  // Load image, then immmidiatly callback createImage, place it on screen, and return the image to the file.
   static loadImage(scene){
-    scene.load.spritesheet(this.imageKey, this.imageLoc, {frameWidth:this.tileWidth, frameHeight:this.tileHeight})
+    scene.load.spritesheet(this.objName, this.imageLoc, {frameWidth:this.tileWidth, frameHeight:this.tileHeight})
   }
 
   static getImage(scene, x, y){
-    let image = scene.add.sprite(x , y, this.imageKey)
+    let image = scene.add.sprite(x , y, this.objName)
     image.setFrame(this.baseIndex);
     return image;
   }

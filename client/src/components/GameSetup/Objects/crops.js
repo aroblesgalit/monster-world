@@ -39,6 +39,13 @@ class Crop extends farmObject{
     return {type:"crop", data: new this.Class(this.Class.plantName, placed)};
   }
 
+  // The ability to harvest plants
+  harvest(){
+    this.phase-=2;
+    this.nextPhase = Date.now;
+    console.log(`Harvested ${this.Class.plantName}`)
+  }
+
   
   // check a placed crop, to see if it is at its next 
   update(time, delta){
