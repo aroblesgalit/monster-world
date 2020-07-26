@@ -16,6 +16,10 @@ class Potato extends Crop{
   static tileWidth = 32;
   static phases = [1, 10, 19, 28];
   static phaseLength = 3000;
+
+  static imageKey = "potato";
+  static imageLoc = "Assets/tilesets/plants.png";
+  static baseIndex = 46;
 }
 
 export default Potato

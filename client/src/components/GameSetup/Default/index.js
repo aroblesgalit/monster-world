@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import Potato from '../Farm/Crops/Potato';
 
 class Default extends Phaser.Scene{
   constructor(){
@@ -32,6 +33,8 @@ class Default extends Phaser.Scene{
     logo.setCollideWorldBounds(true);
 
     emitter.startFollow(logo);
+
+    console.log(Potato.getImage(this, 100,100));
   }
 }
 

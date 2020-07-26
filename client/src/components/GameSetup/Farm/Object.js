@@ -29,6 +29,20 @@ class farmObject{
     placed.properties = (placed.tileset.tileProperties[this.tileIndex]);
     placed.setSize(this.tileWidth, this.tileHeight, 32, 32)
   }
+
+ // Load image, then immmidiatly callback createImage, place it on screen, and return the image to the file.
+ static getImage(scene, x, y){
+  var image = scene.load.once("complete", ()=>{return this.createImage(scene, x, y)}, scene);
+  scene.load.spritesheet(this.imageKey, this.imageLoc, {frameWidth:this.tileWidth, frameHeight:this.tileHeight});
+  scene.load.start();
+  return image;
+}
+
+static createImage(scene, x, y){
+  var image = scene.add.sprite(x , y, this.imageKey)
+  image.setFrame(this.baseIndex);
+  return image;
+}
 }
 
 export default farmObject
