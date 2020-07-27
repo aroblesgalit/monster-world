@@ -84,6 +84,14 @@ class Farm extends Phaser.Scene {
     //     }
     // }
 
+    getCrop(tile){
+        // console.log(this.crops);
+        let toHarvest = this.crops.find( crop => crop.tile === tile)
+        if(toHarvest){
+            toHarvest.harvest();
+        }
+    }
+
     update(time, delta) {
         if (this.crops.length > 0) {
             this.crops.forEach(crop => crop.update(time, delta));
@@ -94,10 +102,10 @@ class Farm extends Phaser.Scene {
         // Placement Variables
         // ========================================
         const pointer = this.input.activePointer;
+        const worldPoint = pointer.positionToCamera(this.cameras.main);
 
 
-        // Camera Movement
-        // ========================================
+
         if (pointer.isDown && !this.placeActive) {
             // console.log(this.grassPlatform.getTileAtWorldXY(worldPoint.x, worldPoint.y));
             // console.log(this.dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
@@ -105,6 +113,8 @@ class Farm extends Phaser.Scene {
 
 
             if (this.game.origDragPoint) {
+                // Camera Movement
+                // ========================================
                 // move the camera by the amount the mouse has moved since last update
                 this.cameras.main.scrollX +=
                     this.game.origDragPoint.x - this.game.input.activePointer.position.x;
@@ -112,9 +122,17 @@ class Farm extends Phaser.Scene {
                     this.game.origDragPoint.y - this.game.input.activePointer.position.y;
             } // set new drag origin to current position
             this.game.origDragPoint = this.game.input.activePointer.position.clone();
+
+            
+            // Crop Clicking
+            //this.grassPlatform.getTileAtWorldXY(worldPoint.x, worldPoint.y);
+            //this.dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y);
+            this.getCrop(this.plantLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y-32));
+
         } else {
             this.game.origDragPoint = null;
         }
+
 
     }
 }

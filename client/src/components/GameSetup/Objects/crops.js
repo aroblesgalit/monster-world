@@ -46,6 +46,7 @@ class Crop extends farmObject{
       this.phase=this.Class.postHarvestPhase;
       this.nextPhase = Date.now()+this.Class.phaseLength;
       console.log(`Harvested ${this.Class.objName}`)
+      this.tile.index = this.Class.tilesetOffset+this.Class.phases[this.phase];
     }
   }
 
@@ -53,7 +54,7 @@ class Crop extends farmObject{
   // check a placed crop, to see if it is at its next 
   update(time, delta){
     // end immediatly if the plant is fully grown
-    if (this.harvestable) {this.harvest();};
+    if (this.harvestable) {return};
 
 
     //console.log(time, this.tile.tilemap.scene.game.getTime())
