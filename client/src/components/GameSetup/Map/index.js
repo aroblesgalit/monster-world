@@ -94,6 +94,7 @@ class ShowMap extends Phaser.Scene {
         this.scene.scene.sleep('Shop');
         this.scene.scene.sleep('Default');
         this.scene.scene.sleep('Shelf');
+        this.scene.scene.sleep('FarmHUD');
         this.scene.scene.wake(choseScene);
         console.log(this.scene.scene.get(choseScene));
         // this.scene.scene.bringToTop(choseScene);
