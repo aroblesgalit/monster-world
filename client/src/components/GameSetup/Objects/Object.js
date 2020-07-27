@@ -36,6 +36,12 @@ class farmObject{
     placed.setSize(this.tileWidth, this.tileHeight, 32, 32)
   }
 
+  // remove the item tile from the tilemap
+  remove(cropsArray){
+    this.tile.tilemap.removeTile(this.tile);
+    this.tile = null;
+  }
+
  // Load image, then immmidiatly callback createImage, place it on screen, and return the image to the file.
   static loadImage(scene){
     scene.load.spritesheet(this.objName, this.imageLoc, {frameWidth:this.imageWidth, frameHeight:this.imageHeight})

@@ -39,12 +39,6 @@ class Crop extends farmObject{
     return {type:"crop", data: new this.Class(this.Class.plantName, placed)};
   }
 
-  // remove the item from the screen
-  remove(cropsArray){
-    this.tile.tilemap.removeTile(this.tile);
-    this.tile = null;
-  }
-
   // The ability to harvest plants
   harvest(cropsArray){
     if(this.harvestable){
