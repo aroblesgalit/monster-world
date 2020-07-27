@@ -39,14 +39,27 @@ class Crop extends farmObject{
     return {type:"crop", data: new this.Class(this.Class.plantName, placed)};
   }
 
+  // remove the item from the screen
+  remove(cropsArray){
+    this.tile.tilemap.removeTile(this.tile);
+    this.tile = null;
+  }
+
   // The ability to harvest plants
-  harvest(){
+  harvest(cropsArray){
     if(this.harvestable){
       this.harvestable = false;
-      this.phase=this.Class.postHarvestPhase;
       this.nextPhase = Date.now()+this.Class.phaseLength;
       console.log(`Harvested ${this.Class.objName}`)
-      this.tile.index = this.Class.tilesetOffset+this.Class.phases[this.phase];
+      this.phase=this.Class.postHarvestPhase;
+
+      if(this.phase >0){
+        console.log("replanting");
+        this.tile.index = this.Class.tilesetOffset+this.Class.phases[this.phase];
+      }
+      else{
+        this.remove(cropsArray);
+      }
     }
   }
 
@@ -54,7 +67,7 @@ class Crop extends farmObject{
   // check a placed crop, to see if it is at its next 
   update(time, delta){
     // end immediatly if the plant is fully grown
-    if (this.harvestable) {return};
+    if (this.harvestable || this.phase < 0) {return};
 
 
     //console.log(time, this.tile.tilemap.scene.game.getTime())

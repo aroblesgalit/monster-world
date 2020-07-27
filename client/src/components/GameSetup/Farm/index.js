@@ -88,14 +88,18 @@ class Farm extends Phaser.Scene {
         // console.log(this.crops);
         let toHarvest = this.crops.find( crop => crop.tile === tile)
         if(toHarvest){
-            toHarvest.harvest();
+            toHarvest.harvest(this.crops);
         }
+        console.log(this.crops);
     }
 
     update(time, delta) {
+        // update all crops
         if (this.crops.length > 0) {
             this.crops.forEach(crop => crop.update(time, delta));
-        }        
+        }
+        // remove those that are no longer active
+        this.crops = this.crops.filter(crop => crop.tile);   
 
         this.scene.wake("FarmHUD");
 
