@@ -49,7 +49,6 @@ class Farm extends Phaser.Scene {
         // Dynamic Tilemap
         this.dirtLayer = this.map.createDynamicLayer("dirt", "plowedDirt",0,0);
         this.plantLayer = this.map.createDynamicLayer("plants", "plants",0,-32);
-        console.log(this.plantLayer);
 
         // Crop
         let config = {
@@ -93,7 +92,6 @@ class Farm extends Phaser.Scene {
         if(toHarvest){
             toHarvest.harvest(this.crops);
         }
-        console.log(this.crops);
     }
 
     update(time, delta) {
