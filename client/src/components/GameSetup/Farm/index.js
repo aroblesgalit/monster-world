@@ -50,10 +50,6 @@ class Farm extends Phaser.Scene {
         this.dirtLayer = this.map.createDynamicLayer("dirt", "plowedDirt",0,0);
         this.plantLayer = this.map.createDynamicLayer("plants", "plants",0,-32);
         console.log(this.plantLayer);
-        // plantLayer.anchor.set(1);
-
-
-        // setTile= 10, 10, 10);
 
         // Crop
         let config = {
@@ -67,6 +63,13 @@ class Farm extends Phaser.Scene {
 
         // create animation for plants
         this.anims.create(config);
+
+                // Start with tilemap in center of the map
+                let mapWidth = this.map.width*this.map.tileWidth;
+                let mapHeight = this.map.height*this.map.tileHeight;
+        
+                this.cameras.main.scrollX = (mapWidth - this.game.config.width)/2;
+                this.cameras.main.scrollY = (mapHeight - this.game.config.height)/2;
 
         // put the scene to sleep untill it is used
         this.scene.sleep('Farm');

@@ -139,21 +139,8 @@ class FarmHUD extends Phaser.Scene {
         buildObjects.forEach(function (object) {
             object.on("pointerup", function () {
                 this.scene.toggleBuildWindow();
-                console.log(this);
                 createMarker(this.scene.Farm, this.texture, this.frame.name);
                 placeActive = classes[this.texture.key];
-                // switch (this.texture.key) {
-                //     case "Potato":
-                //         placeActive = Potato;
-                //         break;
-                //     case "Tomato":
-                //         placeActive = Tomato;
-                //         break;
-                //     case "Carrot":
-                //         placeActive = Carrot;
-                //         break;
-                // }
-                console.log(placeActive);
                 this.scene.Farm.placeActive = true;
                 // buildBtn.setTint(0xff2222);
             });
