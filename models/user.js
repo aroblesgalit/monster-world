@@ -20,6 +20,10 @@ const userSchema = new Schema({
       ref: "Monster"
     }
   ],
+  cash: {
+    type: Number,
+    ref: "cash"
+  },
   friends: [
     {
       type: Schema.Types.ObjectId,
