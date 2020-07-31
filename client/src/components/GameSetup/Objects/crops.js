@@ -40,13 +40,21 @@ class Crop extends farmObject{
   }
 
   // The ability to harvest plants
-  harvest(){
+  harvest(cropsArray){
     if(this.harvestable){
       this.harvestable = false;
-      this.phase=this.Class.postHarvestPhase;
       this.nextPhase = Date.now()+this.Class.phaseLength;
       Crop.inventory.addItem(this, 1);
       console.log(`Harvested ${this.Class.objName}`)
+      this.phase=this.Class.postHarvestPhase;
+
+      if(this.phase >0){
+        console.log("replanting");
+        this.tile.index = this.Class.tilesetOffset+this.Class.phases[this.phase];
+      }
+      else{
+        this.remove(cropsArray);
+      }
     }
   }
 
@@ -55,7 +63,7 @@ class Crop extends farmObject{
   update(time, delta){
     console.log(Crop.inventory.inventory);
     // end immediatly if the plant is fully grown
-    if (this.harvestable) {this.harvest();};
+    if (this.harvestable || this.phase < 0) {return};
 
 
     //console.log(time, this.tile.tilemap.scene.game.getTime())
