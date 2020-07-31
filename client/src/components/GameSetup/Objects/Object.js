@@ -1,3 +1,4 @@
+import Inventory from "../Inventory";
 
 class farmObject{
 
@@ -11,6 +12,13 @@ class farmObject{
   // Object Image Settings
   static imageHeight = 32;
   static imageWidth = 32;
+
+  // This seems like a roundabout way of doing this, but we the static crops need a way to input themselves.
+  // this is also being called by the HUD, so the game can access it.(getInventory())
+  static inventory = new Inventory();
+
+  // static HUDdata = this.game.get("HeadsUpDisplay").data;
+  // static inv = farmObject.HUDdata.get('inventory');
 
 
   constructor(type){
@@ -36,6 +44,12 @@ class farmObject{
     placed.setSize(this.tileWidth, this.tileHeight, 32, 32)
   }
 
+  // remove the item tile from the tilemap
+  remove(cropsArray){
+    this.tile.tilemap.removeTile(this.tile);
+    this.tile = null;
+  }
+
  // Load image, then immmidiatly callback createImage, place it on screen, and return the image to the file.
   static loadImage(scene){
     scene.load.spritesheet(this.objName, this.imageLoc, {frameWidth:this.imageWidth, frameHeight:this.imageHeight})
@@ -51,6 +65,11 @@ class farmObject{
     //image.setDisplayOrigin( 16, 50)
     return image;
   }
+
+  static getInventory(){
+    return this.inventory;
+  }
 }
+
 
 export default farmObject

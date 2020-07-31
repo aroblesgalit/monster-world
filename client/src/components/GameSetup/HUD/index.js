@@ -1,5 +1,10 @@
 import Phaser from 'phaser';
 import ShowMap from '../Map'
+import Inventory from '../Inventory';
+import farmObject from '../Objects/Object';
+import Potato from '../Objects/Crops/Potato';
+import Carrot from '../Objects/Crops/Carrot';
+import Tomato from '../Objects/Crops/Tomato';
 
 let goldCount;
 class HeadsUpDisplay extends Phaser.Scene {
@@ -10,6 +15,7 @@ class HeadsUpDisplay extends Phaser.Scene {
     var gameWidth;
     var background;
     var status;
+    var inventory = farmObject.getInventory();
   }
 
   preload() {
@@ -77,6 +83,9 @@ class HeadsUpDisplay extends Phaser.Scene {
     this.data.set('gold', 200);
     goldCount = this.add.text(10, 10).setText(this.data.get('gold') + ' Gold').setScrollFactor(0);
     goldCount.setShadow(1, 1, '#000000', 2);
+
+    // Inventory
+    this.data.set('inventory', {});
   }
 
   resize() {
@@ -100,11 +109,22 @@ class HeadsUpDisplay extends Phaser.Scene {
       this.game.scene.sleep('ShowMap');
       //this.game.scene.sendToBack();
     }
-
-
-
   }
 
+  // Inventory Functions
+  //====================================
+  addItem(item, count){
+    this.data['inventory'][item]+=count;
+    console.log(this.data['inventory'])
+  }
+
+  removeItem(item, count){
+    this.data['inventory'][item]-=count;
+    console.log(this.data['inventory'])
+  }
+
+  // UPDATE
+  //====================================
   update() {
     goldCount.setText(this.data.get('gold') + ' Gold');
   }

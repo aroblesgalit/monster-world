@@ -49,11 +49,6 @@ class Farm extends Phaser.Scene {
         // Dynamic Tilemap
         this.dirtLayer = this.map.createDynamicLayer("dirt", "plowedDirt",0,0);
         this.plantLayer = this.map.createDynamicLayer("plants", "plants",0,-32);
-        console.log(this.plantLayer);
-        // plantLayer.anchor.set(1);
-
-
-        // setTile= 10, 10, 10);
 
         // Crop
         let config = {
@@ -67,6 +62,13 @@ class Farm extends Phaser.Scene {
 
         // create animation for plants
         this.anims.create(config);
+
+                // Start with tilemap in center of the map
+                let mapWidth = this.map.width*this.map.tileWidth;
+                let mapHeight = this.map.height*this.map.tileHeight;
+        
+                this.cameras.main.scrollX = (mapWidth - this.game.config.width)/2;
+                this.cameras.main.scrollY = (mapHeight - this.game.config.height)/2;
 
         // put the scene to sleep untill it is used
         this.scene.sleep('Farm');
@@ -84,20 +86,31 @@ class Farm extends Phaser.Scene {
     //     }
     // }
 
+    getCrop(tile){
+        // console.log(this.crops);
+        let toHarvest = this.crops.find( crop => crop.tile === tile)
+        if(toHarvest){
+            toHarvest.harvest(this.crops);
+        }
+    }
+
     update(time, delta) {
+        // update all crops
         if (this.crops.length > 0) {
             this.crops.forEach(crop => crop.update(time, delta));
-        }        
+        }
+        // remove those that are no longer active
+        this.crops = this.crops.filter(crop => crop.tile);   
 
         this.scene.wake("FarmHUD");
 
         // Placement Variables
         // ========================================
         const pointer = this.input.activePointer;
+        const worldPoint = pointer.positionToCamera(this.cameras.main);
 
 
-        // Camera Movement
-        // ========================================
+
         if (pointer.isDown && !this.placeActive) {
             // console.log(this.grassPlatform.getTileAtWorldXY(worldPoint.x, worldPoint.y));
             // console.log(this.dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y));
@@ -105,6 +118,8 @@ class Farm extends Phaser.Scene {
 
 
             if (this.game.origDragPoint) {
+                // Camera Movement
+                // ========================================
                 // move the camera by the amount the mouse has moved since last update
                 this.cameras.main.scrollX +=
                     this.game.origDragPoint.x - this.game.input.activePointer.position.x;
@@ -112,9 +127,17 @@ class Farm extends Phaser.Scene {
                     this.game.origDragPoint.y - this.game.input.activePointer.position.y;
             } // set new drag origin to current position
             this.game.origDragPoint = this.game.input.activePointer.position.clone();
+
+            
+            // Crop Clicking
+            //this.grassPlatform.getTileAtWorldXY(worldPoint.x, worldPoint.y);
+            //this.dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y);
+            this.getCrop(this.plantLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y-32));
+
         } else {
             this.game.origDragPoint = null;
         }
+
 
     }
 }

@@ -16,7 +16,7 @@ class Carrot extends Crop{
   static tileWidth = 32;
   static phases = [2, 11, 20, 29];
   static phaseLength = 1000;
-  static postHarvestPhase = 0;
+  static postHarvestPhase = -1;
 
   // Object Image Settings
   static imageLoc = "Assets/Objects/objects.png";
