@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import ShowMap from '../Map'
+import Inventory from '../Inventory';
+import farmObject from '../Objects/Object';
 
 let goldCount;
 class HeadsUpDisplay extends Phaser.Scene {
@@ -10,6 +12,7 @@ class HeadsUpDisplay extends Phaser.Scene {
     var gameWidth;
     var background;
     var status;
+    var inventory = farmObject.getInventory();
   }
 
   preload() {

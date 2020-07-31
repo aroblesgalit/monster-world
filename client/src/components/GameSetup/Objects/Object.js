@@ -1,3 +1,4 @@
+import Inventory from "../Inventory";
 
 class farmObject{
 
@@ -11,6 +12,7 @@ class farmObject{
   // Object Image Settings
   static imageHeight = 32;
   static imageWidth = 32;
+  static inventory = new Inventory();
 
 
   constructor(type){
@@ -50,6 +52,10 @@ class farmObject{
     // image.body.setOffset(-32,0);
     //image.setDisplayOrigin( 16, 50)
     return image;
+  }
+
+  static getInventory(){
+    return this.inventory;
   }
 }
 
