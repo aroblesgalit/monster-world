@@ -1,4 +1,4 @@
-
+import { Scene } from "phaser";
 class farmObject{
 
   static layer;
@@ -11,6 +11,9 @@ class farmObject{
   // Object Image Settings
   static imageHeight = 32;
   static imageWidth = 32;
+
+  // static HUDdata = this.game.get("HeadsUpDisplay").data;
+  // static inv = farmObject.HUDdata.get('inventory');
 
 
   constructor(type){
@@ -58,5 +61,6 @@ class farmObject{
     return image;
   }
 }
+
 
 export default farmObject
