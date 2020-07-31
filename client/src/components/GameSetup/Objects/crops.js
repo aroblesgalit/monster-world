@@ -44,8 +44,9 @@ class Crop extends farmObject{
     if(this.harvestable){
       this.harvestable = false;
       this.nextPhase = Date.now()+this.Class.phaseLength;
-      Crop.inventory.addItem(this, 1);
+      Crop.inventory.addItem(this.Class, 1);
       console.log(`Harvested ${this.Class.objName}`)
+      console.log(Crop.inventory.inventory);
       this.phase=this.Class.postHarvestPhase;
 
       if(this.phase >0){
@@ -61,7 +62,6 @@ class Crop extends farmObject{
   
   // check a placed crop, to see if it is at its next 
   update(time, delta){
-    console.log(Crop.inventory.inventory);
     // end immediatly if the plant is fully grown
     if (this.harvestable || this.phase < 0) {return};
 

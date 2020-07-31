@@ -12,6 +12,9 @@ class farmObject{
   // Object Image Settings
   static imageHeight = 32;
   static imageWidth = 32;
+
+  // This seems like a roundabout way of doing this, but we the static crops need a way to input themselves.
+  // this is also being called by the HUD, so the game can access it.(getInventory())
   static inventory = new Inventory();
 
   // static HUDdata = this.game.get("HeadsUpDisplay").data;

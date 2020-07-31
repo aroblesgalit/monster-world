@@ -4,25 +4,28 @@ class Inventory extends Scene{
   
   constructor(){
     super({key: "Inventory" });
-    this.inventory = {};
+    this.inventory = [];
   }
 
   addItem(item, count){
-    if(this.inventory[item]){
-      this.inventory[item]+=count;
+    let invItem = this.inventory.find(el => el.name == item.objName);
+    console.log(invItem);
+    if(!invItem){
+      this.inventory.push(this.makeItem(item, count));
+      invItem = this.inventory.find(el => el.name == item.objName);
     }
-    else {
-      this.inventory[item] = count;
-    }
+    console.log(invItem);
+    invItem.count+=count;
   }
 
   removeItem(item, count){
-    if(this.inventory[item]){
-      this.inventory[item]-=count;
-    }
-    else {
-      this.inventory[item] = 0;
-    }
+    let invItem = this.inventory.find(el => el.name == item.objName);
+    if(!invItem){ return }
+    this.inventory[item.objName].count = 0;
+  }
+
+  makeItem(item){
+    return {name:item.objName, Class: item, count:0};
   }
 
 }
