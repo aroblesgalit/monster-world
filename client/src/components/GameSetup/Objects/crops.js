@@ -21,7 +21,8 @@ class Crop extends farmObject{
     const groundTile = dirtLayer.getTileAt(x, y);
     const plantTile = plantLayer.getTileAt(x, y);
     //console.log(grassTile, groundTile, plantTile);
-    if(grassTile && groundTile && !plantTile && grassTile.index===26 && groundTile.properties["Contiguous"])
+    const doHave = this.inventory.getCount(this.Class) > 0;
+    if(grassTile && groundTile && !plantTile && grassTile.index===26 && groundTile.properties["Contiguous"] && doHave)
       {return true;}
     return false;
   }
@@ -34,6 +35,9 @@ class Crop extends farmObject{
     let placed =  mapLayer.putTileAtWorldXY(this.tileIndex+this.tilesetOffset, x, y);
     placed.properties = (placed.tileset.tileProperties[this.tileIndex]);
     placed.setSize(this.tileWidth, this.tileHeight, 32, 32)
+
+    // remove seed from inventory
+    this.inventory.removeItem(this.Class, 1)
 
     // send back new instance of a Crop to be stored
     return {type:"crop", data: new this.Class(this.Class.plantName, placed)};
