@@ -9,12 +9,12 @@ class Inventory extends Scene{
 
   addItem(item, count){
     let invItem = this.inventory.find(el => el.name == item.objName);
-    console.log(invItem);
+
+    // add new item if it is not already in the inventory;
     if(!invItem){
       this.inventory.push(this.makeItem(item, count));
       invItem = this.inventory.find(el => el.name == item.objName);
     }
-    console.log(invItem);
     invItem.count+=count;
   }
 
