@@ -21,7 +21,7 @@ class Inventory extends Scene{
   removeItem(item, count){
     let invItem = this.inventory.find(el => el.name == item.objName);
     if(!invItem){ return }
-    this.inventory[item.objName].count = 0;
+    this.inventory[item.objName].count -= count;
   }
 
   makeItem(item){
