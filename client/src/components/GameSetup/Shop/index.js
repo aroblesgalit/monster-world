@@ -341,11 +341,20 @@ class Shelf extends Phaser.Scene {
     this.load.image('closeButton', 'Assets/menuClose.png');
   }
 
-  create() {
-    // add close button
-    this.add.image(400,300,'shopMenuBox');
+  create() {  
+    // define width parameter based on screen size
+    let menuWidth;
+    // console.log("game width ", this.game.config.width);
+    if (this.game.config.width > 600) {
+      menuWidth = 500
+    }
+    else {
+      menuWidth = this.game.config.width * 0.85
+    }
+    this.add.image(this.game.config.width * 0.5, 300,'shopMenuBox').setDisplaySize(menuWidth, 400);
 
-    let closeButton = this.add.image(180, 200, 'closeButton').setScale(0.1).setInteractive();
+    // add close button
+    let closeButton = this.add.image(this.game.config.width * 0.5 - (menuWidth * 0.5), 200, 'closeButton').setScale(0.1).setInteractive();
     closeButton.on('pointerdown', function () {
             this.setScale(0.08);
           });
@@ -425,9 +434,9 @@ class Shelf extends Phaser.Scene {
     // set up table
     var scrollablePanel = this.rexUI.add.scrollablePanel({
       // table config
-      x: 400,
+      x: this.game.config.width * 0.5,
       y: 300,
-      width: 400,
+      width: menuWidth * 0.8,
       height: 220,
 
       scrollMode: 1,
@@ -450,7 +459,6 @@ class Shelf extends Phaser.Scene {
         right: 10,
         top: 10,
         bottom: 10,
-
         panel: 10,
       }
     })
