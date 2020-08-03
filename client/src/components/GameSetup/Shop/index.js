@@ -352,7 +352,7 @@ class Shelf extends Phaser.Scene {
       menuWidth = this.game.config.width * 0.85
     }
     this.add.image(this.game.config.width * 0.5, 300,'shopMenuBox').setDisplaySize(menuWidth, 400);
-
+    
     // add close button
     let closeButton = this.add.image(this.game.config.width * 0.5 - (menuWidth * 0.5), 200, 'closeButton').setScale(0.1).setInteractive();
     closeButton.on('pointerdown', function () {
@@ -598,13 +598,30 @@ var createIcon = function (scene, item) {
   icon.setDataEnabled();
   icon.data.set('price', item.price);
 
-  var label = scene.rexUI.add.label({
-    orientation: 'y',
-    icon: icon,
-    text: scene.add.text(0, 0, item.name),
+  // let gold = HUDdata.get('gold');
 
-    space: { icon: 3 }
-  });
+  
+
+  if (item.price > 200) {
+    icon.setTint(0x111111);
+    var label = scene.rexUI.add.label({
+      orientation: 'y',
+      icon: icon,
+      text: scene.add.text(0, 0, item.name, { fill: "#f00" }),
+  
+      space: { icon: 3 }
+    });
+  }
+  else {
+    var label = scene.rexUI.add.label({
+      orientation: 'y',
+      icon: icon,
+      text: scene.add.text(0, 0, item.name),
+  
+      space: { icon: 3 }
+    });
+  }
+
 
   return label;
 };
