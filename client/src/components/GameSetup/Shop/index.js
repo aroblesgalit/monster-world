@@ -1,6 +1,7 @@
 // scroll menu example https://codepen.io/rexrainbow/pen/YMyBom?editors=0010
 
 import Phaser from 'phaser';
+import HUD from '../HUD';
 
 let HUDdata;
 let controls;
@@ -598,17 +599,16 @@ var createIcon = function (scene, item) {
   icon.setDataEnabled();
   icon.data.set('price', item.price);
 
-  // let gold = HUDdata.get('gold');
-
+  let gold = scene.game.scene.scenes[6].data.get('gold');
   
 
-  if (item.price > 200) {
+  if (item.price > gold) {
     icon.setTint(0x111111);
     var label = scene.rexUI.add.label({
       orientation: 'y',
       icon: icon,
       text: scene.add.text(0, 0, item.name, { fill: "#f00" }),
-  
+
       space: { icon: 3 }
     });
   }
