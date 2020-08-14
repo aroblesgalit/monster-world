@@ -20,6 +20,8 @@ class Farm extends Phaser.Scene {
             frameHeight: 16
         });
 
+        // Font
+        this.load.bitmapFont('atari-smooth', 'Assets/Fonts/atari-smooth.png', 'Assets/Fonts/atari-smooth.xml');
 
         // Tilemap - Static - grass
         this.load.image("farmland", "Assets/tilesets/farmland.png");
@@ -42,13 +44,13 @@ class Farm extends Phaser.Scene {
         const tileset = this.map.addTilesetImage("farmland", "farmland");
         this.map.addTilesetImage("plowedDirt", "plowedDirt");
         this.map.addTilesetImage("plants", "plants");
-        
+
         // Static Layer
         this.grassPlatform = this.map.createStaticLayer("grass", tileset);
 
         // Dynamic Tilemap
-        this.dirtLayer = this.map.createDynamicLayer("dirt", "plowedDirt",0,0);
-        this.plantLayer = this.map.createDynamicLayer("plants", "plants",0,-32);
+        this.dirtLayer = this.map.createDynamicLayer("dirt", "plowedDirt", 0, 0);
+        this.plantLayer = this.map.createDynamicLayer("plants", "plants", 0, -32);
 
         // Crop
         let config = {
@@ -63,12 +65,12 @@ class Farm extends Phaser.Scene {
         // create animation for plants
         this.anims.create(config);
 
-                // Start with tilemap in center of the map
-                let mapWidth = this.map.width*this.map.tileWidth;
-                let mapHeight = this.map.height*this.map.tileHeight;
-        
-                this.cameras.main.scrollX = (mapWidth - this.game.config.width)/2;
-                this.cameras.main.scrollY = (mapHeight - this.game.config.height)/2;
+        // Start with tilemap in center of the map
+        let mapWidth = this.map.width * this.map.tileWidth;
+        let mapHeight = this.map.height * this.map.tileHeight;
+
+        this.cameras.main.scrollX = (mapWidth - this.game.config.width) / 2;
+        this.cameras.main.scrollY = (mapHeight - this.game.config.height) / 2;
 
         // put the scene to sleep untill it is used
         this.scene.sleep('Farm');
@@ -86,21 +88,44 @@ class Farm extends Phaser.Scene {
     //     }
     // }
 
-    getCrop(tile){
+    getCrop(tile, xloc, yloc) {
         // console.log(this.crops);
-        let toHarvest = this.crops.find( crop => crop.tile === tile)
-        if(toHarvest){
-            toHarvest.harvest(this.crops);
+        let toHarvest = this.crops.find(crop => crop.tile === tile)
+        if (toHarvest) {
+            let harvested = toHarvest.harvest(this.crops);
+            if (harvested) {
+                this.createFloatingText(xloc, yloc+8, harvested, 0x33ff00, 'atari-smooth');
+            }
         }
     }
 
+
+    // Effects
+    //===============
+    createFloatingText(x, y, message, tint, font) {
+
+        let animation = this.add.bitmapText(x, y, font, message).setTint(tint).setScale(.3).setOrigin(1);
+        let tween: Phaser.Tweens.Tween = this.add.tween({
+            targets: animation,
+                duration: 500,
+                ease: 'Back.easeIn',
+                alpha: 0,
+                y: y - 30,
+            onComplete: () => {
+                animation.destroy();
+            }, callbackScope: this
+        });
+    }
+
+    // Update
+    //===============
     update(time, delta) {
         // update all crops
         if (this.crops.length > 0) {
             this.crops.forEach(crop => crop.update(time, delta));
         }
         // remove those that are no longer active
-        this.crops = this.crops.filter(crop => crop.tile);   
+        this.crops = this.crops.filter(crop => crop.tile);
 
         this.scene.wake("FarmHUD");
 
@@ -128,11 +153,11 @@ class Farm extends Phaser.Scene {
             } // set new drag origin to current position
             this.game.origDragPoint = this.game.input.activePointer.position.clone();
 
-            
+
             // Crop Clicking
             //this.grassPlatform.getTileAtWorldXY(worldPoint.x, worldPoint.y);
             //this.dirtLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y);
-            this.getCrop(this.plantLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y-32));
+            this.getCrop(this.plantLayer.getTileAtWorldXY(worldPoint.x, worldPoint.y - 32), worldPoint.x, worldPoint.y - 32);
 
         } else {
             this.game.origDragPoint = null;

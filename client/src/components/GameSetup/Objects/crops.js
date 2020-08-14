@@ -47,24 +47,27 @@ class Crop extends farmObject{
 
   // The ability to harvest plants
   harvest(cropsArray){
-    if(this.harvestable){
-      this.harvestable = false;
-      this.nextPhase = Date.now()+this.Class.phaseLength;
-      let harvestCount = this.Class.baseHarvest + Math.floor(Math.random()*(1+this.Class.additionalHarvest));
-      console.log(harvestCount);
-      Crop.inventory.addItem(this.Class, harvestCount);
-      console.log(`Harvested ${this.Class.objName}`)
-      console.log(Crop.inventory.inventory);
-      this.phase=this.Class.postHarvestPhase;
+    if(!this.harvestable){ return false}
 
-      if(this.phase >0){
-        console.log("replanting");
-        this.tile.index = this.Class.tilesetOffset+this.Class.phases[this.phase];
-      }
-      else{
-        this.remove(cropsArray);
-      }
+    this.harvestable = false;
+    this.nextPhase = Date.now()+this.Class.phaseLength;
+    let harvestCount = this.Class.baseHarvest + Math.floor(Math.random()*(1+this.Class.additionalHarvest));
+    console.log(harvestCount);
+    Crop.inventory.addItem(this.Class, harvestCount);
+    console.log(`Harvested ${this.Class.objName}`)
+    console.log(Crop.inventory.inventory);
+    this.phase=this.Class.postHarvestPhase;
+
+    // remove plant if it doesnt keep growing
+    if(this.phase >0){
+      console.log("replanting");
+      this.tile.index = this.Class.tilesetOffset+this.Class.phases[this.phase];
     }
+    else{
+      this.remove(cropsArray);
+    }
+
+    return harvestCount;
   }
 
   
