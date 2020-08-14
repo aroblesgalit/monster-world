@@ -12,6 +12,8 @@ class Crop extends farmObject{
     this.harvestable = false;
   }
 
+  static baseHarvest = 1;
+  static additionalHarvest = 0;
 
  // static methods allow us to call the Crop method, before creating a new Crop.
 
@@ -48,7 +50,9 @@ class Crop extends farmObject{
     if(this.harvestable){
       this.harvestable = false;
       this.nextPhase = Date.now()+this.Class.phaseLength;
-      Crop.inventory.addItem(this.Class, 1);
+      let harvestCount = this.Class.baseHarvest + Math.floor(Math.random()*(1+this.Class.additionalHarvest));
+      console.log(harvestCount);
+      Crop.inventory.addItem(this.Class, harvestCount);
       console.log(`Harvested ${this.Class.objName}`)
       console.log(Crop.inventory.inventory);
       this.phase=this.Class.postHarvestPhase;

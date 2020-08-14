@@ -117,17 +117,17 @@ class HeadsUpDisplay extends Phaser.Scene {
     }
   }
 
-  // Inventory Functions
-  //====================================
-  addItem(item, count){
-    this.data['inventory'][item]+=count;
-    console.log(this.data['inventory'])
-  }
+  // // Inventory Functions
+  // //====================================
+  // addItem(item, count){
+  //   this.data['inventory'][item]+=count;
+  //   console.log(this.data['inventory'])
+  // }
 
-  removeItem(item, count){
-    this.data['inventory'][item]-=count;
-    console.log(this.data['inventory'])
-  }
+  // removeItem(item, count){
+  //   this.data['inventory'][item]-=count;
+  //   console.log(this.data['inventory'])
+  // }
 
   // UPDATE
   //====================================
