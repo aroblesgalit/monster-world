@@ -16,7 +16,10 @@ class Potato extends Crop{
   static tileWidth = 32;
   static phases = [1, 10, 19, 28];
   static phaseLength = 3000;
+
+  // Harvest Settings;
   static postHarvestPhase = -1;
+  static additionalHarvest = 1;
 
   // Object Image Settings
   static imageLoc = "Assets/Objects/objects.png";

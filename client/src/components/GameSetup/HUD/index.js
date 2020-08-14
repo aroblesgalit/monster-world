@@ -15,9 +15,9 @@ class HeadsUpDisplay extends Phaser.Scene {
     var gameWidth;
     var background;
     var status;
-    var inventory = farmObject.getInventory();
+    this.inventory = farmObject.getInventory();
   }
-
+  
   preload() {
     this.status = "closed";
     this.load.image('background', 'Assets/hudBackground.png');
@@ -26,6 +26,12 @@ class HeadsUpDisplay extends Phaser.Scene {
   }
 
   create() {
+    // Testing to give players default inventory
+    this.inventory.addItem(Carrot, 2);
+    this.inventory.addItem(Tomato, 2);
+    this.inventory.addItem(Potato, 2);
+
+
     var gameWidth = this.game.config.width
     var gameHeight = this.game.config.height
 
@@ -111,17 +117,17 @@ class HeadsUpDisplay extends Phaser.Scene {
     }
   }
 
-  // Inventory Functions
-  //====================================
-  addItem(item, count){
-    this.data['inventory'][item]+=count;
-    console.log(this.data['inventory'])
-  }
+  // // Inventory Functions
+  // //====================================
+  // addItem(item, count){
+  //   this.data['inventory'][item]+=count;
+  //   console.log(this.data['inventory'])
+  // }
 
-  removeItem(item, count){
-    this.data['inventory'][item]-=count;
-    console.log(this.data['inventory'])
-  }
+  // removeItem(item, count){
+  //   this.data['inventory'][item]-=count;
+  //   console.log(this.data['inventory'])
+  // }
 
   // UPDATE
   //====================================

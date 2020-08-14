@@ -15,8 +15,11 @@ class Tomato extends Crop{
   static tileHeight = 64;
   static tileWidth = 32;
   static phases = [0, 9, 18, 27];
-  static phaseLength = 6000;
+  static phaseLength = 12000;
+
+  // Harvest Settings;
   static postHarvestPhase = 1;
+  static additionalHarvest = 3;
 
   // Object Image Settings
   static imageLoc = "Assets/Objects/objects.png";
