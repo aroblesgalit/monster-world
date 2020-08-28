@@ -48,11 +48,11 @@ class HeadsUpDisplay extends Phaser.Scene {
     //==========================================
 
     var mapButton = this.add.sprite(0, 0, 'button').setOrigin(0)
-    var mapText = this.add.text(22, 28).setText("Map")
+    var invText = this.add.text(22, 28).setText("Map")
     mapButton.setScale(1.5);
 
     mapButton.setInteractive();
-    var mapContainer = this.add.container((this.background.displayWidth - mapButton.displayWidth) / 2, 0, [mapButton, mapText]);
+    var mapContainer = this.add.container((this.background.displayWidth - mapButton.displayWidth) / 2, 0, [mapButton, invText]);
 
     mapButton.on('pointerup', this.triggerMap, this);
 
@@ -73,6 +73,31 @@ class HeadsUpDisplay extends Phaser.Scene {
       this.clearTint();
     });
 
+    // Inventory Button
+    var invBtn = this.add.sprite(0, 0, 'button').setOrigin(0);
+
+    var invText = this.add.text(10, 18).setText("Inv")
+
+    invBtn.setInteractive();
+    var invContainer = this.add.container(this.background.displayWidth - 120, 0, [invBtn, invText]);
+    
+    // button down
+    invBtn.on('pointerdown', function (event, gameObjects) {
+      this.setTint(0xbbbbff);
+    });
+    // button down
+    invBtn.on('pointerup', function (event, gameObjects) {
+      this.setTint(0xddddff);
+    });
+
+    // button hover
+    invBtn.on('pointerover', function (event, gameObjects) {
+      this.setTint(0xddddff);
+    });
+    invBtn.on('pointerout', function (event, gameObjects) {
+      this.clearTint();
+    });
+
     
 
     // other buttons
@@ -81,7 +106,6 @@ class HeadsUpDisplay extends Phaser.Scene {
     settingsDisplay.setScale(.15);
     var settingsContainer = this.add.container((this.background.displayWidth - 60), 0, [settingsButton, settingsDisplay]);
 
-    var button2 = this.add.sprite(this.background.displayWidth - 120, 0, 'button').setOrigin(0);
     var button3 = this.add.sprite(this.background.displayWidth - 180, 0, 'button').setOrigin(0);
 
 

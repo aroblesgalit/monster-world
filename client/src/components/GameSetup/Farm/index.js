@@ -52,19 +52,6 @@ class Farm extends Phaser.Scene {
         this.dirtLayer = this.map.createDynamicLayer("dirt", "plowedDirt", 0, 0);
         this.plantLayer = this.map.createDynamicLayer("plants", "plants", 0, -32);
 
-        // Crop
-        let config = {
-            key: "cropAnimation",
-            frames: this.anims.generateFrameNumbers("crop", {
-                start: 5, end: 0
-            }),
-            frameRate: 0.1,
-            repeat: -1
-        };
-
-        // create animation for plants
-        this.anims.create(config);
-
         // Start with tilemap in center of the map
         let mapWidth = this.map.width * this.map.tileWidth;
         let mapHeight = this.map.height * this.map.tileHeight;
