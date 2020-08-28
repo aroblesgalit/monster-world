@@ -34,6 +34,8 @@ class Inventory extends Scene{
     return invItem.count;
   }
 
+  
+
 }
 
 export default Inventory
